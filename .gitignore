@@ -1,3 +1,5 @@
+ptx
+*.ptx
 # Compiled Object files
 *.slo
 *.lo

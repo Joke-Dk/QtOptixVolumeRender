@@ -1,0 +1,53 @@
+#include <optix.h>
+#include <optixu/optixu_math_namespace.h>
+//#include "helpers.h"
+#include "Sampler.h"
+#include "random.h"
+
+using namespace optix;
+
+struct PerRayData_pathtrace
+{
+	float3 result;
+	float3 radiance;
+	float3 attenuation;
+	float3 origin;
+	float3 direction;
+	unsigned int seed;
+	int depth;
+	int countEmitted;
+	int done;
+	int inside;
+	float expand_rad;
+};
+
+struct PerRayData_pathtrace_shadow
+{
+	float3 origin;
+	float3 direction;
+	float3 attenuation;
+};
+
+// Scene wide
+rtDeclareVariable(float,         scene_epsilon, , );
+rtDeclareVariable(rtObject,      top_object, , );
+rtBuffer<ParallelogramLight>     lights;
+
+rtDeclareVariable(unsigned int,  pathtrace_ray_type, , );
+rtDeclareVariable(unsigned int,  pathtrace_shadow_ray_type, , );
+rtDeclareVariable(unsigned int,  rr_begin_depth, , );
+rtDeclareVariable(unsigned int,  max_depth, , );
+
+rtDeclareVariable(float3, geometric_normal, attribute geometric_normal, ); 
+rtDeclareVariable(float3, shading_normal,   attribute shading_normal, ); 
+
+rtDeclareVariable(PerRayData_pathtrace, current_prd, rtPayload, );
+
+rtDeclareVariable(optix::Ray, ray,          rtCurrentRay, );
+rtDeclareVariable(float,      t_hit,        rtIntersectionDistance, );
+rtDeclareVariable(uint2,      launch_index, rtLaunchIndex, );
+
+// For miss program
+rtDeclareVariable(float3,       bg_color, , );
+// For shadow program
+rtDeclareVariable(PerRayData_pathtrace_shadow, current_prd_shadow, rtPayload, );
