@@ -54,7 +54,7 @@ private:
 		optix::Material material,
 		const std::string& color_name,
 		const float3& color);
-
+	
 	optix::Program        m_pgram_bounding_box;
 	optix::Program        m_pgram_intersection;
 

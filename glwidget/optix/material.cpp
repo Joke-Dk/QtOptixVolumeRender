@@ -34,16 +34,32 @@ Material DefineGlassMaterial( Context& m_context)
 }
 
 
+optix::Material DefineFogMaterial( optix::Context& m_context)
+{
+	// Set up glass material
+	Material& fogMaterial = makeMaterialPrograms( m_context, "fog.cu", "fog__closest_hit_radiance", "");
+
+	fogMaterial["glass_color"] ->setFloat(  1.f,1.f,1.f);
+	fogMaterial["index_of_refraction"]->setFloat(1.f);
+	fogMaterial["fresnel_exponent"   ]->setFloat( 4.0f );
+	fogMaterial["fresnel_minimum"    ]->setFloat( 0.1f );
+	fogMaterial["fresnel_maximum"    ]->setFloat( 1.0f );
+
+	return fogMaterial;
+}
+
 Material makeMaterialPrograms( Context& m_context, const std::string& filename, 
 							  const std::string& ch_program_name,
 							  const std::string& ah_program_name )
 {
 	Material material = m_context->createMaterial();
 	Program ch_program = m_context->createProgramFromPTXFile( my_ptxpath( filename), ch_program_name );
-	Program ah_program = m_context->createProgramFromPTXFile( my_ptxpath( filename), ah_program_name );
-
 	material->setClosestHitProgram( 0, ch_program );
-	material->setAnyHitProgram( 1, ah_program );
+	if( ah_program_name!="")
+	{
+		Program ah_program = m_context->createProgramFromPTXFile( my_ptxpath( filename), ah_program_name );
+		material->setAnyHitProgram( 1, ah_program );
+	}
 
 	return material;
 }
