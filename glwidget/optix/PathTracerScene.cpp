@@ -43,10 +43,10 @@ void PathTracerScene::initScene( InitialCameraData& camera_data )
 
 
 	// Set up camera
-	camera_data = InitialCameraData( make_float3( 278.0f, 273.0f, -800.0f ), // eye
-		make_float3( 278.0f, 273.0f, 0.0f ),    // lookat
+	camera_data = InitialCameraData( make_float3( 0.0f, 0.0f, 30.0f ), // eye
+		make_float3( 0.f, 0.0f, 0.0f ),    // lookat
 		make_float3( 0.0f, 1.0f,  0.0f ),       // up
-		35.0f );                                // vfov
+		45.0f );                                // vfov
 
 	// Declare these so validation will pass
 	m_context["eye"]->setFloat( make_float3( 0.0f, 0.0f, 0.0f ) );
@@ -461,7 +461,7 @@ void PathTracerScene::createEnvironmentScene()
 	//////////////////////////////////////////////////////////////////////////
 	// global parameter setting
 	float alpha_value = 0.9f;
-	float sigma_t=0.2f;//0.1f;
+	float sigma_t=5.f;//0.1f;
 
 	int index_x = 100;
 	int index_y = 100;
@@ -507,10 +507,10 @@ void PathTracerScene::createEnvironmentScene()
 	const float3 light_em = make_float3( 15.0f, 15.0f, 5.0f );
 
 	// Floor
-	gis.push_back( createParallelogram( make_float3( 0.0f, 0.0f, 0.0f ),
-		make_float3( 0.0f, 0.0f, 559.2f ),
-		make_float3( 556.0f, 0.0f, 0.0f ) ) );
-	setMaterial(gis.back(), diffuseMaterial, "diffuse_color", white);
+	//gis.push_back( createParallelogram( make_float3( -10.0f, -10.0f, -10.0f ),
+	//	make_float3( 0.0f, 0.0f, 20.f ),
+	//	make_float3( 20.f, 0.0f, 0.0f ) ) );
+	//setMaterial(gis.back(), diffuseMaterial, "diffuse_color", white);
 
 	//// Ceiling
 	//gis.push_back( createParallelogram( make_float3( 0.0f, 548.8f, 0.0f ),
@@ -538,9 +538,9 @@ void PathTracerScene::createEnvironmentScene()
 
 	//////////////////////////////////////////////////////////////////////////
 	// fog
-	Material fogMaterial = DefineFogMaterial( m_context);
-	float3 p0 = make_float3(0.5f, 10.f, 150.f);
-	float3 p1 = make_float3(520.f, 475.f, 325.f);
+	Material &fogMaterial = DefineFogMaterial( m_context);
+	float3 p0 = make_float3(-10.f, -10.f, -4.f);
+	float3 p1 = make_float3(10.f, 10.f, 4.f);
 	m_context["P0"]->setFloat(p0.x, p0.y, p0.z );
 	m_context["P1"]->setFloat(p1.x, p1.y, p1.z );
 	float3 dp = p1-p0;
@@ -585,9 +585,9 @@ void PathTracerScene::createEnvironmentScene()
 
 	//////////////////////////////////////////////////////////////////////////
 	// Sphere
-	Material glassMaterial = DefineGlassMaterial( m_context);
+	Material &glassMaterial = DefineGlassMaterial( m_context);
 
-	gis.push_back( createSphere( make_float3(100.f,400.f,400.f), 40.f));
+	gis.push_back( createSphere( make_float3(-6.f,0.f,6.f), 1.f));
 	//setMaterial(gis.back(), diffuse, "diffuse_color", white);
 	setMaterial(gis.back(), glassMaterial, "glass_color", make_float3(1.f));
 
@@ -597,10 +597,25 @@ void PathTracerScene::createEnvironmentScene()
 	//	light.v2 ) );
 	//setMaterial(gis.back(), areaMaterial, "emission_color", light_em);
 
+	// Obj 1
+	const float matrix_1[4*4] = { 1,  0,  0,  3, 
+		0,  1,  0,  3, 
+		0,  0,  1, 7, 
+		0,  0,  0,  1 };
+	const optix::Matrix4x4 m1( matrix_1 );
+	std::string obj_path1 = ("optix/mesh/cognacglass.obj");
+	GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, glassMaterial);
+	//setMaterial(objgroup1->getChild(0), diffuse, "diffuse_color", white);
+
 
 	// Create geometry group
 	GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
 	int count_geom = geometry_group->getChildCount();
+
+	//geometry_group->setChildCount( count_geom+1 );
+	//geometry_group->setChild( count_geom, objgroup1->getChild(0) );
+	//geometry_group->addChild()
+
 	geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
 	m_context["top_object"]->set( geometry_group );
 }
