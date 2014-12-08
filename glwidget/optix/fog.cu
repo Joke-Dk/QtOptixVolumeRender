@@ -70,7 +70,7 @@ static __device__ __inline__ float woodcockTracking_shadow( const Ray& current_r
 
 RT_PROGRAM void fog_shadow()
 {
-	float maxLength = 500.f;//ray.tmax;
+	float maxLength = 20.f;//ray.tmax;
 	float d = woodcockTracking_shadow( ray, maxLength, sigma_t);
 	if(d< maxLength-scene_epsilon)
 	{

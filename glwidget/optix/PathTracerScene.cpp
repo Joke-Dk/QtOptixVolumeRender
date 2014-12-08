@@ -212,8 +212,8 @@ void PathTracerScene::createCornelScene()
 
 	//////////////////////////////////////////////////////////////////////////
 	// global parameter setting
-	float alpha_value = 0.85f;
-	float sigma_t=0.1f;//0.1f;
+	float alpha_value = 0.55f;
+	float sigma_t=3.f;//0.1f;
 
 	int index_x = 100;
 	int index_y = 100;
@@ -267,9 +267,9 @@ void PathTracerScene::createCornelScene()
 	//////////////////////////////////////////////////////////////////////////
 	// Light buffer
 	ParallelogramLight light;
-	light.corner   = make_float3( 343.0f, 548.6f, 157.0f);
-	light.v1       = make_float3( -130.0f, 0.0f, 0.0f);
-	light.v2       = make_float3( 0.0f, 0.0f, 105.0f);
+	light.corner   = make_float3( 3.0f, 10.499f, -2.0f);
+	light.v1       = make_float3( -6.0f, 0.0f, 0.0f);
+	light.v2       = make_float3( 0.0f, 0.0f, 4.0f);
 	light.normal   = normalize( cross(light.v1, light.v2) );
 	light.emission = make_float3( 15.0f, 15.0f, 15.0f )*2.f;
 
@@ -296,46 +296,41 @@ void PathTracerScene::createCornelScene()
 	const float3 black = make_float3( 0.2f, 0.2f, 0.2f );
 	const float3 green = make_float3( 0.05f, 0.3f, 0.05f );
 	const float3 red   = make_float3( 0.8f, 0.05f, 0.05f );
-	const float3 light_em = make_float3( 15.0f, 15.0f, 5.0f );
+	const float3 light_em = make_float3( 15.0f, 15.0f, 15.0f );
 
-	// Floor
-	gis.push_back( createParallelogram( make_float3( 0.0f, 0.0f, 0.0f ),
-		make_float3( 0.0f, 0.0f, 559.2f ),
-		make_float3( 556.0f, 0.0f, 0.0f ) ) );
+
+	//////////////////////////////////////////////////////////////////////////
+	// cornel wall
+	float3 p0 = make_float3(-10.5f, -10.5f, -10.5f);
+	float3 p1 = make_float3(10.5f, 10.5f, 10.5f);
+	float3 dp = p1-p0;
+	//floor
+	gis.push_back( createParallelogram( p0, make_float3( 0.0f, 0.0f, dp.z),make_float3( dp.x, 0.0f, 0.0f) ) );
 	setMaterial(gis.back(), diffuseMaterial, "diffuse_color", white);
-
-	// Ceiling
-	gis.push_back( createParallelogram( make_float3( 0.0f, 548.8f, 0.0f ),
-		make_float3( 556.0f, 0.0f, 0.0f ),
-		make_float3( 0.0f, 0.0f, 559.2f ) ) );
+	//ceiling
+	gis.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( dp.x, 0.0f, 0.0f) ) );
 	setMaterial(gis.back(), diffuseMaterial, "diffuse_color", white);
-
-	// Back wall
-	gis.push_back( createParallelogram( make_float3( 0.0f, 0.0f, 559.2f),
-		make_float3( 0.0f, 548.8f, 0.0f),
-		make_float3( 556.0f, 0.0f, 0.0f) ) );
-	setMaterial(gis.back(), diffuseMaterial, "diffuse_color", white);
-
-	// Right wall
-	gis.push_back( createParallelogram( make_float3( 0.0f, 0.0f, 0.0f ),
-		make_float3( 0.0f, 548.8f, 0.0f ),
-		make_float3( 0.0f, 0.0f, 559.2f ) ) );
+	//left
+	gis.push_back( createParallelogram( p0, make_float3( 0.0f, 0.0f, dp.z),make_float3( 0.f , dp.y, 0.0f) ) );
 	setMaterial(gis.back(), diffuseMaterial, "diffuse_color", green);
-
-	// Left wall
-	gis.push_back( createParallelogram( make_float3( 556.0f, 0.0f, 0.0f ),
-		make_float3( 0.0f, 0.0f, 559.2f ),
-		make_float3( 0.0f, 548.8f, 0.0f ) ) );
+	//right
+	gis.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( 0.f , dp.y, 0.0f) ) );
 	setMaterial(gis.back(), diffuseMaterial, "diffuse_color", red);
+	//behind
+	gis.push_back( createParallelogram( p0, make_float3( dp.x, 0.0f, 0.f),make_float3( 0.f , dp.y, 0.0f) ) );
+	setMaterial(gis.back(), diffuseMaterial, "diffuse_color", white);
+	//front
+	//gis.push_back( createParallelogram( p1, -make_float3( dp.x, 0.0f, 0.f), -make_float3( 0.f , dp.y, 0.0f) ) );
+	//setMaterial(gis.back(), diffuseMaterial, "diffuse_color", white);
 
 	//////////////////////////////////////////////////////////////////////////
 	// fog
 	Material fogMaterial = DefineFogMaterial( m_context);
-	float3 p0 = make_float3(0.5f, 10.f, 150.f);
-	float3 p1 = make_float3(520.f, 475.f, 325.f);
+	p0 = make_float3(-10.49f, -10.f, -4.f);
+	p1 = make_float3(10.49f, 10.f, 4.f);
 	m_context["P0"]->setFloat(p0.x, p0.y, p0.z );
 	m_context["P1"]->setFloat(p1.x, p1.y, p1.z );
-	float3 dp = p1-p0;
+	dp = p1-p0;
 	//floor
 	gis.push_back( createParallelogram( p0, make_float3( 0.0f, 0.0f, dp.z),make_float3( dp.x, 0.0f, 0.0f) ) );
 	setMaterial(gis.back(), fogMaterial, "diffuse_color", white);
@@ -379,7 +374,7 @@ void PathTracerScene::createCornelScene()
 	// Sphere
 	Material glassMaterial = DefineGlassMaterial( m_context);
 
-	gis.push_back( createSphere( make_float3(100.f,400.f,400.f), 40.f));
+	gis.push_back( createSphere( make_float3(-6.f,0.f,6.f), 1.f));
 	//setMaterial(gis.back(), diffuse, "diffuse_color", white);
 	setMaterial(gis.back(), glassMaterial, "glass_color", make_float3(1.f));
 
@@ -450,6 +445,7 @@ void PathTracerScene::createEnvironmentScene()
 	//m_context["envmap"]->setTextureSampler( loadTexture( m_context, std::string("optix/hdr/DH037LL.hdr"), default_color) );
 	m_context["envmap"]->setTextureSampler( loadTexture( m_context, std::string("optix/hdr/CedarCity.hdr"), default_color) );
 	//m_context["envmap"]->setTextureSampler( loadTexture( m_context, std::string("optix/hdr/grace_ll.hdr"), default_color) );
+	//m_context["envmap"]->setTextureSampler( loadTexture( m_context, std::string("optix/hdr/octane_studio4.hdr"), default_color) );
 
 	// create geometry instances
 	std::vector<GeometryInstance> gis;
