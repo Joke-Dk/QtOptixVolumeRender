@@ -15,6 +15,16 @@ static __device__ __inline__ int xyz2i(int x, int y, int z)
 	return z*index_x*index_y+ y*index_x+x;
 }
 
+static __device__  __inline__ float CloudExpCurve(float v)
+{
+	float CloudCover = 0.02f;
+	float CloudSharpness = 0.001f;
+	float c=v-CloudCover;
+	if (c<0.f){c=0.f;}
+	float cloudDensity = 1.f-pow(CloudSharpness, c);
+	return cloudDensity;
+}
+
 static __device__ __inline__ float get_density(float3 p)
 {
 	//return 1.f
@@ -55,7 +65,7 @@ static __device__ __inline__ float get_density(float3 p)
 		//debug.watch(p,x0,y0,z0, w1, w0)
 		//return 1.f
 		float res = (((d000 * w0.x + d001 * w1.x) * w0.y +  (d010 * w0.x + d011 * w1.x) * w1.y) * w0.z +  ((d100 * w0.x + d101 * w1.x) * w0.y + (d110 * w0.x + d111 * w1.x) * w1.y) * w1.z); 
-		return  res;//CloudExpCurve(res);//*.densityMultiplier//*CloudExpCurve(res)
+		return  CloudExpCurve(res);//*.densityMultiplier//*CloudExpCurve(res)
 	}
 	else 
 	{
@@ -63,15 +73,7 @@ static __device__ __inline__ float get_density(float3 p)
 	}
 }
 
-static __device__  __inline__ float CloudExpCurve(float v)
-{
-	float CloudCover = 0.1f;
-	float CloudSharpness = 0.1f;
-	float c=v-CloudCover;
-	if (c<0.f){c=0.f;}
-	float cloudDensity = 1.f-pow(CloudSharpness, c);
-	return cloudDensity;
-}
+
 
 
 	
