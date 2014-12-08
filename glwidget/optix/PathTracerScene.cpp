@@ -291,6 +291,7 @@ void PathTracerScene::createGeometry()
 
 
 	const float3 white = make_float3( 0.8f, 0.8f, 0.8f );
+	const float3 black = make_float3( 0.2f, 0.2f, 0.2f );
 	const float3 green = make_float3( 0.05f, 0.3f, 0.05f );
 	const float3 red   = make_float3( 0.8f, 0.05f, 0.05f );
 	const float3 light_em = make_float3( 15.0f, 15.0f, 5.0f );
@@ -351,7 +352,6 @@ void PathTracerScene::createGeometry()
 	//front
 	gis.push_back( createParallelogram( p1, -make_float3( dp.x, 0.0f, 0.f), -make_float3( 0.f , dp.y, 0.0f) ) );
 	setMaterial(gis.back(), fogMaterial, "diffuse_color", white);
-	//////////////////////////////////////////////////////////////////////////
 	//load volume data
 	int index_N = index_x*index_y*index_z;
 	optix::Buffer vol_data = m_context->createBuffer(RT_BUFFER_INPUT);
@@ -387,34 +387,34 @@ void PathTracerScene::createGeometry()
 		light.v2 ) );
 	setMaterial(gis.back(), diffuse_light, "emission_color", light_em);
 
-	// Obj 1
-	const float matrix_1[4*4] = { 10,  0,  0,  300, 
-		0,  10,  0,  300, 
-		0,  0,  10, 200, 
-		0,  0,  0,  1 };
-	const optix::Matrix4x4 m1( matrix_1 );
-	std::string obj_path1 = ("./mesh/cognacglass.obj");
-	GeometryGroup objgroup1 = createObjloader( obj_path1, m1, diffuseMaterial);
-	//setMaterial(objgroup1->getChild(0), diffuseMaterial, "diffuse_color", white);
+	//// Obj 1
+	//const float matrix_1[4*4] = { 10,  0,  0,  300, 
+	//	0,  10,  0,  300, 
+	//	0,  0,  10, 200, 
+	//	0,  0,  0,  1 };
+	//const optix::Matrix4x4 m1( matrix_1 );
+	//std::string obj_path1 = ("./mesh/cognacglass.obj");
+	//GeometryGroup objgroup1 = createObjloader( obj_path1, m1, diffuseMaterial);
+	////setMaterial(objgroup1->getChild(0), diffuseMaterial, "diffuse_color", white);
 
-	// Obj 2
-	const float matrix_2[4*4] = { 10,  0,  0,  400, 
-		0,  10,  0,  350, 
-		0,  0,  10, 200, 
-		0,  0,  0,  1 };
-	const optix::Matrix4x4 m2( matrix_2 );
-	std::string obj_path2 = ("./mesh/wineglass.obj");
-	GeometryGroup objgroup2 = createObjloader( obj_path2, m2, diffuseMaterial);
-	//setMaterial(objgroup2->getChild(0), diffuse, "diffuse_color", white);
+	//// Obj 2
+	//const float matrix_2[4*4] = { 10,  0,  0,  400, 
+	//	0,  10,  0,  350, 
+	//	0,  0,  10, 200, 
+	//	0,  0,  0,  1 };
+	//const optix::Matrix4x4 m2( matrix_2 );
+	//std::string obj_path2 = ("./mesh/wineglass.obj");
+	//GeometryGroup objgroup2 = createObjloader( obj_path2, m2, diffuseMaterial);
+	////setMaterial(objgroup2->getChild(0), diffuse, "diffuse_color", white);
 
-	//Obj bunny
-	const float matrix_3[4*4] = { 400,  0,  0,  200,
-		0,  400,  0,  200, 
-		0,  0,  -400, 200, 
-		0,  0,  0,  1 };
-	const optix::Matrix4x4 m3( matrix_3 );
-	std::string obj_path3 = ("./mesh/bunny.obj"); 
-	GeometryGroup objgroup3 = createObjloader( obj_path3, m3, diffuseMaterial);
+	////Obj bunny
+	//const float matrix_3[4*4] = { 400,  0,  0,  200,
+	//	0,  400,  0,  200, 
+	//	0,  0,  -400, 200, 
+	//	0,  0,  0,  1 };
+	//const optix::Matrix4x4 m3( matrix_3 );
+	//std::string obj_path3 = ("./mesh/bunny.obj"); 
+	//GeometryGroup objgroup3 = createObjloader( obj_path3, m3, diffuseMaterial);
 
 	//Obj head/
 	/*

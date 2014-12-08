@@ -23,6 +23,7 @@ struct PerRayData_pathtrace
 
 struct PerRayData_pathtrace_shadow
 {
+	unsigned int seed;
 	float3 origin;
 	float3 direction;
 	float3 attenuation;
