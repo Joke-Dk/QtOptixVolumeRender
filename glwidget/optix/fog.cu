@@ -113,7 +113,7 @@ RT_PROGRAM void fog__closest_hit_radiance()
 		float d = woodcockTracking( ray, t_hit, sigma_t);//1000.f;//woodcockTracking(0.1f, r1);
 		if (d>t_hit)
 		{
-			current_prd.origin = hitpoint;
+			current_prd.origin = ray.origin + (t_hit+scene_epsilon) * ray.direction;//hitpoint;
 			refract(current_prd.direction, ray.direction, ffnormal, iof);
 			current_prd.inside = !current_prd.inside;
 		}
@@ -191,18 +191,13 @@ RT_PROGRAM void fog__closest_hit_radiance()
 		{
 			//refract
 			refract(current_prd.direction, ray.direction, ffnormal, iof);
-			//current_prd.expand_rad = 3.f;
-			//current_prd.attenuation*=20.f;//
 			current_prd.inside = !current_prd.inside;
 
 		}
 	}
 
-
-
-	//current_prd.attenuation*=5.f;
 	current_prd.radiance = result;
-	//current_prd.radiance = make_float3(0.f,0.f,0.f);
+
 }
 
 

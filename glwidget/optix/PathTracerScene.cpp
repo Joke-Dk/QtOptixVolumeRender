@@ -447,7 +447,8 @@ void PathTracerScene::createEnvironmentScene()
 {
 	m_context->setMissProgram( 0, m_context->createProgramFromPTXFile( my_ptxpath("PathCamera.cu" ), "envmap_miss" ) );
 	const float3 default_color = make_float3(1.0f, 1.0f, 1.0f);
-	m_context["envmap"]->setTextureSampler( loadTexture( m_context, std::string("optix/hdr/DH037LL.hdr"), default_color) );
+	//m_context["envmap"]->setTextureSampler( loadTexture( m_context, std::string("optix/hdr/DH037LL.hdr"), default_color) );
+	m_context["envmap"]->setTextureSampler( loadTexture( m_context, std::string("optix/hdr/CedarCity.hdr"), default_color) );
 	//m_context["envmap"]->setTextureSampler( loadTexture( m_context, std::string("optix/hdr/grace_ll.hdr"), default_color) );
 
 	// create geometry instances
@@ -459,8 +460,8 @@ void PathTracerScene::createEnvironmentScene()
 
 	//////////////////////////////////////////////////////////////////////////
 	// global parameter setting
-	float alpha_value = 0.85f;
-	float sigma_t=0.5f;//0.1f;
+	float alpha_value = 0.9f;
+	float sigma_t=0.2f;//0.1f;
 
 	int index_x = 100;
 	int index_y = 100;
@@ -490,7 +491,7 @@ void PathTracerScene::createEnvironmentScene()
 	light_buffer->unmap();
 	m_context["lights"]->setBuffer( light_buffer );
 	// Set up material
-	Material& diffuse_light = DefineDiffuseLight( m_context);
+	//Material& areaMaterial = DefineDiffuseLight( m_context);
 
 	Material& diffuseMaterial = DefineDiffuseMaterial( m_context);
 	//////////////////////////////////////////////////////////////////////////
@@ -591,10 +592,10 @@ void PathTracerScene::createEnvironmentScene()
 	setMaterial(gis.back(), glassMaterial, "glass_color", make_float3(1.f));
 
 	// Light
-	gis.push_back( createParallelogram( light.corner,
-		light.v1,
-		light.v2 ) );
-	setMaterial(gis.back(), diffuse_light, "emission_color", light_em);
+	//gis.push_back( createParallelogram( light.corner,
+	//	light.v1,
+	//	light.v2 ) );
+	//setMaterial(gis.back(), areaMaterial, "emission_color", light_em);
 
 
 	// Create geometry group
