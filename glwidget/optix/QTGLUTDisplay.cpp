@@ -130,7 +130,19 @@ inline void removeArg( int& i, int& argc, char** argv )
 
 void QTGLUTDisplay::mousePressEvent(QMouseEvent *event)
 {	
-	mouseButton( event->button(),  GLUT_DOWN, event->x(), event->y());
+	int button = 0;
+	switch( event->button())
+	{
+	case Qt::LeftButton:
+		button = GLUT_LEFT_BUTTON; break;
+	case Qt::MidButton:
+		button = GLUT_MIDDLE_BUTTON; break;
+	case Qt::RightButton:
+		button = GLUT_RIGHT_BUTTON; break;
+	default:
+		break;
+	}
+	mouseButton( button,  GLUT_DOWN, event->x(), event->y());
 	//updateGL();
 }
 
