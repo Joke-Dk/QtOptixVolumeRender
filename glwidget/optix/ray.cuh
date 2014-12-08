@@ -52,3 +52,4 @@ rtDeclareVariable(uint2,      launch_index, rtLaunchIndex, );
 rtDeclareVariable(float3,       bg_color, , );
 // For shadow program
 rtDeclareVariable(PerRayData_pathtrace_shadow, current_prd_shadow, rtPayload, );
+

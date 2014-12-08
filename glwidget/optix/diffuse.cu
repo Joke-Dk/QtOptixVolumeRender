@@ -1,4 +1,5 @@
-#include "volume.cuh"
+//#include "volume.cuh"
+#include "ray.cuh"
 
 rtDeclareVariable(float3,        diffuse_color, , );
 
@@ -46,25 +47,11 @@ RT_PROGRAM void diffuse()
 		{
 			PerRayData_pathtrace_shadow shadow_prd;
 			shadow_prd.attenuation = make_float3(1.f);
-			Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
-			//rtTrace(top_object, shadow_ray, shadow_prd);
-
-			//dk
-			float3 p=shadow_ray.origin;
-			float3 dir=shadow_ray.direction;
-			float l=0.f;
-			float step=30.f;
-			float rand0=rnd(current_prd.seed);
-			l+=rand0*step;
-			float tau = 0.f;
-			tau+=get_density(p)*rand0;
-			while (l<=300.f)
-			{
-				tau+=get_density(p+dir*l);
-				l+=step;
-			}
-			tau*=step;
-			shadow_prd.attenuation *=  exp(-sigma_t*tau);//make_float3(0.f);
+			Ray shadow_ray = make_Ray( current_prd.origin, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+			shadow_prd.origin = current_prd.origin;
+			shadow_prd.direction = L;
+			shadow_prd.seed = current_prd.seed;
+			rtTrace(top_object, shadow_ray, shadow_prd);
 
 			float3 light_attenuation = shadow_prd.attenuation;
 			if(fmaxf(light_attenuation) > 0.0f)

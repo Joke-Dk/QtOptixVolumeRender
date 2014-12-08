@@ -70,15 +70,17 @@ static __device__ __inline__ float woodcockTracking_shadow( const Ray& current_r
 
 RT_PROGRAM void fog_shadow()
 {
-	float d = woodcockTracking_shadow( ray, t_hit, sigma_t);
-	if(d>=t_hit)
-	{
-		current_prd_shadow.attenuation = make_float3(1.f);
-	}
-	else
+	float maxLength = 500.f;//ray.tmax;
+	float d = woodcockTracking_shadow( ray, maxLength, sigma_t);
+	if(d< maxLength-scene_epsilon)
 	{
 		current_prd_shadow.attenuation = make_float3(0.f);
 	}
+	else
+	{
+		current_prd_shadow.attenuation = make_float3(1.f);
+	}
+	//current_prd_shadow.attenuation = make_float3(0.f, 0.f, 1.f);
 	rtTerminateRay();
 }
 
