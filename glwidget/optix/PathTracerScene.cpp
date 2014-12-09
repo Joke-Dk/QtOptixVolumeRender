@@ -266,19 +266,19 @@ void PathTracerScene::createCornelScene()
 
 	//////////////////////////////////////////////////////////////////////////
 	// Light buffer
-	ParallelogramLight light;
-	light.corner   = make_float3( 3.0f, 10.499f, -2.0f);
-	light.v1       = make_float3( -6.0f, 0.0f, 0.0f);
-	light.v2       = make_float3( 0.0f, 0.0f, 4.0f);
-	light.normal   = normalize( cross(light.v1, light.v2) );
-	light.emission = make_float3( 15.0f, 15.0f, 15.0f )*2.f;
+	//ParallelogramLight light;
+	//light.corner   = make_float3( 3.0f, 10.499f, -2.0f);
+	//light.v1       = make_float3( -6.0f, 0.0f, 0.0f);
+	//light.v2       = make_float3( 0.0f, 0.0f, 4.0f);
+	//light.normal   = normalize( cross(light.v1, light.v2) );
+	//light.emission = make_float3( 15.0f, 15.0f, 15.0f )*2.f;
 
 	Buffer light_buffer = m_context->createBuffer( RT_BUFFER_INPUT );
 	light_buffer->setFormat( RT_FORMAT_USER );
-	light_buffer->setElementSize( sizeof( ParallelogramLight ) );
-	light_buffer->setSize( 1u );
-	memcpy( light_buffer->map(), &light, sizeof( light ) );
-	light_buffer->unmap();
+	//light_buffer->setElementSize( sizeof( ParallelogramLight ) );
+	light_buffer->setSize( 0u );
+	//memcpy( light_buffer->map(), &light, sizeof( light ) );
+	//light_buffer->unmap();
 	m_context["lights"]->setBuffer( light_buffer );
 	// Set up material
 	Material& diffuseMaterial = DefineDiffuseMaterial( m_context);
@@ -379,10 +379,10 @@ void PathTracerScene::createCornelScene()
 	setMaterial(gis.back(), glassMaterial, "glass_color", make_float3(1.f));
 
 	// Light
-	gis.push_back( createParallelogram( light.corner,
-		light.v1,
-		light.v2 ) );
-	setMaterial(gis.back(), diffuse_light, "emission_color", light_em);
+	//gis.push_back( createParallelogram( light.corner,
+	//	light.v1,
+	//	light.v2 ) );
+	//setMaterial(gis.back(), diffuse_light, "emission_color", light_em);
 
 	//// Obj 1
 	//const float matrix_1[4*4] = { 10,  0,  0,  300, 
@@ -473,9 +473,9 @@ void PathTracerScene::createEnvironmentScene()
 	//////////////////////////////////////////////////////////////////////////
 	// Light buffer
 	ParallelogramLight light;
-	light.corner   = make_float3( 343.0f, 548.6f, 157.0f);
-	light.v1       = make_float3( -130.0f, 0.0f, 0.0f);
-	light.v2       = make_float3( 0.0f, 0.0f, 105.0f);
+	light.corner   = make_float3( 3.0f, 10.499f, -2.0f);
+	light.v1       = make_float3( -6.0f, 0.0f, 0.0f);
+	light.v2       = make_float3( 0.0f, 0.0f, 4.0f);
 	light.normal   = normalize( cross(light.v1, light.v2) );
 	light.emission = make_float3( 15.0f, 15.0f, 15.0f )*0.f;
 
