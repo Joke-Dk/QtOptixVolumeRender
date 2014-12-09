@@ -48,7 +48,7 @@ QT_BEGIN_NAMESPACE
 class QSlider;
 QT_END_NAMESPACE
 //! [0]
-//class QTGLUTDisplay;
+class Widget;
 
 class Window : public QWidget
 {
@@ -62,11 +62,8 @@ protected:
 
 private:
     QSlider *createSlider();
-
+	Widget *uiwidget;
     QTGLUTDisplay *glWidget;
-    QSlider *xSlider;
-    QSlider *ySlider;
-    QSlider *zSlider;
 };
 //! [0]
 
