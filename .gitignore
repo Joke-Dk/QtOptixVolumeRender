@@ -1,3 +1,6 @@
+*.ncb
+*.sln
+
 hdr
 GeneratedFiles
 Debug

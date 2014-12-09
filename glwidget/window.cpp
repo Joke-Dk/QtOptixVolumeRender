@@ -49,6 +49,7 @@ Window::Window( int argc, char** argv )
     glWidget = new QTGLUTDisplay( argc, argv);
 	uiwidget = new Widget();
 
+
 //! [0]
 
 //! [1]

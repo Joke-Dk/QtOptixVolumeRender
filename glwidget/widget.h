@@ -11,7 +11,13 @@ class Widget : public QWidget
 public:
 	Widget(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~Widget();
-
+	public slots:
+	void slotDoubleSpinbox_Slider();
+	void slotSlider_DoubleSpinbox();
+	void slotDoubleSpinbox_Slider2();
+	void slotSlider_DoubleSpinbox2();
+	void slotDoubleSpinbox_Slider3();
+	void slotSlider_DoubleSpinbox3();
 private:
 	Ui::WidgetClass ui;
 };
