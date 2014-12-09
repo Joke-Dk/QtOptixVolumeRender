@@ -41,7 +41,7 @@
 
 //#include "glwidget.h"
 #include "window.h"
-#include "widget.h"
+
 
 //! [0]
 Window::Window( int argc, char** argv )

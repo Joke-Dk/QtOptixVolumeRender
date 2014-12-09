@@ -4,7 +4,6 @@ Widget::Widget(QWidget *parent, Qt::WFlags flags)
 : QWidget(parent, flags)
 {
 	ui.setupUi(this);
-
 	connect(ui.doubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(slotDoubleSpinbox_Slider()));
 	connect(ui.horizontalSlider, SIGNAL(valueChanged(int)), this, SLOT(slotSlider_DoubleSpinbox()));
 	connect(ui.doubleSpinBox_2, SIGNAL(valueChanged(double)), this, SLOT(slotDoubleSpinbox_Slider2()));

@@ -3,7 +3,7 @@
 
 #include <QtGui/QWidget>
 #include "ui_widget.h"
-
+#include "optix/QTGLUTDisplay.h"
 class Widget : public QWidget
 {
 	Q_OBJECT

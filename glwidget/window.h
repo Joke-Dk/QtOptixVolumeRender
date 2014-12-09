@@ -42,13 +42,12 @@
 #define WINDOW_H
 
 #include <QWidget>
-#include "optix/QTGLUTDisplay.h"
+#include "widget.h"
 
 QT_BEGIN_NAMESPACE
 class QSlider;
 QT_END_NAMESPACE
 //! [0]
-class Widget;
 
 class Window : public QWidget
 {
