@@ -8,9 +8,12 @@ class Widget : public QWidget
 {
 	Q_OBJECT
 
+	friend class QTGLUTDisplay;
 public:
-	Widget(QWidget *parent = 0, Qt::WFlags flags = 0);
+	Widget( QTGLUTDisplay* glWidget, QWidget *parent = 0, Qt::WFlags flags = 0);
 	~Widget();
+	void UpdataParameterAndRefresh(std::string str, float value);
+	QTGLUTDisplay* _glWidget;
 	public slots:
 	void slotDoubleSpinbox_Slider();
 	void slotSlider_DoubleSpinbox();

@@ -19,6 +19,11 @@ using namespace std;
 
 
 using namespace optix;
+void PathTracerScene::updateParameter( std::string str, float value)
+{ 
+	m_context[str.c_str()]->setFloat(value); 
+}
+
 void PathTracerScene::initScene( InitialCameraData& camera_data )
 {
 	m_context->setPrintEnabled(true);

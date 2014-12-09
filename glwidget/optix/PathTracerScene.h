@@ -33,6 +33,9 @@ public:
 	void   setDimensions( const unsigned int w, const unsigned int h ) { m_width = w; m_height = h; }
 	void   setMaxDepth( unsigned int depth )                           { m_max_depth= depth; }
 
+	void updateParameter( std::string str, float value);
+	unsigned int   m_width;
+	unsigned int   m_height;
 private:
 	// Should return true if key was handled, false otherwise.
 	virtual bool keyPressed(unsigned char key, int x, int y);
@@ -61,8 +64,6 @@ private:
 	unsigned int   m_rr_begin_depth;
 	unsigned int   m_max_depth;
 	unsigned int   m_sqrt_num_samples;
-	unsigned int   m_width;
-	unsigned int   m_height;
 	unsigned int   m_frame;
 	unsigned int   m_sampling_strategy;
 };
