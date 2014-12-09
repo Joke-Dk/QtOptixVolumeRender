@@ -8,7 +8,7 @@ rtDeclareVariable(int,        index_y, , );
 rtDeclareVariable(int,        index_z, , );
 rtDeclareVariable(float,        sigma_t, , );
 rtDeclareVariable(float,        alpha_value, , );
-
+rtDeclareVariable(int,        isCurve, , );
 
 static __device__ __inline__ int xyz2i(int x, int y, int z)
 {
@@ -65,7 +65,10 @@ static __device__ __inline__ float get_density(float3 p)
 		//debug.watch(p,x0,y0,z0, w1, w0)
 		//return 1.f
 		float res = (((d000 * w0.x + d001 * w1.x) * w0.y +  (d010 * w0.x + d011 * w1.x) * w1.y) * w0.z +  ((d100 * w0.x + d101 * w1.x) * w0.y + (d110 * w0.x + d111 * w1.x) * w1.y) * w1.z); 
-		return  CloudExpCurve(res);//*.densityMultiplier//*CloudExpCurve(res)
+		if(isCurve==1)
+			return  CloudExpCurve(res);//*.densityMultiplier//*CloudExpCurve(res)
+		else 
+			return res;
 	}
 	else 
 	{

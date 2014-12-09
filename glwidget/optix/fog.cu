@@ -111,9 +111,9 @@ RT_PROGRAM void fog__closest_hit_radiance()
 	if (current_prd.inside) 
 	{
 		float d = woodcockTracking( ray, t_hit, sigma_t);//1000.f;//woodcockTracking(0.1f, r1);
-		if (d>t_hit)
+		if (d>=t_hit)
 		{
-			current_prd.origin = ray.origin + (t_hit+scene_epsilon) * ray.direction;//hitpoint;
+			current_prd.origin = hitpoint;
 			refract(current_prd.direction, ray.direction, ffnormal, iof);
 			current_prd.inside = !current_prd.inside;
 		}

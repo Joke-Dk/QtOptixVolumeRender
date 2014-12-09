@@ -237,6 +237,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\optix\mirror.cu"
+						>
+					</File>
+					<File
 						RelativePath=".\optix\parallelogram.cu"
 						>
 					</File>
@@ -254,6 +258,10 @@
 					</File>
 					<File
 						RelativePath=".\optix\TriangleMesh.cu"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\volume.cuh"
 						>
 					</File>
 				</Filter>

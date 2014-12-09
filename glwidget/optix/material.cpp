@@ -33,6 +33,14 @@ Material DefineGlassMaterial( Context& m_context)
 	return glassMaterial;
 }
 
+Material DefineMirrorMaterial( Context& m_context)
+{
+	// Set up glass material
+	Material& mirrorMaterial = makeMaterialPrograms( m_context, "mirror.cu", "mirror_fresnel", "shadow");
+
+	return mirrorMaterial;
+}
+
 
 optix::Material DefineFogMaterial( optix::Context& m_context)
 {

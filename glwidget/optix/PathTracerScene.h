@@ -36,8 +36,7 @@ public:
 private:
 	// Should return true if key was handled, false otherwise.
 	virtual bool keyPressed(unsigned char key, int x, int y);
-	void createCornelScene();
-	void createEnvironmentScene();
+	void createEnvironmentScene(int sceneKind);
 
 	optix::GeometryInstance createParallelogram( const float3& anchor,
 		const float3& offset1,
