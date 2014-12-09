@@ -74,8 +74,8 @@ void PathTracerScene::initScene( InitialCameraData& camera_data )
 
 	// Create scene geometry
 
-	createCornelScene();
-	//createEnvironmentScene();
+	//createCornelScene();
+	createEnvironmentScene();
 
 	// Finalize
 	m_context->validate();
@@ -482,7 +482,7 @@ void PathTracerScene::createEnvironmentScene()
 	Buffer light_buffer = m_context->createBuffer( RT_BUFFER_INPUT );
 	light_buffer->setFormat( RT_FORMAT_USER );
 	light_buffer->setElementSize( sizeof( ParallelogramLight ) );
-	light_buffer->setSize( 0u );
+	light_buffer->setSize( 1u );
 	memcpy( light_buffer->map(), &light, sizeof( light ) );
 	light_buffer->unmap();
 	m_context["lights"]->setBuffer( light_buffer );
