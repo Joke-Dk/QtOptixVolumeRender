@@ -74,8 +74,8 @@ void PathTracerScene::initScene( InitialCameraData& camera_data )
 
 	// Create scene geometry
 
-	//createCornelScene();
-	createEnvironmentScene();
+	createCornelScene();
+	//createEnvironmentScene();
 
 	// Finalize
 	m_context->validate();
@@ -356,7 +356,7 @@ void PathTracerScene::createCornelScene()
 	vol_data->setSize(index_N);
 	float* temp_data = (float*)vol_data->map();
 	//read .vol file
-	char* filename = "volume/density_render.70.pbrt";
+	char* filename = "optix/volume/density_render.70.pbrt";
 	FILE* fin;
 	fopen_s(&fin, filename, "r");
 	if (!fin)
@@ -565,7 +565,7 @@ void PathTracerScene::createEnvironmentScene()
 	vol_data->setSize(index_N);
 	float* temp_data = (float*)vol_data->map();
 	//read .vol file
-	char* filename = "volume/density_render.70.pbrt";
+	char* filename = "optix/volume/density_render.70.pbrt";
 	FILE* fin;
 	fopen_s(&fin, filename, "r");
 	if (!fin)
