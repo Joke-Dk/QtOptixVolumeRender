@@ -75,8 +75,10 @@ void PathTracerScene::initScene( InitialCameraData& camera_data )
 	m_context->setRayGenerationProgram( 0, ray_gen_program );
 	Program exception_program = m_context->createProgramFromPTXFile( ptx_path, "exception" );
 	m_context->setExceptionProgram( 0, exception_program );
-	m_context->setMissProgram( 0, m_context->createProgramFromPTXFile( ptx_path, "miss" ) );
 
+	miss_program_noHDR = m_context->createProgramFromPTXFile( ptx_path, "miss" );
+	miss_program_hasHDR = m_context->createProgramFromPTXFile( ptx_path, "envmap_miss" );
+	switchHasHDR(m_context["hasHDR"]->getFloat()<0.5f? false:true);
 	m_context["frame_number"]->setUint(1);
 
 	// Index of sampling_stategy (BSDF, light, MIS)
@@ -211,7 +213,31 @@ void PathTracerScene::setMaterial( GeometryInstance& gi,
 	gi[color_name]->setFloat(color);
 }
 
+void PathTracerScene::switchHasHDR( bool hasHDR)
+{
+	if(hasHDR)
+	{
+		m_context->setMissProgram( 0, miss_program_hasHDR );
+	}
+	else
+	{
+		m_context->setMissProgram( 0, miss_program_noHDR );
+	}
+}
 
+void PathTracerScene::switchEnvironmentLight( int envId)
+{
+	const float3 default_color = make_float3(1.0f, 1.0f, 1.0f);
+	std::string envmapPath = "optix/hdr/";
+	switch( envId)
+	{
+	case 0:envmapPath += "CedarCity.hdr";break;
+	case 1:envmapPath += "grace_ll.hdr";break;
+	case 2:envmapPath += "octane_studio4.hdr";break;
+	default:envmapPath += "CedarCity.hdr";break;
+	}
+	m_context["envmap"]->setTextureSampler( loadTexture( m_context, envmapPath, default_color) );
+}
 
 
 void PathTracerScene::createEnvironmentScene(int sceneKind)
@@ -235,32 +261,15 @@ void PathTracerScene::createEnvironmentScene(int sceneKind)
 
 	//////////////////////////////////////////////////////////////////////////
 	// global parameter setting
-	float alpha_value = 0.95f;
-	float sigma_t=5.f;//0.1f;
-	float g=0.f;//0.1f;
-	float isCurve = 1.f;
-	float CloudCover = 0.02f;
-	float CloudSharpness = 0.0f;
 
-	if (sceneKind == 0)
-	{
-		sigma_t = 2.f;
-		alpha_value = 0.85f;
-		isCurve = 0.f;
-	}
 
 	int index_x = 100;
 	int index_y = 100;
 	int index_z = 40;	
-	m_context["alpha_value"    ]->setFloat( alpha_value );
 	m_context["index_x" ]->setInt(index_x );
 	m_context["index_y" ]->setInt(index_y );
 	m_context["index_z" ]->setInt(index_z );  
-	m_context["sigma_t"    ]->setFloat( sigma_t );
-	m_context["g"    ]->setFloat( g );
-	m_context["isCurve"]->setFloat(isCurve);
-	m_context["CloudCover"    ]->setFloat( CloudCover );
-	m_context["CloudSharpness"    ]->setFloat( CloudSharpness );
+
 
 	const float3 white = make_float3( 0.8f, 0.8f, 0.8f );
 	const float3 black = make_float3( 0.2f, 0.2f, 0.2f );
@@ -268,15 +277,11 @@ void PathTracerScene::createEnvironmentScene(int sceneKind)
 	const float3 red   = make_float3( 0.8f, 0.05f, 0.05f );
 	
 
-	if(sceneKind==1)
-	{
-		m_context->setMissProgram( 0, m_context->createProgramFromPTXFile( my_ptxpath("PathCamera.cu" ), "envmap_miss" ) );
-		const float3 default_color = make_float3(1.0f, 1.0f, 1.0f);
-
-		std::string envmapPath = "optix/hdr/";
-		envmapPath += "CedarCity.hdr";//	DH037LL.hdr		grace_ll.hdr	CedarCity.hdr	octane_studio4.hdr
-		m_context["envmap"]->setTextureSampler( loadTexture( m_context, envmapPath, default_color) );
-	}
+	//if(sceneKind==1)
+	//{
+	//	m_context->setMissProgram( 0, m_context->createProgramFromPTXFile( my_ptxpath("PathCamera.cu" ), "envmap_miss" ) );
+	//	
+	//}
 
 	//////////////////////////////////////////////////////////////////////////
 	// Light buffer

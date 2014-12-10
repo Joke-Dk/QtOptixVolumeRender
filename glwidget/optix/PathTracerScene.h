@@ -35,9 +35,13 @@ public:
 
 	void updateParameter( std::string str, float value);
 	float getParameter( std::string str);
+	void switchEnvironmentLight( int envId);
+	void switchHasHDR( bool hasHDR);
 	unsigned int   m_width;
 	unsigned int   m_height;
 private:
+	optix::Program miss_program_noHDR;
+	optix::Program miss_program_hasHDR;
 	// Should return true if key was handled, false otherwise.
 	virtual bool keyPressed(unsigned char key, int x, int y);
 	void createEnvironmentScene(int sceneKind);

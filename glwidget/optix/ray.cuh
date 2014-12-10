@@ -18,7 +18,6 @@ struct PerRayData_pathtrace
 	int countEmitted;
 	int done;
 	int inside;
-	float expand_rad;
 };
 
 struct PerRayData_pathtrace_shadow

@@ -12,8 +12,11 @@ class Widget : public QWidget
 public:
 	Widget( QTGLUTDisplay* glWidget, QWidget *parent = 0, Qt::WFlags flags = 0);
 	~Widget();
-	void UpdataParameterAndRefresh(std::string str, float value);
+	void UpdataParameterAndRefresh(std::string str, float value, bool refresh=true);
 	float GetParameterValue(std::string str);
+	void SetDeafaultParamater();
+	void UpdataEnvironmentLight(int idEnv, bool refresh=true);
+	void UpdataHasHDR(bool hasHDR, bool refresh=true);
 	QTGLUTDisplay* _glWidget;
 	public slots:
 	void slotDoubleSpinbox_Slider();
@@ -24,10 +27,18 @@ public:
 	void slotSlider_DoubleSpinbox3();
 
 	void slotClicked3();
+	void slotClicked4();
+	void slotClicked2add_HDR();
 	void slotDoubleSpinbox_Slider4();
 	void slotSlider_DoubleSpinbox4();
 	void slotDoubleSpinbox_Slider5();
 	void slotSlider_DoubleSpinbox5();
+	void slotDoubleSpinbox_Slider6();
+	void slotSlider_DoubleSpinbox6();
+
+	void slotClicked2HasHDR();
+	void slotComboBox();
+
 private:
 	Ui::WidgetClass ui;
 };

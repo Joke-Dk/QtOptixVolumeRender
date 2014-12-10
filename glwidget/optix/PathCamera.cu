@@ -8,6 +8,9 @@ rtDeclareVariable(float3,        bad_color, , );
 rtDeclareVariable(unsigned int,  frame_number, , );
 rtDeclareVariable(unsigned int,  sqrt_num_samples, , );
 rtBuffer<float4, 2>              output_buffer;
+rtDeclareVariable(float,  hasBackground, , );
+rtDeclareVariable(float,  radianceMultipler, , );
+rtDeclareVariable(float,  hasHDR, , );
 
 //-----------------------------------------------------------------------------
 //
@@ -43,13 +46,12 @@ RT_PROGRAM void pathtrace_camera()
 		prd.inside = false;
 		prd.seed = seed;
 		prd.depth = 0;
-		prd.expand_rad = 1.f;
 
 		for(;;) {
 			Ray ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
 			rtTrace(top_object, ray, prd);
 			if(prd.done ||(prd.depth >= max_depth)) {
-				prd.result += prd.radiance * prd.attenuation*prd.expand_rad;
+				prd.result += prd.radiance * prd.attenuation;
 				break;
 			}
 
@@ -61,7 +63,7 @@ RT_PROGRAM void pathtrace_camera()
 				prd.attenuation /= pcont;
 			}
 			prd.depth++;
-			prd.result += prd.radiance * prd.attenuation*prd.expand_rad;
+			prd.result += prd.radiance * prd.attenuation;
 			ray_origin = prd.origin;
 			ray_direction = prd.direction;
 		} // eye ray
@@ -77,7 +79,7 @@ RT_PROGRAM void pathtrace_camera()
 	rtPrintf("[%f,%f,%f]",pixel_color.x,pixel_color.y,pixel_color.z);
 	}*/
 
-
+	pixel_color *= radianceMultipler;
 	if (frame_number > 1)
 	{
 		float a = 1.0f / (float)frame_number;
@@ -120,11 +122,15 @@ RT_PROGRAM void miss()
 rtTextureSampler<float4, 2> envmap;
 RT_PROGRAM void envmap_miss()
 {
-  float theta = atan2f( ray.direction.x, ray.direction.z );
-  float phi   = M_PIf * 0.5f -  acosf( ray.direction.y );
-  float u     = (theta + M_PIf) * (0.5f * M_1_PIf);
-  float v     = 0.5f * ( 1.0f + sin(phi) );
-  current_prd.radiance = make_float3( tex2D(envmap, u, v) )*1.f;
-  current_prd.done = true;
-  //current_prd.attenuation *= 0.1f;
+	float theta = atan2f( ray.direction.x, ray.direction.z );
+	float phi   = M_PIf * 0.5f -  acosf( ray.direction.y );
+	float u     = (theta + M_PIf) * (0.5f * M_1_PIf);
+	float v     = 0.5f * ( 1.0f + sin(phi) );
+	current_prd.radiance = bg_color;
+	if(hasBackground>0.5f || current_prd.depth>2)
+	{
+		current_prd.radiance = make_float3( tex2D(envmap, u, v) )*1.f;
+	}
+	current_prd.done = true;
+	//current_prd.attenuation *= 0.1f;
 }
