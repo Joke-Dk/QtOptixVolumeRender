@@ -24,6 +24,12 @@ void PathTracerScene::updateParameter( std::string str, float value)
 	m_context[str.c_str()]->setFloat(value); 
 }
 
+float PathTracerScene::getParameter( std::string str)
+{ 
+	return m_context[str.c_str()]->getFloat(); 
+}
+
+
 void PathTracerScene::initScene( InitialCameraData& camera_data )
 {
 	m_context->setPrintEnabled(true);
@@ -231,13 +237,16 @@ void PathTracerScene::createEnvironmentScene(int sceneKind)
 	// global parameter setting
 	float alpha_value = 0.95f;
 	float sigma_t=5.f;//0.1f;
-	int isCurve = 1;
+	float g=0.f;//0.1f;
+	float isCurve = 1.f;
+	float CloudCover = 0.02f;
+	float CloudSharpness = 0.0f;
 
 	if (sceneKind == 0)
 	{
 		sigma_t = 2.f;
 		alpha_value = 0.85f;
-		isCurve = 0;
+		isCurve = 0.f;
 	}
 
 	int index_x = 100;
@@ -248,7 +257,10 @@ void PathTracerScene::createEnvironmentScene(int sceneKind)
 	m_context["index_y" ]->setInt(index_y );
 	m_context["index_z" ]->setInt(index_z );  
 	m_context["sigma_t"    ]->setFloat( sigma_t );
-	m_context["isCurve"]->setInt(isCurve);
+	m_context["g"    ]->setFloat( g );
+	m_context["isCurve"]->setFloat(isCurve);
+	m_context["CloudCover"    ]->setFloat( CloudCover );
+	m_context["CloudSharpness"    ]->setFloat( CloudSharpness );
 
 	const float3 white = make_float3( 0.8f, 0.8f, 0.8f );
 	const float3 black = make_float3( 0.2f, 0.2f, 0.2f );

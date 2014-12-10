@@ -13,6 +13,7 @@ public:
 	Widget( QTGLUTDisplay* glWidget, QWidget *parent = 0, Qt::WFlags flags = 0);
 	~Widget();
 	void UpdataParameterAndRefresh(std::string str, float value);
+	float GetParameterValue(std::string str);
 	QTGLUTDisplay* _glWidget;
 	public slots:
 	void slotDoubleSpinbox_Slider();
@@ -21,6 +22,12 @@ public:
 	void slotSlider_DoubleSpinbox2();
 	void slotDoubleSpinbox_Slider3();
 	void slotSlider_DoubleSpinbox3();
+
+	void slotClicked3();
+	void slotDoubleSpinbox_Slider4();
+	void slotSlider_DoubleSpinbox4();
+	void slotDoubleSpinbox_Slider5();
+	void slotSlider_DoubleSpinbox5();
 private:
 	Ui::WidgetClass ui;
 };

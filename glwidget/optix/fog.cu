@@ -122,11 +122,12 @@ RT_PROGRAM void fog__closest_hit_radiance()
 			current_prd.origin = ray.origin+d*ray.direction;
 			float z1=rnd(current_prd.seed);
 			float z2=rnd(current_prd.seed);
-			float3 p;
-			cosine_sample_hemisphere(z1, z2, p);
-			float3 v1, v2;
-			createONB(ray.direction, v1, v2);
-			current_prd.direction = v1 * p.x + v2 * p.y + ray.direction * p.z;
+			//float3 p;
+			//cosine_sample_hemisphere(z1, z2, p);
+			//float3 v1, v2;
+			//createONB(ray.direction, v1, v2);
+			//current_prd.direction = v1 * p.x + v2 * p.y + ray.direction * p.z;
+			current_prd.direction = SampleHG( z1, z2, ray.direction);
 			current_prd.attenuation*=alpha_value;
 
 			// Compute direct light...

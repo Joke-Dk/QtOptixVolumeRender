@@ -34,6 +34,7 @@ public:
 	void   setMaxDepth( unsigned int depth )                           { m_max_depth= depth; }
 
 	void updateParameter( std::string str, float value);
+	float getParameter( std::string str);
 	unsigned int   m_width;
 	unsigned int   m_height;
 private:
