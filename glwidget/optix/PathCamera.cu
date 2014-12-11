@@ -10,7 +10,7 @@ rtDeclareVariable(unsigned int,  sqrt_num_samples, , );
 rtBuffer<float4, 2>              output_buffer;
 rtDeclareVariable(float,  hasBackground, , );
 rtDeclareVariable(float,  radianceMultipler, , );
-rtDeclareVariable(float,  hasHDR, , );
+//rtDeclareVariable(float,  hasHDR, , );
 
 //-----------------------------------------------------------------------------
 //

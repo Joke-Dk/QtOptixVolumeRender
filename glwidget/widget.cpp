@@ -27,6 +27,9 @@ Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
 	connect(ui.doubleSpinBox_6, SIGNAL(valueChanged(double)), this, SLOT(slotDoubleSpinbox_Slider6()));
 	connect(ui.horizontalSlider_6, SIGNAL(valueChanged(int)), this, SLOT(slotSlider_DoubleSpinbox6()));
 
+	// UI: Area box scene area light
+	connect(ui.checkBox, SIGNAL(clicked(bool)), this, SLOT(slotClicked1HasArea()));
+	connect(ui.checkBox_5, SIGNAL(clicked(bool)), this, SLOT(slotClicked5HasCornell()));
 	// UI: Environment kind light choose
 	connect(ui.checkBox_2, SIGNAL(clicked(bool)), this, SLOT(slotClicked2HasHDR()));
 
@@ -50,7 +53,9 @@ void Widget::SetDeafaultParamater()
 	UpdataParameterAndRefresh("radianceMultipler", ui.doubleSpinBox_6->value(), false);
 	UpdataEnvironmentLight( ui.comboBox->currentIndex() , false);
 	
+	UpdataParameterAndRefresh("hasCornell", ui.checkBox_5->isChecked()?1.f:0.f, false);
 	//UpdataHasHDR( ui.checkBox_2->isChecked(), false);
+	UpdataParameterAndRefresh("hasArea", ui.checkBox->isChecked()?1.f:0.f, false);
 	UpdataParameterAndRefresh("hasHDR", ui.checkBox_2->isChecked()?1.f:0.f, false);
 }
 
@@ -178,12 +183,10 @@ void Widget::slotClicked3()
 void Widget::slotClicked4()
 {
 	UpdataParameterAndRefresh("hasBackground", ui.checkBox_4->isChecked()?1.f:0.f);
+	PathTracerScene* scene= dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene);
+	scene->updateGeometryInstance();
 }
 
-void Widget::slotClicked2add_HDR()
-{
-	
-}
 
 void Widget::slotComboBox()
 {
@@ -225,6 +228,28 @@ void Widget::slotClicked2HasHDR()
 	ui.groupBox->setEnabled(ui.checkBox_2->isChecked());
 	UpdataHasHDR( ui.checkBox_2->isChecked());
 }
+
+
+
+void Widget::slotClicked5HasCornell()
+{
+	UpdataParameterAndRefresh("hasCornell", ui.checkBox_5->isChecked()?1.f:0.f, false);
+	PathTracerScene* scene= dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene);
+	scene->updateGeometryInstance();
+	_glWidget->resizeGL(scene->m_width, scene->m_height);
+}
+
+//////////////////////////////////////////////////////////////////////////
+// 3 - Area Light
+void Widget::slotClicked1HasArea()
+{
+	UpdataParameterAndRefresh("hasArea", ui.checkBox->isChecked()?1.f:0.f, false);
+	PathTracerScene* scene= dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene);
+	scene->updateHasAreaBox( );
+	scene->updateGeometryInstance();
+	_glWidget->resizeGL(scene->m_width, scene->m_height);
+}
+
 
 void Widget::UpdataHasHDR(bool hasHDR, bool refresh)
 {

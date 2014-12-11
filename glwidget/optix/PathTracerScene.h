@@ -37,11 +37,29 @@ public:
 	float getParameter( std::string str);
 	void switchEnvironmentLight( int envId);
 	void switchHasHDR( bool hasHDR);
+	void updateHasAreaBox( );
+	void updateGeometryInstance( );
+
 	unsigned int   m_width;
 	unsigned int   m_height;
 private:
+	// create geometry instances
+	std::vector<optix::GeometryInstance> gis0volume;
+	std::vector<optix::GeometryInstance> gis1reference;
+	std::vector<optix::GeometryInstance> gis2cornell;
+	std::vector<optix::GeometryInstance> gis3arealight;
+
+	// Generate material
+	optix::Material areaMaterial;
+	optix::Material diffuseMaterial;
+	optix::Material fogMaterial;
+	optix::Material glassMaterial;
+	optix::Material mirrorMaterial;
+
 	optix::Program miss_program_noHDR;
 	optix::Program miss_program_hasHDR;
+	ParallelogramLight light;
+	optix::Buffer light_buffer;
 	// Should return true if key was handled, false otherwise.
 	virtual bool keyPressed(unsigned char key, int x, int y);
 	void createEnvironmentScene(int sceneKind);
@@ -60,8 +78,8 @@ private:
 		const optix::Material &material0);
 	void setMaterial( optix::GeometryInstance& gi,
 		optix::Material material,
-		const std::string& color_name,
-		const float3& color);
+		const std::string& color_name="",
+		const float3& color=optix::make_float3(1.f));
 	
 	optix::Program        m_pgram_bounding_box;
 	optix::Program        m_pgram_intersection;

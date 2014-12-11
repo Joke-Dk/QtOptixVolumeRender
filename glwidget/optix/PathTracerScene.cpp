@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //
-// PathCamera.cpp: render cornell box using path tracing.
+// PathCamera.cpp: render Area box using path tracing.
 //
 //------------------------------------------------------------------------------
 
@@ -210,7 +210,23 @@ void PathTracerScene::setMaterial( GeometryInstance& gi,
 								  const float3& color)
 {
 	gi->addMaterial(material);
-	gi[color_name]->setFloat(color);
+	if (color_name!="")
+	{
+		gi[color_name]->setFloat(color);
+	}
+}
+
+
+
+void PathTracerScene::updateHasAreaBox( )
+{
+	// Light buffer
+	float light_em = m_context["light_em"]->getFloat();
+	float hasArea = m_context["hasArea"]->getFloat();
+	light.emission = hasArea>0.5f?make_float3(light_em):make_float3(0.f);
+	memcpy( light_buffer->map(), &light, sizeof( light ) );
+	light_buffer->unmap();
+	m_context["lights"]->setBuffer( light_buffer );
 }
 
 void PathTracerScene::switchHasHDR( bool hasHDR)
@@ -239,25 +255,52 @@ void PathTracerScene::switchEnvironmentLight( int envId)
 	m_context["envmap"]->setTextureSampler( loadTexture( m_context, envmapPath, default_color) );
 }
 
+void PathTracerScene::updateGeometryInstance()
+{
+	std::vector<GeometryInstance> gis;
+	// 0 add volume 
+	gis.insert(gis.end(), gis0volume.begin(), gis0volume.end());
+
+	// 1 add reference
+	if (getParameter("hasBackground")>0.5f)
+	{
+		gis.insert(gis.end(), gis1reference.begin(), gis1reference.end());
+	}	
+
+	// 2 add cornell box
+	if( getParameter("hasCornell")>0.5f)
+		gis.insert(gis.end(), gis2cornell.begin(), gis2cornell.end());
+
+	// 3 add area box
+	if( getParameter("hasArea")>0.5f)
+		gis.insert(gis.end(), gis3arealight.begin(), gis3arealight.end());
+
+	GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
+	geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
+	m_context["top_object"]->set( geometry_group );
+}
 
 void PathTracerScene::createEnvironmentScene(int sceneKind)
 {
-	// create geometry instances
+	// init Geometry Instance
+
+	// set the top_shadower
 	std::vector<GeometryInstance> gis;
-
-	// Generate material
-	Material& areaMaterial = DefineDiffuseLight( m_context);
-	Material& diffuseMaterial = DefineDiffuseMaterial( m_context);
-	Material &fogMaterial = DefineFogMaterial( m_context);
-	Material &glassMaterial = DefineGlassMaterial( m_context);
-	Material &mirrorMaterial = DefineMirrorMaterial( m_context);
-	m_pgram_bounding_box = m_context->createProgramFromPTXFile( my_ptxpath( "parallelogram.cu" ), "bounds" );
-	m_pgram_intersection = m_context->createProgramFromPTXFile( my_ptxpath( "parallelogram.cu" ), "intersect" );
-
-	// Create shadow group (no light)
 	GeometryGroup shadow_group = m_context->createGeometryGroup(gis.begin(), gis.end());
 	shadow_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
 	m_context["top_shadower"]->set( shadow_group );
+
+
+	// Generate material
+	areaMaterial = DefineDiffuseLight( m_context);
+	diffuseMaterial = DefineDiffuseMaterial( m_context);
+	fogMaterial = DefineFogMaterial( m_context);
+	glassMaterial = DefineGlassMaterial( m_context);
+	mirrorMaterial = DefineMirrorMaterial( m_context);
+	m_pgram_bounding_box = m_context->createProgramFromPTXFile( my_ptxpath( "parallelogram.cu" ), "bounds" );
+	m_pgram_intersection = m_context->createProgramFromPTXFile( my_ptxpath( "parallelogram.cu" ), "intersect" );
+
+
 
 	//////////////////////////////////////////////////////////////////////////
 	// global parameter setting
@@ -277,98 +320,80 @@ void PathTracerScene::createEnvironmentScene(int sceneKind)
 	const float3 red   = make_float3( 0.8f, 0.05f, 0.05f );
 	
 
-	//if(sceneKind==1)
-	//{
-	//	m_context->setMissProgram( 0, m_context->createProgramFromPTXFile( my_ptxpath("PathCamera.cu" ), "envmap_miss" ) );
-	//	
-	//}
-
 	//////////////////////////////////////////////////////////////////////////
 	// Light buffer
-	float3 light_em = make_float3( 15.0f, 15.0f, 15.0f );
-	if (sceneKind==0)
-	{
-		light_em *= 2.f;
-	}
-	else
-	{
-		light_em *= 0.f;
-	}
-	ParallelogramLight light;
 	light.corner   = make_float3( 2.0f, 10.499f, -2.0f);
 	light.v1       = make_float3( -4.0f, 0.0f, 0.0f);
 	light.v2       = make_float3( 0.0f, 0.0f, 4.0f);
 	light.normal   = normalize( cross(light.v1, light.v2) );
-	light.emission = light_em;
+	m_context["light_em"]->setFloat( 30.f);
 
-	Buffer light_buffer = m_context->createBuffer( RT_BUFFER_INPUT );
+	light_buffer = m_context->createBuffer( RT_BUFFER_INPUT );
 	light_buffer->setFormat( RT_FORMAT_USER );
 	light_buffer->setElementSize( sizeof( ParallelogramLight ) );
 	light_buffer->setSize( 1u );
-	memcpy( light_buffer->map(), &light, sizeof( light ) );
-	light_buffer->unmap();
-	m_context["lights"]->setBuffer( light_buffer );
-	if (fmaxf(light_em)>0.f)
-	{
-		// Light shape
-		gis.push_back( createParallelogram( light.corner,
-			light.v1,
-			light.v2 ) );
-		setMaterial(gis.back(), areaMaterial, "emission_color", light_em);
-	}
+	updateHasAreaBox();
+
+	//////////////////////////////////////////////////////////////////////////
+	// GeometryInstance 3 - light  
+	gis3arealight.push_back( createParallelogram( light.corner,
+		light.v1,
+		light.v2 ) );
+	setMaterial(gis3arealight.back(), areaMaterial, "emission_color", make_float3(1.f));
+
 	
 	
 	//////////////////////////////////////////////////////////////////////////
-	// cornel wall
+	// GeometryInstance 2 - Cornell Box
 	float3 p0 = make_float3(-10.5f, -10.5f, -10.5f);
 	float3 p1 = make_float3(10.5f, 10.5f, 10.5f);
 	float3 dp = p1-p0;
-	if(sceneKind==0)
-	{
-		//floor
-		gis.push_back( createParallelogram( p0, make_float3( 0.0f, 0.0f, dp.z),make_float3( dp.x, 0.0f, 0.0f) ) );
-		setMaterial(gis.back(), diffuseMaterial, "diffuse_color", white);
-		//ceiling
-		gis.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( dp.x, 0.0f, 0.0f) ) );
-		setMaterial(gis.back(), diffuseMaterial, "diffuse_color", white);
-		//left
-		gis.push_back( createParallelogram( p0, make_float3( 0.0f, 0.0f, dp.z),make_float3( 0.f , dp.y, 0.0f) ) );
-		setMaterial(gis.back(), diffuseMaterial, "diffuse_color", green);
-		//right
-		gis.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( 0.f , dp.y, 0.0f) ) );
-		setMaterial(gis.back(), diffuseMaterial, "diffuse_color", red);
-		//behind
-		gis.push_back( createParallelogram( p0, make_float3( dp.x, 0.0f, 0.f),make_float3( 0.f , dp.y, 0.0f) ) );
-		setMaterial(gis.back(), diffuseMaterial, "diffuse_color", white);
-		//front
-		//gis.push_back( createParallelogram( p1, -make_float3( dp.x, 0.0f, 0.f), -make_float3( 0.f , dp.y, 0.0f) ) );
-		//setMaterial(gis.back(), diffuseMaterial, "diffuse_color", white);
-	}
+
+	//floor
+	gis2cornell.push_back( createParallelogram( p0, make_float3( 0.0f, 0.0f, dp.z),make_float3( dp.x, 0.0f, 0.0f) ) );
+	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
+	//ceiling
+	gis2cornell.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( dp.x, 0.0f, 0.0f) ) );
+	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
+	//left
+	gis2cornell.push_back( createParallelogram( p0, make_float3( 0.0f, 0.0f, dp.z),make_float3( 0.f , dp.y, 0.0f) ) );
+	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", green);
+	//right
+	gis2cornell.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( 0.f , dp.y, 0.0f) ) );
+	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", red);
+	//behind
+	gis2cornell.push_back( createParallelogram( p0, make_float3( dp.x, 0.0f, 0.f),make_float3( 0.f , dp.y, 0.0f) ) );
+	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
+	//front
+	//gis.push_back( createParallelogram( p1, -make_float3( dp.x, 0.0f, 0.f), -make_float3( 0.f , dp.y, 0.0f) ) );
+	//setMaterial(gis.back(), diffuseMaterial, "diffuse_color", white);
+
+
 	//////////////////////////////////////////////////////////////////////////
-	// fog
+	// GeometryInstance 0 - Volume Box
 	p0 = make_float3(-10.49f, -10.49f, -4.f);
 	p1 = make_float3(10.49f, 10.49f, 4.f);
 	m_context["P0"]->setFloat(p0.x, p0.y, p0.z );
 	m_context["P1"]->setFloat(p1.x, p1.y, p1.z );
 	dp = p1-p0;
 	//floor
-	gis.push_back( createParallelogram( p0, make_float3( 0.0f, 0.0f, dp.z),make_float3( dp.x, 0.0f, 0.0f) ) );
-	setMaterial(gis.back(), fogMaterial, "diffuse_color", white);
+	gis0volume.push_back( createParallelogram( p0, make_float3( 0.0f, 0.0f, dp.z),make_float3( dp.x, 0.0f, 0.0f) ) );
+	setMaterial(gis0volume.back(), fogMaterial, "diffuse_color", white);
 	//ceiling
-	gis.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( dp.x, 0.0f, 0.0f) ) );
-	setMaterial(gis.back(), fogMaterial, "diffuse_color", white);
+	gis0volume.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( dp.x, 0.0f, 0.0f) ) );
+	setMaterial(gis0volume.back(), fogMaterial, "diffuse_color", white);
 	//left
-	gis.push_back( createParallelogram( p0, make_float3( 0.0f, 0.0f, dp.z),make_float3( 0.f , dp.y, 0.0f) ) );
-	setMaterial(gis.back(), fogMaterial, "diffuse_color", white);
+	gis0volume.push_back( createParallelogram( p0, make_float3( 0.0f, 0.0f, dp.z),make_float3( 0.f , dp.y, 0.0f) ) );
+	setMaterial(gis0volume.back(), fogMaterial, "diffuse_color", white);
 	//right
-	gis.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( 0.f , dp.y, 0.0f) ) );
-	setMaterial(gis.back(), fogMaterial, "diffuse_color", white);
+	gis0volume.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( 0.f , dp.y, 0.0f) ) );
+	setMaterial(gis0volume.back(), fogMaterial, "diffuse_color", white);
 	//behind
-	gis.push_back( createParallelogram( p0, make_float3( dp.x, 0.0f, 0.f),make_float3( 0.f , dp.y, 0.0f) ) );
-	setMaterial(gis.back(), fogMaterial, "diffuse_color", white);
+	gis0volume.push_back( createParallelogram( p0, make_float3( dp.x, 0.0f, 0.f),make_float3( 0.f , dp.y, 0.0f) ) );
+	setMaterial(gis0volume.back(), fogMaterial, "diffuse_color", white);
 	//front
-	gis.push_back( createParallelogram( p1, -make_float3( dp.x, 0.0f, 0.f), -make_float3( 0.f , dp.y, 0.0f) ) );
-	setMaterial(gis.back(), fogMaterial, "diffuse_color", white);
+	gis0volume.push_back( createParallelogram( p1, -make_float3( dp.x, 0.0f, 0.f), -make_float3( 0.f , dp.y, 0.0f) ) );
+	setMaterial(gis0volume.back(), fogMaterial, "diffuse_color", white);
 	//load volume data
 	int index_N = index_x*index_y*index_z;
 	optix::Buffer vol_data = m_context->createBuffer(RT_BUFFER_INPUT);
@@ -391,14 +416,12 @@ void PathTracerScene::createEnvironmentScene(int sceneKind)
 	m_context["volume_density"]->setBuffer( vol_data );
 
 	//////////////////////////////////////////////////////////////////////////
-	// Sphere
+	// GeometryInstance 0 - Sphere and Cup.obj
 
-	gis.push_back( createSphere( make_float3(-6.f,0.f,6.f), 1.f));
+	gis1reference.push_back( createSphere( make_float3(-6.f,0.f,6.f), 1.f));
 	//setMaterial(gis.back(), diffuse, "diffuse_color", white);
-	setMaterial(gis.back(), mirrorMaterial, "glass_color", make_float3(1.f));
+	setMaterial(gis1reference.back(), mirrorMaterial, "glass_color", make_float3(1.f));
 
-
-	// Obj 1
 	const float matrix_1[4*4] = { 0.3,  0,  0,  3, 
 		0,  0.3,  0,  -6, 
 		0,  0,  0.3, 7, 
@@ -407,14 +430,8 @@ void PathTracerScene::createEnvironmentScene(int sceneKind)
 	std::string obj_path1 = ("optix/mesh/cognacglass.obj");
 	GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, glassMaterial);
 
+	gis1reference.push_back(objgroup1->getChild(0));
 
 	// Create geometry group
-	GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
-	int count_geom = geometry_group->getChildCount();
-
-	geometry_group->setChildCount( count_geom+1 );
-	geometry_group->setChild( count_geom, objgroup1->getChild(0) );
-
-	geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
-	m_context["top_object"]->set( geometry_group );
+	updateGeometryInstance();
 }

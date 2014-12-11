@@ -28,7 +28,6 @@ public:
 
 	void slotClicked3();
 	void slotClicked4();
-	void slotClicked2add_HDR();
 	void slotDoubleSpinbox_Slider4();
 	void slotSlider_DoubleSpinbox4();
 	void slotDoubleSpinbox_Slider5();
@@ -36,7 +35,9 @@ public:
 	void slotDoubleSpinbox_Slider6();
 	void slotSlider_DoubleSpinbox6();
 
+	void slotClicked1HasArea();
 	void slotClicked2HasHDR();
+	void slotClicked5HasCornell();
 	void slotComboBox();
 
 private:

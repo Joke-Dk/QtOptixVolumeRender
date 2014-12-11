@@ -32,6 +32,7 @@ struct PerRayData_pathtrace_shadow
 rtDeclareVariable(float,         scene_epsilon, , );
 rtDeclareVariable(rtObject,      top_object, , );
 rtBuffer<ParallelogramLight>     lights;
+rtDeclareVariable(float,         light_em, , );
 
 rtDeclareVariable(unsigned int,  pathtrace_ray_type, , );
 rtDeclareVariable(unsigned int,  pathtrace_shadow_ray_type, , );
