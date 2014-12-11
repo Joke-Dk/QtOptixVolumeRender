@@ -36,8 +36,16 @@ Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
 	ui.comboBox->setEditable(false); 
 	ui.comboBox->addItem(  "Cedar City");  
 	ui.comboBox->addItem(  "Grace LL");  
-	ui.comboBox->addItem(  "Octane Studio 4");  
+	ui.comboBox->addItem(  "Octane Studio 4"); 
+	ui.comboBox->addItem(  "DH001 LL"); 
+	ui.comboBox->addItem(  "DH037 LL"); 
+	ui.comboBox->addItem(  "DH053 LL");  
+	ui.comboBox->addItem(  "Ennis");  
+	ui.comboBox->addItem(  "Grace Latlong");  
+	ui.comboBox->addItem(  "Window Studio");  
+	ui.comboBox->addItem(  "Studio 019");  
 	connect( ui.comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotComboBox()));
+
 	SetDeafaultParamater();
 }
 

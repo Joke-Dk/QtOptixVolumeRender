@@ -250,6 +250,13 @@ void PathTracerScene::switchEnvironmentLight( int envId)
 	case 0:envmapPath += "CedarCity.hdr";break;
 	case 1:envmapPath += "grace_ll.hdr";break;
 	case 2:envmapPath += "octane_studio4.hdr";break;
+	case 3:envmapPath += "DH001LL.hdr";break;
+	case 4:envmapPath += "DH037LL.hdr";break;
+	case 5:envmapPath += "DH053LL.hdr";break;
+	case 6:envmapPath += "ennis.hdr";break;
+	case 7:envmapPath += "grace_latlong.hdr";break;
+	case 8:envmapPath += "windowStudio.hdr";break;
+	case 9:envmapPath += "studio019.hdr";break;
 	default:envmapPath += "CedarCity.hdr";break;
 	}
 	m_context["envmap"]->setTextureSampler( loadTexture( m_context, envmapPath, default_color) );
