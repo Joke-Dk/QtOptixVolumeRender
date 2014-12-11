@@ -76,6 +76,7 @@ RT_PROGRAM void glass_fresnel()
   current_prd.radiance = make_float3(0.0f,0.f,0.f);
 }
 
+
 rtDeclareVariable(float3, shadow_attenuation, , );
 
 RT_PROGRAM void glass_any_hit_shadow()

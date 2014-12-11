@@ -44,6 +44,7 @@ class PinholeCamera;
 class QTGLUTDisplay : public QGLWidget
 {
 	Q_OBJECT
+	friend class Widget;
 public:
 	QTGLUTDisplay(int argc, char **argv, QWidget *parent = 0);
 	~QTGLUTDisplay();
@@ -85,7 +86,8 @@ public:
   static void postRedisplay();
 
   static void setUseSRGB(bool enabled) { _use_sRGB = enabled; }
-
+  
+static SampleScene*   _scene;
 private:
 
   // Draw text to screen at window pos x,y.  To make this public we will need to have
@@ -123,7 +125,7 @@ private:
 
   static Mouse*         _mouse;
   static PinholeCamera* _camera;
-  static SampleScene*   _scene;
+
 
   static double         _last_frame_time;
   static unsigned int   _last_frame_count;

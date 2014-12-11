@@ -8,11 +8,22 @@ rtDeclareVariable(int,        index_y, , );
 rtDeclareVariable(int,        index_z, , );
 rtDeclareVariable(float,        sigma_t, , );
 rtDeclareVariable(float,        alpha_value, , );
+rtDeclareVariable(float,        g, , );
+rtDeclareVariable(float,        isCurve, , );
 
-
+rtDeclareVariable(float,        CloudCover, , );
+rtDeclareVariable(float,        CloudSharpness, , );
 static __device__ __inline__ int xyz2i(int x, int y, int z)
 {
 	return z*index_x*index_y+ y*index_x+x;
+}
+
+static __device__  __inline__ float CloudExpCurve(float v)
+{
+	float c=v-CloudCover;
+	if (c<0.f){c=0.f;}
+	float cloudDensity = 1.f-pow(CloudSharpness, c);
+	return cloudDensity;
 }
 
 static __device__ __inline__ float get_density(float3 p)
@@ -55,7 +66,10 @@ static __device__ __inline__ float get_density(float3 p)
 		//debug.watch(p,x0,y0,z0, w1, w0)
 		//return 1.f
 		float res = (((d000 * w0.x + d001 * w1.x) * w0.y +  (d010 * w0.x + d011 * w1.x) * w1.y) * w0.z +  ((d100 * w0.x + d101 * w1.x) * w0.y + (d110 * w0.x + d111 * w1.x) * w1.y) * w1.z); 
-		return  res;//CloudExpCurve(res);//*.densityMultiplier//*CloudExpCurve(res)
+		if(isCurve>0.5f)
+			return  CloudExpCurve(res);//*.densityMultiplier//*CloudExpCurve(res)
+		else 
+			return res;
 	}
 	else 
 	{
@@ -63,15 +77,52 @@ static __device__ __inline__ float get_density(float3 p)
 	}
 }
 
-static __device__  __inline__ float CloudExpCurve(float v)
+
+static __device__ __inline__ void localFrame(float3& T, float3& B, const float3& N2)
 {
-	float CloudCover = 0.1f;
-	float CloudSharpness = 0.1f;
-	float c=v-CloudCover;
-	if (c<0.f){c=0.f;}
-	float cloudDensity = 1.f-pow(CloudSharpness, c);
-	return cloudDensity;
+	float3 N=normalize(N2);
+	if (abs(N.x) <= abs(N.y) && abs(N.x) <= abs(N.z))
+		T = make_float3(0.f, -N.z, N.y);
+	else if (abs(N.y) <= abs(N.x) && abs(N.y) <= abs(N.z))
+		T = make_float3(-N.z, 0.f, N.x);
+	else
+		T = make_float3(-N.y, N.x, 0.f);
+	T = normalize(T);
+	B = cross(N, T);
+	T = cross(B, N);
 }
+
+static __device__ __inline__ float3 SampleHG( const float u1, const float u2, const float3& N)
+{
+	float3 T,B;
+	localFrame(T,B,N);
+	
+	float costheta;
+	if (fabs(g) < 0.001f)
+		costheta = 1.f - 2.f * u1;
+	else 
+	{
+		float sqrTerm = (1.f - g * g) /(1.f - g + 2.f * g * u1);
+		costheta = (1.f + g * g - sqrTerm * sqrTerm) / (2.f * g);
+	}
+	float sintheta = sqrt(max(0.f, 1.f-costheta*costheta));
+	float phi = 2.f * M_PIf * u2;
+	float x=cos(phi)*sintheta;
+	float y=sin(phi)*sintheta;
+	return x*T+y*B+costheta*N;
+}
+
+static __device__ __inline__ float3 cosineHemisphere( const float u1, const float u2, const float3& N)
+{
+	float3 p;
+	cosine_sample_hemisphere(u1, u2, p);
+	float3 v1, v2;
+	createONB(ray.direction, v1, v2);
+	current_prd.direction = v1 * p.x + v2 * p.y + ray.direction * p.z;
+	return v1 * p.x + v2 * p.y + ray.direction * p.z;
+}
+
+
 
 
 	

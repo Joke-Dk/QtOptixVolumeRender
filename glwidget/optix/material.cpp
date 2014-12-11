@@ -13,7 +13,7 @@ Material DefineGlassMaterial( Context& m_context)
 	// Set up glass material
 	Material& glassMaterial = makeMaterialPrograms( m_context, "glass.cu", "glass_fresnel", "glass_any_hit_shadow");
 
-	bool m_green_glass = false;
+	bool m_green_glass = 1;
 	glassMaterial["index_of_refraction"  ]->setFloat( 1.41f );
 	glassMaterial["glass_color"  ]->setFloat( 0.95f,1.f,1.f );
 	glassMaterial["importance_cutoff"  ]->setFloat( 0.01f );
@@ -33,6 +33,28 @@ Material DefineGlassMaterial( Context& m_context)
 	return glassMaterial;
 }
 
+Material DefineMirrorMaterial( Context& m_context)
+{
+	// Set up glass material
+	Material& mirrorMaterial = makeMaterialPrograms( m_context, "mirror.cu", "mirror_fresnel", "shadow");
+
+	return mirrorMaterial;
+}
+
+
+optix::Material DefineFogMaterial( optix::Context& m_context)
+{
+	// Set up glass material
+	Material& fogMaterial = makeMaterialPrograms( m_context, "fog.cu", "fog__closest_hit_radiance", "fog_shadow");
+
+	fogMaterial["glass_color"] ->setFloat(  1.f,1.f,1.f);
+	fogMaterial["index_of_refraction"]->setFloat(1.f);
+	fogMaterial["fresnel_exponent"   ]->setFloat( 4.0f );
+	fogMaterial["fresnel_minimum"    ]->setFloat( 0.1f );
+	fogMaterial["fresnel_maximum"    ]->setFloat( 1.0f );
+
+	return fogMaterial;
+}
 
 Material makeMaterialPrograms( Context& m_context, const std::string& filename, 
 							  const std::string& ch_program_name,
@@ -40,10 +62,12 @@ Material makeMaterialPrograms( Context& m_context, const std::string& filename,
 {
 	Material material = m_context->createMaterial();
 	Program ch_program = m_context->createProgramFromPTXFile( my_ptxpath( filename), ch_program_name );
-	Program ah_program = m_context->createProgramFromPTXFile( my_ptxpath( filename), ah_program_name );
-
 	material->setClosestHitProgram( 0, ch_program );
-	material->setAnyHitProgram( 1, ah_program );
+	if( ah_program_name!="")
+	{
+		Program ah_program = m_context->createProgramFromPTXFile( my_ptxpath( filename), ah_program_name );
+		material->setAnyHitProgram( 1, ah_program );
+	}
 
 	return material;
 }

@@ -207,88 +207,142 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\widget.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\widget.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DUNICODE -DWIN32&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot; &quot;-I$(CUDA_PATH_V4_0)\include&quot; &quot;-I$(OPTIX_SDK)\include&quot; &quot;-I$(OPTIX_SDK)\include\optixu&quot; &quot;-I$(OPTIX_SDK)\lib&quot; &quot;-I$(OPTIX_SDK)\SDK\support\freeglut\include&quot; &quot;-I$(OPTIX_SDK)\SDK\sutil&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DUNICODE -DWIN32&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\window.cpp"
 				>
 			</File>
 			<Filter
 				Name="optix"
 				>
-				<File
-					RelativePath=".\optix\diffuse.cu"
+				<Filter
+					Name="cuda"
 					>
-				</File>
-				<File
-					RelativePath=".\optix\glass.cu"
+					<File
+						RelativePath=".\optix\diffuse.cu"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\fog.cu"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\glass.cu"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\light.cu"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\math.cuh"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\mirror.cu"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\parallelogram.cu"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\PathCamera.cu"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\ray.cuh"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\sphere.cu"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\TriangleMesh.cu"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\volume.cuh"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="h file"
 					>
-				</File>
-				<File
-					RelativePath=".\optix\helpers.h"
+					<File
+						RelativePath=".\optix\helpers.h"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\intersection_refinement.h"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\light.h"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\material.h"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\PathTracerScene.h"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\random.h"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\Sampler.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="cpp file"
 					>
-				</File>
-				<File
-					RelativePath=".\optix\intersection_refinement.h"
-					>
-				</File>
-				<File
-					RelativePath=".\optix\light.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\optix\light.cu"
-					>
-				</File>
-				<File
-					RelativePath=".\optix\light.h"
-					>
-				</File>
-				<File
-					RelativePath=".\optix\material.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\optix\material.h"
-					>
-				</File>
-				<File
-					RelativePath=".\optix\math.cuh"
-					>
-				</File>
-				<File
-					RelativePath=".\optix\parallelogram.cu"
-					>
-				</File>
-				<File
-					RelativePath=".\optix\PathCamera.cu"
-					>
-				</File>
-				<File
-					RelativePath=".\optix\PathTracerScene.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\optix\PathTracerScene.h"
-					>
-				</File>
-				<File
-					RelativePath=".\optix\random.h"
-					>
-				</File>
-				<File
-					RelativePath=".\optix\ray.cuh"
-					>
-				</File>
-				<File
-					RelativePath=".\optix\Sampler.h"
-					>
-				</File>
-				<File
-					RelativePath=".\optix\sphere.cu"
-					>
-				</File>
-				<File
-					RelativePath=".\optix\TriangleMesh.cu"
-					>
-				</File>
+					<File
+						RelativePath=".\optix\light.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\material.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\PathTracerScene.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -329,7 +383,7 @@
 			UniqueIdentifier="{99349809-55BA-4b9d-BF79-8FDBB0286EB3}"
 			>
 			<File
-				RelativePath=".\glwidget.ui"
+				RelativePath=".\widget.ui"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -394,6 +448,10 @@
 			UniqueIdentifier="{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}"
 			SourceControlFiles="false"
 			>
+			<File
+				RelativePath=".\GeneratedFiles\ui_widget.h"
+				>
+			</File>
 			<Filter
 				Name="Release"
 				Filter="cpp;moc"
@@ -401,6 +459,18 @@
 				>
 				<File
 					RelativePath=".\GeneratedFiles\Release\moc_QTGLUTDisplay.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\GeneratedFiles\Release\moc_widget.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -431,6 +501,18 @@
 				>
 				<File
 					RelativePath=".\GeneratedFiles\Debug\moc_QTGLUTDisplay.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\GeneratedFiles\Debug\moc_widget.cpp"
 					>
 					<FileConfiguration
 						Name="Release|Win32"

@@ -18,11 +18,11 @@ struct PerRayData_pathtrace
 	int countEmitted;
 	int done;
 	int inside;
-	float expand_rad;
 };
 
 struct PerRayData_pathtrace_shadow
 {
+	unsigned int seed;
 	float3 origin;
 	float3 direction;
 	float3 attenuation;
@@ -32,6 +32,7 @@ struct PerRayData_pathtrace_shadow
 rtDeclareVariable(float,         scene_epsilon, , );
 rtDeclareVariable(rtObject,      top_object, , );
 rtBuffer<ParallelogramLight>     lights;
+rtDeclareVariable(float,         light_em, , );
 
 rtDeclareVariable(unsigned int,  pathtrace_ray_type, , );
 rtDeclareVariable(unsigned int,  pathtrace_shadow_ray_type, , );
@@ -51,3 +52,4 @@ rtDeclareVariable(uint2,      launch_index, rtLaunchIndex, );
 rtDeclareVariable(float3,       bg_color, , );
 // For shadow program
 rtDeclareVariable(PerRayData_pathtrace_shadow, current_prd_shadow, rtPayload, );
+

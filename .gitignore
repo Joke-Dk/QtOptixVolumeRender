@@ -1,5 +1,13 @@
+#*.suo
+#*.ncb
+#*.sln
+
+hdr
+GeneratedFiles
+Debug
+Release
+lib
 ptx
-*.ptx
 # Compiled Object files
 *.slo
 *.lo
