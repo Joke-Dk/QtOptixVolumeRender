@@ -27,6 +27,7 @@ public:
 
 	virtual void   initScene( InitialCameraData& camera_data );
 	virtual void   trace( const RayGenCameraData& camera_data );
+	void PreCompution();
 	virtual optix::Buffer getOutputBuffer();
 
 	void   setNumSamples( unsigned int sns )                           { m_sqrt_num_samples= sns; }
@@ -34,6 +35,7 @@ public:
 	void   setMaxDepth( unsigned int depth )                           { m_max_depth= depth; }
 
 	void updateParameter( std::string str, float value);
+	void updateParameter( std::string str, int value);
 	float getParameter( std::string str);
 	void switchEnvironmentLight( int envId);
 	void switchHasHDR( bool hasHDR);

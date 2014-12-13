@@ -112,6 +112,19 @@ static __device__ __inline__ float3 SampleHG( const float u1, const float u2, co
 	return x*T+y*B+costheta*N;
 }
 
+static __device__ __inline__ float3 uniformSphere( const float u1, const float u2, const float3& N)
+{
+	float3 T,B;
+	localFrame(T,B,N);
+
+	float z=1.f-2.f*u1;
+	float r=sqrt(max(0.f,1.f-z*z));
+	float phi=2.f*M_PIf*u2;
+	float x=r*cos(phi);
+	float y=r*sin(phi);
+	return x*T+y*B+z*N;
+}
+
 static __device__ __inline__ float3 cosineHemisphere( const float u1, const float u2, const float3& N)
 {
 	float3 p;
@@ -121,7 +134,6 @@ static __device__ __inline__ float3 cosineHemisphere( const float u1, const floa
 	current_prd.direction = v1 * p.x + v2 * p.y + ray.direction * p.z;
 	return v1 * p.x + v2 * p.y + ray.direction * p.z;
 }
-
 
 
 

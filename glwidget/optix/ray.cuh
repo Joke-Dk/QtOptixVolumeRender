@@ -46,10 +46,10 @@ rtDeclareVariable(PerRayData_pathtrace, current_prd, rtPayload, );
 
 rtDeclareVariable(optix::Ray, ray,          rtCurrentRay, );
 rtDeclareVariable(float,      t_hit,        rtIntersectionDistance, );
-rtDeclareVariable(uint2,      launch_index, rtLaunchIndex, );
 
 // For miss program
 rtDeclareVariable(float3,       bg_color, , );
+rtDeclareVariable(float3,        bad_color, , );
 // For shadow program
 rtDeclareVariable(PerRayData_pathtrace_shadow, current_prd_shadow, rtPayload, );
 

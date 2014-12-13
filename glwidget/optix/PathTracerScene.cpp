@@ -24,6 +24,11 @@ void PathTracerScene::updateParameter( std::string str, float value)
 	m_context[str.c_str()]->setFloat(value); 
 }
 
+void PathTracerScene::updateParameter( std::string str, int value)
+{ 
+	m_context[str.c_str()]->setUint(value); 
+}
+
 float PathTracerScene::getParameter( std::string str)
 { 
 	return m_context[str.c_str()]->getFloat(); 
@@ -36,7 +41,7 @@ void PathTracerScene::initScene( InitialCameraData& camera_data )
 
 
 	m_context->setRayTypeCount( 3 );
-	m_context->setEntryPointCount( 1 );
+	m_context->setEntryPointCount( 2 );
 	m_context->setStackSize( 1800 );
 
 	m_context["scene_epsilon"]->setFloat( 1.e-3f );
@@ -69,7 +74,7 @@ void PathTracerScene::initScene( InitialCameraData& camera_data )
 	m_context["bad_color"]->setFloat( 0.0f, 1.0f, 0.0f );
 	m_context["bg_color"]->setFloat( make_float3(0.0f) );
 
-	// Setup programs
+	// Setup programs 1
 	std::string ptx_path = my_ptxpath("PathCamera.cu" );
 	Program ray_gen_program = m_context->createProgramFromPTXFile( ptx_path, "pathtrace_camera" );
 	m_context->setRayGenerationProgram( 0, ray_gen_program );
@@ -118,6 +123,15 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 	m_context["frame_number"]->setUint( m_frame++ );
 
 	m_context->launch( 0,static_cast<unsigned int>(buffer_width),static_cast<unsigned int>(buffer_height));
+}
+
+void PathTracerScene::PreCompution( )
+{
+	Buffer buffer = m_context["gridBuffer"]->getBuffer();
+	RTsize buffer_x, buffer_y, buffer_z;
+	buffer->getSize( buffer_x, buffer_y, buffer_z );
+	m_context->launch( 0,static_cast<unsigned int>(buffer_x),static_cast<unsigned int>(buffer_y),static_cast<unsigned int>(buffer_z));
+
 }
 
 //-----------------------------------------------------------------------------
@@ -441,4 +455,19 @@ void PathTracerScene::createEnvironmentScene(int sceneKind)
 
 	// Create geometry group
 	updateGeometryInstance();
+
+	//////////////////////////////////////////////////////////////////////////
+	// Setup programs 2
+	std::string ptx_path2 = my_ptxpath("PreCompution.cu" );
+	Program ray_gen_program2 = m_context->createProgramFromPTXFile( ptx_path2, "PreCompution" );
+	m_context->setRayGenerationProgram( 1, ray_gen_program2 );
+	Program exception_program2 = m_context->createProgramFromPTXFile( ptx_path2, "exception" );
+	m_context->setExceptionProgram( 1, exception_program2 );
+	// Setup output buffer 2
+	//m_context["gridBuffer"]->set(createOutputBuffer( RT_FORMAT_FLOAT4, 100, 100, 40));
+
+	optix::Buffer gridData = m_context->createBuffer(RT_BUFFER_INPUT_OUTPUT);
+	gridData->setFormat(RT_FORMAT_FLOAT4);
+	gridData->setSize(index_x, index_y, index_z);
+	m_context["gridBuffer"]->setBuffer( gridData );
 }

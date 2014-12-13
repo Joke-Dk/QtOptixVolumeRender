@@ -279,6 +279,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\optix\PreCompution.cu"
+						>
+					</File>
+					<File
 						RelativePath=".\optix\ray.cuh"
 						>
 					</File>

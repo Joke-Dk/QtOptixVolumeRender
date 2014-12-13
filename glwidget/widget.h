@@ -13,6 +13,7 @@ public:
 	Widget( QTGLUTDisplay* glWidget, QWidget *parent = 0, Qt::WFlags flags = 0);
 	~Widget();
 	void UpdataParameterAndRefresh(std::string str, float value, bool refresh=true);
+	void UpdataParameterAndRefreshInt(std::string str, int value, bool refresh=true);
 	float GetParameterValue(std::string str);
 	void SetDeafaultParamater();
 	void UpdataEnvironmentLight(int idEnv, bool refresh=true);

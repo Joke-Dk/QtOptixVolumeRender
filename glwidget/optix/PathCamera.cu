@@ -1,10 +1,11 @@
 #include "ray.cuh"
 
+rtDeclareVariable(uint2,      launch_index, rtLaunchIndex, );
+
 rtDeclareVariable(float3,        eye, , );
 rtDeclareVariable(float3,        U, , );
 rtDeclareVariable(float3,        V, , );
 rtDeclareVariable(float3,        W, , );
-rtDeclareVariable(float3,        bad_color, , );
 rtDeclareVariable(unsigned int,  frame_number, , );
 rtDeclareVariable(unsigned int,  sqrt_num_samples, , );
 rtBuffer<float4, 2>              output_buffer;

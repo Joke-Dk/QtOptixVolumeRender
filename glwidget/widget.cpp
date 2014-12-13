@@ -211,6 +211,16 @@ float Widget::GetParameterValue(std::string str)
 	return scene->getParameter( str);
 }
 
+void Widget::UpdataParameterAndRefreshInt(std::string str, int value, bool refresh)
+{
+	PathTracerScene* scene= dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene);
+	scene->updateParameter(str , value);
+	if(refresh)
+	{
+		_glWidget->resizeGL(scene->m_width, scene->m_height);
+	}
+}
+
 void Widget::UpdataParameterAndRefresh(std::string str, float value, bool refresh)
 {
 	PathTracerScene* scene= dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene);
