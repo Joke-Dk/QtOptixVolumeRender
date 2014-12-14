@@ -15,6 +15,7 @@ rtDeclareVariable(float,        fresnel_minimum, , );
 rtDeclareVariable(float,        fresnel_maximum, , );
 rtDeclareVariable(float,        isRayMarching, , );
 
+
 static __device__ __inline__ float woodcockTracking( const Ray& current_ray, float maxLength, float maxExtinction)
 {
 	float3 p = current_ray.origin;

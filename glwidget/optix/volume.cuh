@@ -15,7 +15,16 @@ rtDeclareVariable(float,        CloudCover, , );
 rtDeclareVariable(float,        CloudSharpness, , );
 
 //Precomputation Intensity
-rtBuffer<float3, 3>    gridBuffer;
+rtBuffer<float3, 1>    gridBuffer;
+
+static __device__ __inline__ uint3 i2xyz(int i)
+{
+	uint3 xyz;
+	xyz.x = i%(index_x);
+	xyz.y = i/(index_x)%(index_y);
+	xyz.z = i/(index_x)/(index_y);
+	return xyz;
+}
 
 static __device__ __inline__ int xyz2i(int x, int y, int z)
 {
@@ -103,14 +112,14 @@ static __device__ __inline__ float3 interpolation(float3 p)
 		int z1=z0+1;
 
 		
-		float3 d000=gridBuffer[make_uint3(x0,y0,z0)];
-		float3 d100=gridBuffer[make_uint3(x0,y0,z1)];
-		float3 d010=gridBuffer[make_uint3(x0,y1,z0)];
-		float3 d110=gridBuffer[make_uint3(x0,y1,z1)];
-		float3 d001=gridBuffer[make_uint3(x1,y0,z0)];
-		float3 d101=gridBuffer[make_uint3(x1,y0,z1)];
-		float3 d011=gridBuffer[make_uint3(x1,y1,z0)];
-		float3 d111=gridBuffer[make_uint3(x1,y1,z1)];
+		float3 d000=gridBuffer[xyz2i(x0,y0,z0)];
+		float3 d100=gridBuffer[xyz2i(x0,y0,z1)];
+		float3 d010=gridBuffer[xyz2i(x0,y1,z0)];
+		float3 d110=gridBuffer[xyz2i(x0,y1,z1)];
+		float3 d001=gridBuffer[xyz2i(x1,y0,z0)];
+		float3 d101=gridBuffer[xyz2i(x1,y0,z1)];
+		float3 d011=gridBuffer[xyz2i(x1,y1,z0)];
+		float3 d111=gridBuffer[xyz2i(x1,y1,z1)];
 	
 		//p>p0
 		float3 w1 = make_float3(x0f, y0f, z0f);

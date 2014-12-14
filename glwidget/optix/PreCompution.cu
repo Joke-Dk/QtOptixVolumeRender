@@ -1,7 +1,7 @@
 #include <optix.h>
 #include <optixu/optixu_math_namespace.h>
 #include "volume.cuh"
-rtDeclareVariable(uint3, gridIndex, rtLaunchIndex, );
+rtDeclareVariable(uint, gridIndex, rtLaunchIndex, );
 rtDeclareVariable(int, numSampling, , );
 //rtBuffer<float4, 3>    gridBuffer;
 static __device__ __inline__ float3 GetPosition( uint3 index)
@@ -17,10 +17,10 @@ static __device__ __inline__ float3 GetPosition( uint3 index)
 //-----------------------------------------------------------------------------
 RT_PROGRAM void PreCompution()
 {
-	int max_depth = 20;
-	unsigned int seed = tea<16>(gridIndex.z*index_x*index_y + gridIndex.y*index_x + gridIndex.z, 0);
-	float3 ray_origin = GetPosition( gridIndex);
-	float3 ray_direction;
+	int max_depth = 2;
+	unsigned int seed = tea<16>(gridIndex*index_x*index_y + gridIndex*index_x + gridIndex, 0);
+	float3 p = GetPosition( i2xyz(gridIndex));
+	float3 ray_direction, ray_origin;
 	Ray ray;
 	PerRayData_pathtrace prd;
 	prd.seed = seed;
@@ -33,9 +33,10 @@ RT_PROGRAM void PreCompution()
 		prd.done = false;
 		prd.inside = true;
 		prd.depth = 0;
+		ray_direction = uniformSphere( rnd(prd.seed), rnd(prd.seed), make_float3(1.f, 0.f, 0.f));
+		ray_origin = p;
 		while(1)
 		{
-			ray_direction = uniformSphere( rnd(prd.seed), rnd(prd.seed), make_float3(1.f, 0.f, 0.f));
 			ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
 			rtTrace(top_object, ray, prd);
 			if(prd.done ||(prd.depth >= max_depth))
@@ -45,9 +46,11 @@ RT_PROGRAM void PreCompution()
 			}
 			prd.depth++;
 			prd.result += prd.radiance * prd.attenuation;
+			ray_origin = prd.origin;
+			ray_direction = prd.direction;
 		}
 	}
-	gridBuffer[ gridIndex] =  prd.result;//(float)numSampling;
+	gridBuffer[ gridIndex] =  prd.result/(float)numSampling;
 }
 
 //-----------------------------------------------------------------------------

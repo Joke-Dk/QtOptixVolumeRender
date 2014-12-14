@@ -128,11 +128,11 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 
 void PathTracerScene::PreCompution( )
 {
-	updateParameter( "numSampling", 20);
+	updateParameter( "numSampling", 500);
 	Buffer buffer = m_context["gridBuffer"]->getBuffer();
-	RTsize buffer_x, buffer_y, buffer_z;
-	buffer->getSize( buffer_x, buffer_y, buffer_z );
-	m_context->launch( 1,static_cast<unsigned int>(buffer_x),static_cast<unsigned int>(buffer_y),static_cast<unsigned int>(buffer_z));
+	RTsize buffer_x;
+	buffer->getSize( buffer_x);
+	m_context->launch( 1,static_cast<unsigned int>(buffer_x));
 
 }
 
@@ -472,6 +472,6 @@ void PathTracerScene::createEnvironmentScene(int sceneKind)
 
 	optix::Buffer gridData = m_context->createBuffer(RT_BUFFER_INPUT_OUTPUT);
 	gridData->setFormat(RT_FORMAT_FLOAT3);
-	gridData->setSize(index_x, index_y, index_z);
+	gridData->setSize(index_x*index_y*index_z);
 	m_context["gridBuffer"]->setBuffer( gridData );
 }
