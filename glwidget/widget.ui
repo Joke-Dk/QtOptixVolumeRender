@@ -101,7 +101,7 @@
         <item row="0" column="2">
          <widget class="QSlider" name="horizontalSlider">
           <property name="value">
-           <number>50</number>
+           <number>5</number>
           </property>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -156,7 +156,7 @@
            <double>0.100000000000000</double>
           </property>
           <property name="value">
-           <double>5.000000000000000</double>
+           <double>0.500000000000000</double>
           </property>
          </widget>
         </item>

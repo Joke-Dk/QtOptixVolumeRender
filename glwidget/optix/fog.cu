@@ -13,7 +13,7 @@ rtDeclareVariable(float,         index_of_refraction, , );
 rtDeclareVariable(float,        fresnel_exponent, , );
 rtDeclareVariable(float,        fresnel_minimum, , );
 rtDeclareVariable(float,        fresnel_maximum, , );
-
+rtDeclareVariable(float,        isRayMarching, , );
 
 static __device__ __inline__ float woodcockTracking( const Ray& current_ray, float maxLength, float maxExtinction)
 {
@@ -165,6 +165,12 @@ RT_PROGRAM void fog__closest_hit_radiance()
 						result += light.emission * weight*light_attenuation;
 					}
 				}
+			}
+			//rtTerminateRay();
+			if( isRayMarching>0.5f)
+			{
+				current_prd.done = true;
+				result = interpolation( current_prd.origin);
 			}
 		}
 	}

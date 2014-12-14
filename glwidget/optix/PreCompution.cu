@@ -3,7 +3,7 @@
 #include "volume.cuh"
 rtDeclareVariable(uint3, gridIndex, rtLaunchIndex, );
 rtDeclareVariable(int, numSampling, , );
-rtBuffer<float4, 3>    gridBuffer;
+//rtBuffer<float4, 3>    gridBuffer;
 static __device__ __inline__ float3 GetPosition( uint3 index)
 {
 	float3 p01 = P1-P0;
@@ -17,23 +17,37 @@ static __device__ __inline__ float3 GetPosition( uint3 index)
 //-----------------------------------------------------------------------------
 RT_PROGRAM void PreCompution()
 {
+	int max_depth = 20;
 	unsigned int seed = tea<16>(gridIndex.z*index_x*index_y + gridIndex.y*index_x + gridIndex.z, 0);
 	float3 ray_origin = GetPosition( gridIndex);
 	float3 ray_direction;
 	Ray ray;
 	PerRayData_pathtrace prd;
-	prd.result = make_float3(0.f);
 	prd.seed = seed;
+	prd.attenuation = make_float3(1.f);
+	prd.result = make_float3(0.f);
 	for(int i=0; i<numSampling; ++i)
 	{
-		ray_direction = uniformSphere( rnd(prd.seed), rnd(prd.seed), make_float3(1.f));
-		ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
+		prd.radiance = make_float3(0.f);
+		prd.countEmitted = true;
+		prd.done = false;
+		prd.inside = true;
 		prd.depth = 0;
-		Ray ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
-		rtTrace(top_object, ray, prd);
-		prd.result += prd.radiance * prd.attenuation;
+		while(1)
+		{
+			ray_direction = uniformSphere( rnd(prd.seed), rnd(prd.seed), make_float3(1.f, 0.f, 0.f));
+			ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
+			rtTrace(top_object, ray, prd);
+			if(prd.done ||(prd.depth >= max_depth))
+			{
+				prd.result += prd.radiance * prd.attenuation;
+				break;
+			}
+			prd.depth++;
+			prd.result += prd.radiance * prd.attenuation;
+		}
 	}
-	gridBuffer[ gridIndex] =  make_float4(prd.result / numSampling, 0.f);
+	gridBuffer[ gridIndex] =  prd.result;//(float)numSampling;
 }
 
 //-----------------------------------------------------------------------------
@@ -44,7 +58,7 @@ RT_PROGRAM void PreCompution()
 
 RT_PROGRAM void exception()
 {
-	gridBuffer[ gridIndex] =  make_float4( bad_color, 0.f);
+	gridBuffer[ gridIndex] =  make_float3(1.f,0.f,0.f);//bad_color;
 }
 
 
@@ -54,11 +68,6 @@ RT_PROGRAM void exception()
 //
 //-----------------------------------------------------------------------------
 
-RT_PROGRAM void miss()
-{
-	current_prd.radiance = bg_color;
-	current_prd.done = true;
-}
 
 
 rtTextureSampler<float4, 2> envmap;

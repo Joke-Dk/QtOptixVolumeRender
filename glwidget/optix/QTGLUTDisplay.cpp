@@ -57,7 +57,7 @@
 #include <cstdlib>
 #include <cstdio> //sprintf
 #include <sstream>
-
+#include "PathTracerScene.h"
 
 //-----------------------------------------------------------------------------
 // 
@@ -250,6 +250,7 @@ void QTGLUTDisplay::initializeGL()
 
 	// Enter main loop
 	//glutMainLoop();
+	dynamic_cast<PathTracerScene *>(_scene)->PreCompution();
 }
 void QTGLUTDisplay::paintGL()
 {

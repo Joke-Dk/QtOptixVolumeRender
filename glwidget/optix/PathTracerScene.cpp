@@ -26,7 +26,7 @@ void PathTracerScene::updateParameter( std::string str, float value)
 
 void PathTracerScene::updateParameter( std::string str, int value)
 { 
-	m_context[str.c_str()]->setUint(value); 
+	m_context[str.c_str()]->setInt(value); 
 }
 
 float PathTracerScene::getParameter( std::string str)
@@ -106,6 +106,7 @@ bool PathTracerScene::keyPressed( unsigned char key, int x, int y )
 
 void PathTracerScene::trace( const RayGenCameraData& camera_data )
 {
+	updateParameter("isRayMarching", 1.f);
 	m_context["eye"]->setFloat( camera_data.eye );
 	m_context["U"]->setFloat( camera_data.U );
 	m_context["V"]->setFloat( camera_data.V );
@@ -127,10 +128,11 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 
 void PathTracerScene::PreCompution( )
 {
+	updateParameter( "numSampling", 20);
 	Buffer buffer = m_context["gridBuffer"]->getBuffer();
 	RTsize buffer_x, buffer_y, buffer_z;
 	buffer->getSize( buffer_x, buffer_y, buffer_z );
-	m_context->launch( 0,static_cast<unsigned int>(buffer_x),static_cast<unsigned int>(buffer_y),static_cast<unsigned int>(buffer_z));
+	m_context->launch( 1,static_cast<unsigned int>(buffer_x),static_cast<unsigned int>(buffer_y),static_cast<unsigned int>(buffer_z));
 
 }
 
@@ -316,6 +318,7 @@ void PathTracerScene::createEnvironmentScene(int sceneKind)
 	areaMaterial = DefineDiffuseLight( m_context);
 	diffuseMaterial = DefineDiffuseMaterial( m_context);
 	fogMaterial = DefineFogMaterial( m_context);
+	updateParameter("isRayMarching", 0.f);
 	glassMaterial = DefineGlassMaterial( m_context);
 	mirrorMaterial = DefineMirrorMaterial( m_context);
 	m_pgram_bounding_box = m_context->createProgramFromPTXFile( my_ptxpath( "parallelogram.cu" ), "bounds" );
@@ -415,6 +418,7 @@ void PathTracerScene::createEnvironmentScene(int sceneKind)
 	//front
 	gis0volume.push_back( createParallelogram( p1, -make_float3( dp.x, 0.0f, 0.f), -make_float3( 0.f , dp.y, 0.0f) ) );
 	setMaterial(gis0volume.back(), fogMaterial, "diffuse_color", white);
+
 	//load volume data
 	int index_N = index_x*index_y*index_z;
 	optix::Buffer vol_data = m_context->createBuffer(RT_BUFFER_INPUT);
@@ -467,7 +471,7 @@ void PathTracerScene::createEnvironmentScene(int sceneKind)
 	//m_context["gridBuffer"]->set(createOutputBuffer( RT_FORMAT_FLOAT4, 100, 100, 40));
 
 	optix::Buffer gridData = m_context->createBuffer(RT_BUFFER_INPUT_OUTPUT);
-	gridData->setFormat(RT_FORMAT_FLOAT4);
+	gridData->setFormat(RT_FORMAT_FLOAT3);
 	gridData->setSize(index_x, index_y, index_z);
 	m_context["gridBuffer"]->setBuffer( gridData );
 }
