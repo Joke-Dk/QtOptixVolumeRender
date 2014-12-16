@@ -17,13 +17,12 @@ static __device__ __inline__ float3 GetPosition( uint3 index)
 //-----------------------------------------------------------------------------
 RT_PROGRAM void PreCompution()
 {
-	int max_depth = 2;
-	unsigned int seed = tea<16>(gridIndex*index_x*index_y + gridIndex*index_x + gridIndex, 0);
+	int maxDepth = 0;
 	float3 p = GetPosition( i2xyz(gridIndex));
 	float3 ray_direction, ray_origin;
 	Ray ray;
 	PerRayData_pathtrace prd;
-	prd.seed = seed;
+	//prd.seed = seed;
 	prd.attenuation = make_float3(1.f);
 	prd.result = make_float3(0.f);
 	for(int i=0; i<numSampling; ++i)
@@ -33,13 +32,14 @@ RT_PROGRAM void PreCompution()
 		prd.done = false;
 		prd.inside = true;
 		prd.depth = 0;
+		prd.seed = tea<16>(gridIndex*gridIndex*index_x*index_y + gridIndex*index_x + gridIndex, i*index_x);
 		ray_direction = uniformSphere( rnd(prd.seed), rnd(prd.seed), make_float3(1.f, 0.f, 0.f));
 		ray_origin = p;
 		while(1)
 		{
 			ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
 			rtTrace(top_object, ray, prd);
-			if(prd.done ||(prd.depth >= max_depth))
+			if(prd.done ||(prd.depth >= maxDepth))
 			{
 				prd.result += prd.radiance * prd.attenuation;
 				break;

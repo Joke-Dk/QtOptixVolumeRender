@@ -29,6 +29,11 @@ void PathTracerScene::updateParameter( std::string str, int value)
 	m_context[str.c_str()]->setInt(value); 
 }
 
+void PathTracerScene::updateParameter( std::string str, unsigned int value)
+{ 
+	m_context[str.c_str()]->setUint(value); 
+}
+
 float PathTracerScene::getParameter( std::string str)
 { 
 	return m_context[str.c_str()]->getFloat(); 
@@ -107,6 +112,9 @@ bool PathTracerScene::keyPressed( unsigned char key, int x, int y )
 void PathTracerScene::trace( const RayGenCameraData& camera_data )
 {
 	updateParameter("isRayMarching", 1.f);
+
+	//updateParameter("isRayMarching", 0.f);
+	//updateParameter("max_depth", unsigned int(1));
 	m_context["eye"]->setFloat( camera_data.eye );
 	m_context["U"]->setFloat( camera_data.U );
 	m_context["V"]->setFloat( camera_data.V );
@@ -128,7 +136,7 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 
 void PathTracerScene::PreCompution( )
 {
-	updateParameter( "numSampling", 500);
+	updateParameter( "numSampling", 20);
 	Buffer buffer = m_context["gridBuffer"]->getBuffer();
 	RTsize buffer_x;
 	buffer->getSize( buffer_x);

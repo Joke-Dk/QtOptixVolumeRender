@@ -46,7 +46,6 @@ optix::Material DefineFogMaterial( optix::Context& m_context)
 {
 	// Set up glass material
 	Material& fogMaterial = makeMaterialPrograms( m_context, "fog.cu", "fog__closest_hit_radiance", "fog_shadow");
-	//Material& fogMaterial = makeMaterialPrograms( m_context, "fog.cu", "fog__closest_hit_radiance_rayMarching", "fog_shadow");
 	fogMaterial["glass_color"] ->setFloat(  1.f,1.f,1.f);
 	fogMaterial["index_of_refraction"]->setFloat(1.f);
 	fogMaterial["fresnel_exponent"   ]->setFloat( 4.0f );

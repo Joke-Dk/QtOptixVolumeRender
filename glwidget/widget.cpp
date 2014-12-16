@@ -60,6 +60,7 @@ void Widget::SetDeafaultParamater()
 	UpdataParameterAndRefresh("hasBackground", ui.checkBox_4->isChecked()?1.f:0.f, false);
 	UpdataParameterAndRefresh("radianceMultipler", ui.doubleSpinBox_6->value(), false);
 	UpdataEnvironmentLight( ui.comboBox->currentIndex() , false);
+	UpdataEnvironmentLight( 1, false);
 	
 	UpdataParameterAndRefresh("hasCornell", ui.checkBox_5->isChecked()?1.f:0.f, false);
 	//UpdataHasHDR( ui.checkBox_2->isChecked(), false);
@@ -238,6 +239,7 @@ void Widget::UpdataEnvironmentLight(int idEnv, bool refresh)
 	if(refresh)
 	{
 		_glWidget->resizeGL(scene->m_width, scene->m_height);
+		//scene->PreCompution( );
 	}
 }
 

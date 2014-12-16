@@ -36,6 +36,7 @@ public:
 
 	void updateParameter( std::string str, float value);
 	void updateParameter( std::string str, int value);
+	void updateParameter( std::string str, unsigned int value);
 	float getParameter( std::string str);
 	void switchEnvironmentLight( int envId);
 	void switchHasHDR( bool hasHDR);
