@@ -113,10 +113,11 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 {
 	updateParameter("isRayMarching", 1.f);
 	updateParameter( "isPreCompution", 0.f);
-	if(1)
+	if(0)
 	{
+		updateParameter( "isSingle", 1.f);
 		updateParameter("isRayMarching", 0.f);
-		updateParameter("max_depth", unsigned int(1));
+		updateParameter("max_depth", unsigned int(100));
 	}
 	m_context["eye"]->setFloat( camera_data.eye );
 	m_context["U"]->setFloat( camera_data.U );
@@ -140,7 +141,7 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 void PathTracerScene::PreCompution( )
 {
 	updateParameter( "numSampling", 20);
-
+	updateParameter( "isSingle", 0.f);
 	updateParameter("isRayMarching", 0.f);
 	updateParameter( "isPreCompution", 1.f);
 	Buffer buffer = m_context["gridBuffer"]->getBuffer();
@@ -481,6 +482,7 @@ void PathTracerScene::createEnvironmentScene(int sceneKind)
 	m_context->setRayGenerationProgram( 1, ray_gen_program2 );
 	Program exception_program2 = m_context->createProgramFromPTXFile( ptx_path2, "exception" );
 	m_context->setExceptionProgram( 1, exception_program2 );
+	m_context->setMissProgram( 1, m_context->createProgramFromPTXFile( ptx_path2, "envmap_miss" ) );
 	// Setup output buffer 2
 	//m_context["gridBuffer"]->set(createOutputBuffer( RT_FORMAT_FLOAT4, 100, 100, 40));
 

@@ -120,7 +120,6 @@ RT_PROGRAM void miss()
 }
 
 
-rtTextureSampler<float4, 2> envmap;
 RT_PROGRAM void envmap_miss()
 {
 	float theta = atan2f( ray.direction.x, ray.direction.z );

@@ -15,6 +15,8 @@ rtDeclareVariable(float,        fresnel_minimum, , );
 rtDeclareVariable(float,        fresnel_maximum, , );
 rtDeclareVariable(float,        isRayMarching, , );
 rtDeclareVariable(float,        isPreCompution, , );
+rtDeclareVariable(float,        isSingle, , );
+
 
 
 static __device__ __inline__ float woodcockTracking( const Ray& current_ray, float maxLength, float maxExtinction)
@@ -113,7 +115,7 @@ RT_PROGRAM void fog__closest_hit_radiance()
 	if (current_prd.inside) 
 	{
 		float d = woodcockTracking( ray, t_hit, sigma_t);//1000.f;//woodcockTracking(0.1f, r1);
-		if (isPreCompution<0.5f && d>=t_hit)
+		if (d>=t_hit)
 		{
 			current_prd.origin = hitpoint;
 			refract(current_prd.direction, ray.direction, ffnormal, iof);
@@ -155,6 +157,10 @@ RT_PROGRAM void fog__closest_hit_radiance()
 
 			for(int i = 0; i < num_lights; ++i) 
 			{
+				if(isPreCompution<0.5f&&isSingle>0.5f&&current_prd.depth>=2)
+					break;
+				if(isPreCompution>0.5f&&current_prd.depth>=1)
+					break;
 				ParallelogramLight light = lights[i];
 				float z1 = rnd(current_prd.seed);
 				float z2 = rnd(current_prd.seed);
@@ -187,6 +193,14 @@ RT_PROGRAM void fog__closest_hit_radiance()
 					}
 				}
 			}
+			if(isPreCompution>0.5f)
+			{
+				current_prd.origin = ray.origin+d*ray.direction;
+			}
+			//if(isPreCompution<0.5f&&isSingle>0.5f&&current_prd.depth>=3)
+			//{
+			//	current_prd.done = true;
+			//}
 			
 		}
 	}

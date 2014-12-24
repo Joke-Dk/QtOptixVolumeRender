@@ -6,6 +6,8 @@
 
 using namespace optix;
 
+rtTextureSampler<float4, 2> envmap;
+
 struct PerRayData_pathtrace
 {
 	float3 result;
