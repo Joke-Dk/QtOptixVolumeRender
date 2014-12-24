@@ -14,6 +14,7 @@ rtDeclareVariable(float,        fresnel_exponent, , );
 rtDeclareVariable(float,        fresnel_minimum, , );
 rtDeclareVariable(float,        fresnel_maximum, , );
 rtDeclareVariable(float,        isRayMarching, , );
+rtDeclareVariable(float,        isPreCompution, , );
 
 
 static __device__ __inline__ float woodcockTracking( const Ray& current_ray, float maxLength, float maxExtinction)
@@ -112,7 +113,7 @@ RT_PROGRAM void fog__closest_hit_radiance()
 	if (current_prd.inside) 
 	{
 		float d = woodcockTracking( ray, t_hit, sigma_t);//1000.f;//woodcockTracking(0.1f, r1);
-		if (d>=t_hit)
+		if (isPreCompution<0.5f && d>=t_hit)
 		{
 			current_prd.origin = hitpoint;
 			refract(current_prd.direction, ray.direction, ffnormal, iof);
@@ -120,7 +121,24 @@ RT_PROGRAM void fog__closest_hit_radiance()
 		}
 		else
 		{
-			current_prd.origin = ray.origin+d*ray.direction;
+			if(isPreCompution<0.5f)
+			{
+				current_prd.origin = ray.origin+d*ray.direction;
+			}
+			else
+			{
+				current_prd.origin = ray.origin;
+			}
+
+			//////////////////////////////////////////////////////////////////
+			//rtTerminateRay();
+			if( isRayMarching>0.5f)
+			{
+				current_prd.done = true;
+				current_prd.radiance = interpolation( current_prd.origin);
+				current_prd.attenuation = make_float3(1.f);
+				return;
+			}
 			float z1=rnd(current_prd.seed);
 			float z2=rnd(current_prd.seed);
 			//float3 p;
@@ -144,9 +162,11 @@ RT_PROGRAM void fog__closest_hit_radiance()
 
 				float Ldist = length(light_pos - current_prd.origin);
 				float3 L = normalize(light_pos - current_prd.origin);
-				float nDl = dot( current_prd.direction, L );
+				float nDl = 1.f;//dot( ray.direction, L );
+				//if(isPreCompution>0.5f) nDl = 1.f;
 				float LnDl = dot( light.normal, L );
 				float A = length(cross(light.v1, light.v2));
+
 
 				// cast shadow ray
 				if ( nDl > 0.0f && LnDl > 0.0f ) 
@@ -167,12 +187,7 @@ RT_PROGRAM void fog__closest_hit_radiance()
 					}
 				}
 			}
-			//rtTerminateRay();
-			if( isRayMarching>0.5f)
-			{
-				current_prd.done = true;
-				result = interpolation( current_prd.origin);
-			}
+			
 		}
 	}
 	else

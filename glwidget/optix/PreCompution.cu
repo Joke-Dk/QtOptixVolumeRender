@@ -32,7 +32,7 @@ RT_PROGRAM void PreCompution()
 		prd.done = false;
 		prd.inside = true;
 		prd.depth = 0;
-		prd.seed = tea<16>(gridIndex*gridIndex*index_x*index_y + gridIndex*index_x + gridIndex, i*index_x);
+		prd.seed = tea<16>(gridIndex*gridIndex*index_x*index_y + gridIndex*index_z + gridIndex, i);
 		ray_direction = uniformSphere( rnd(prd.seed), rnd(prd.seed), make_float3(1.f, 0.f, 0.f));
 		ray_origin = p;
 		while(1)

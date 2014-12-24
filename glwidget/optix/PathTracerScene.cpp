@@ -112,9 +112,12 @@ bool PathTracerScene::keyPressed( unsigned char key, int x, int y )
 void PathTracerScene::trace( const RayGenCameraData& camera_data )
 {
 	updateParameter("isRayMarching", 1.f);
-
-	//updateParameter("isRayMarching", 0.f);
-	//updateParameter("max_depth", unsigned int(1));
+	updateParameter( "isPreCompution", 0.f);
+	if(1)
+	{
+		updateParameter("isRayMarching", 0.f);
+		updateParameter("max_depth", unsigned int(1));
+	}
 	m_context["eye"]->setFloat( camera_data.eye );
 	m_context["U"]->setFloat( camera_data.U );
 	m_context["V"]->setFloat( camera_data.V );
@@ -137,6 +140,9 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 void PathTracerScene::PreCompution( )
 {
 	updateParameter( "numSampling", 20);
+
+	updateParameter("isRayMarching", 0.f);
+	updateParameter( "isPreCompution", 1.f);
 	Buffer buffer = m_context["gridBuffer"]->getBuffer();
 	RTsize buffer_x;
 	buffer->getSize( buffer_x);
@@ -326,7 +332,7 @@ void PathTracerScene::createEnvironmentScene(int sceneKind)
 	areaMaterial = DefineDiffuseLight( m_context);
 	diffuseMaterial = DefineDiffuseMaterial( m_context);
 	fogMaterial = DefineFogMaterial( m_context);
-	updateParameter("isRayMarching", 0.f);
+	//updateParameter("isRayMarching", 0.f);
 	glassMaterial = DefineGlassMaterial( m_context);
 	mirrorMaterial = DefineMirrorMaterial( m_context);
 	m_pgram_bounding_box = m_context->createProgramFromPTXFile( my_ptxpath( "parallelogram.cu" ), "bounds" );
