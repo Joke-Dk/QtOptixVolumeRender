@@ -117,7 +117,7 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 	{
 		updateParameter( "isSingle", 1.f);
 		updateParameter("isRayMarching", 0.f);
-		updateParameter("max_depth", unsigned int(100));
+		updateParameter("max_depth", unsigned int(3));
 	}
 	m_context["eye"]->setFloat( camera_data.eye );
 	m_context["U"]->setFloat( camera_data.U );
@@ -140,7 +140,7 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 
 void PathTracerScene::PreCompution( )
 {
-	updateParameter( "numSampling", 20);
+	updateParameter( "numSampling", 80);
 	updateParameter( "isSingle", 0.f);
 	updateParameter("isRayMarching", 0.f);
 	updateParameter( "isPreCompution", 1.f);

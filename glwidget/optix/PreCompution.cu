@@ -17,7 +17,7 @@ static __device__ __inline__ float3 GetPosition( uint3 index)
 //-----------------------------------------------------------------------------
 RT_PROGRAM void PreCompution()
 {
-	int maxDepth = 2;
+	int maxDepth = 1;
 	float3 p = GetPosition( i2xyz(gridIndex));
 	float3 ray_direction, ray_origin;
 	Ray ray;
