@@ -3,7 +3,6 @@
 #include "volume.cuh"
 rtDeclareVariable(uint, gridIndex, rtLaunchIndex, );
 rtDeclareVariable(int, numSampling, , );
-rtDeclareVariable(unsigned int,  numCompution, , );
 //rtBuffer<float4, 3>    gridBuffer;
 static __device__ __inline__ float3 GetPosition( uint3 index)
 {
@@ -16,7 +15,7 @@ static __device__ __inline__ float3 GetPosition( uint3 index)
 //  Main program
 //
 //-----------------------------------------------------------------------------
-RT_PROGRAM void PreCompution()
+RT_PROGRAM void MultiCompution()
 {
 	int maxDepth = 1;
 	float3 p = GetPosition( i2xyz(gridIndex));
@@ -24,7 +23,7 @@ RT_PROGRAM void PreCompution()
 	Ray ray;
 	//prd.seed = seed;
 	float3 result = make_float3(0.0f);
-	unsigned int seed = tea<16>(gridIndex*gridIndex, numCompution);
+	unsigned int seed = tea<16>(gridIndex*gridIndex, 1);
 	for(int i=0; i<numSampling; ++i)
 	{
 		PerRayData_pathtrace prd;
@@ -55,19 +54,7 @@ RT_PROGRAM void PreCompution()
 		result += prd.result;
 		seed = prd.seed;
 	}
-	result /= (float)numSampling;
-	if (numCompution > 1)
-	{
-		float a = 1.0f / (float)numCompution;
-		float b = ((float)numCompution - 1.0f) * a;
-		float3 old_color = gridBuffer[gridIndex];
-		gridBuffer[gridIndex] = a * result + b * old_color;
-	}
-	else
-	{
-		gridBuffer[gridIndex] = result;
-	}
-	//gridBuffer[ gridIndex] =  result/(float)numSampling;
+	gridBuffer[ gridIndex] =  result/(float)numSampling;
 }
 
 //-----------------------------------------------------------------------------
@@ -97,8 +84,8 @@ RT_PROGRAM void envmap_miss()
 	float phi   = M_PIf * 0.5f -  acosf( ray.direction.y );
 	float u     = (theta + M_PIf) * (0.5f * M_1_PIf);
 	float v     = 0.5f * ( 1.0f + sin(phi) );
-	//current_prd.radiance = bg_color*100.f;
-	current_prd.radiance = make_float3( tex2D(envmap, u, v) )*1.f;
+	current_prd.radiance = bg_color*100.f;
+	//current_prd.radiance = make_float3( tex2D(envmap, u, v) )*1.f;
 	
 	current_prd.done = true;
 	//current_prd.attenuation *= 0.1f;

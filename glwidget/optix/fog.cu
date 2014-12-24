@@ -15,7 +15,6 @@ rtDeclareVariable(float,        fresnel_minimum, , );
 rtDeclareVariable(float,        fresnel_maximum, , );
 rtDeclareVariable(float,        isRayMarching, , );
 rtDeclareVariable(float,        isPreCompution, , );
-rtDeclareVariable(float,        isSingle, , );
 
 
 

@@ -115,8 +115,11 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 	updateParameter( "isPreCompution", 0.f);
 	if(0)
 	{
-		updateParameter( "isSingle", 1.f);
 		updateParameter("isRayMarching", 0.f);
+		updateParameter( "isSingle", 0.f);	
+	}
+	if(getParameter("isSingle")>0.5f)
+	{
 		updateParameter("max_depth", unsigned int(3));
 	}
 	m_context["eye"]->setFloat( camera_data.eye );
@@ -138,16 +141,22 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 	m_context->launch( 0,static_cast<unsigned int>(buffer_width),static_cast<unsigned int>(buffer_height));
 }
 
-void PathTracerScene::PreCompution( )
+void PathTracerScene::PreCompution()
 {
-	updateParameter( "numSampling", 80);
+	updateParameter( "numSampling", 20);
 	updateParameter( "isSingle", 0.f);
 	updateParameter("isRayMarching", 0.f);
 	updateParameter( "isPreCompution", 1.f);
 	Buffer buffer = m_context["gridBuffer"]->getBuffer();
 	RTsize buffer_x;
 	buffer->getSize( buffer_x);
-	m_context->launch( 1,static_cast<unsigned int>(buffer_x));
+	int maxCompution = 50;
+	for (int i=1; i<maxCompution; ++i)
+	{
+		updateParameter( "numCompution", unsigned int(i));
+		m_context->launch( 1,static_cast<unsigned int>(buffer_x));
+	}
+	
 
 }
 
