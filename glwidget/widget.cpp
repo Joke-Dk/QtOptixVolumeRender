@@ -46,6 +46,10 @@ Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
 	ui.comboBox->addItem(  "Studio 019");  
 	connect( ui.comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotComboBox()));
 
+	// UI: Method selection: Monte Carlo and FLD
+	connect(ui.radioButton, SIGNAL(clicked(bool)), this, SLOT(slotRadioButton()));
+	connect(ui.radioButton_2, SIGNAL(clicked(bool)), this, SLOT(slotRadioButton2()));	
+
 	SetDeafaultParamater();
 }
 
@@ -66,6 +70,8 @@ void Widget::SetDeafaultParamater()
 	//UpdataHasHDR( ui.checkBox_2->isChecked(), false);
 	UpdataParameterAndRefresh("hasArea", ui.checkBox->isChecked()?1.f:0.f, false);
 	UpdataParameterAndRefresh("hasHDR", ui.checkBox_2->isChecked()?1.f:0.f, false);
+
+	UpdataParameterAndRefresh("isFLDMethod", ui.radioButton->isChecked()?0.f:1.f , false);
 }
 
 void Widget::slotDoubleSpinbox_Slider()
@@ -279,4 +285,16 @@ void Widget::UpdataHasHDR(bool hasHDR, bool refresh)
 	{
 		_glWidget->resizeGL(scene->m_width, scene->m_height);
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+// 4 - Method Selection
+void Widget::slotRadioButton()
+{
+	UpdataParameterAndRefresh("isFLDMethod", ui.radioButton->isChecked()?0.f:1.f);
+}
+
+void Widget::slotRadioButton2()
+{
+	UpdataParameterAndRefresh("isFLDMethod", ui.radioButton_2->isChecked()?1.f:0.f);
 }

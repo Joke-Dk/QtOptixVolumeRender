@@ -41,6 +41,8 @@ public:
 	void slotClicked5HasCornell();
 	void slotComboBox();
 
+	void slotRadioButton();
+	void slotRadioButton2();
 private:
 	Ui::WidgetClass ui;
 };

@@ -276,6 +276,7 @@ void QTGLUTDisplay::paintGL()
 void QTGLUTDisplay::resizeGL(int width, int height)
 {
 	resize( width, height);
+	//dynamic_cast<PathTracerScene *>(_scene)->PreCompution();
 }
 
 

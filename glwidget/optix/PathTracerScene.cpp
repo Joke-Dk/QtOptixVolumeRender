@@ -111,9 +111,10 @@ bool PathTracerScene::keyPressed( unsigned char key, int x, int y )
 
 void PathTracerScene::trace( const RayGenCameraData& camera_data )
 {
-	updateParameter("isRayMarching", 1.f);
 	updateParameter( "isPreCompution", 0.f);
-	if(0)
+	updateParameter("isRayMarching", 1.f);
+
+	if(getParameter( "isFLDMethod")<0.5f)
 	{
 		updateParameter("isRayMarching", 0.f);
 		updateParameter( "isSingle", 0.f);	
@@ -143,7 +144,7 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 
 void PathTracerScene::PreCompution()
 {
-	updateParameter( "numSampling", 20);
+	updateParameter( "numSampling", 2);
 	updateParameter( "isSingle", 0.f);
 	updateParameter("isRayMarching", 0.f);
 	updateParameter( "isPreCompution", 1.f);
@@ -157,7 +158,8 @@ void PathTracerScene::PreCompution()
 		m_context->launch( 1,static_cast<unsigned int>(buffer_x));
 	}
 	
-
+	//updateParameter( "isPreCompution", 0.f);
+	//updateParameter("isRayMarching", 1.f);
 }
 
 //-----------------------------------------------------------------------------

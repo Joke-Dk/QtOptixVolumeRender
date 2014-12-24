@@ -13,30 +13,62 @@
   <property name="windowTitle">
    <string>Volume Rendering Demo</string>
   </property>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>10</y>
-     <width>251</width>
-     <height>491</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QGroupBox" name="groupBox_2">
-      <property name="title">
-       <string>Optical Parameters</string>
+  <layout class="QGridLayout" name="gridLayout_4">
+   <item row="3" column="0">
+    <widget class="QGroupBox" name="groupBox_4">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>80</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Method</string>
+     </property>
+     <widget class="QWidget" name="gridLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>231</width>
+        <height>40</height>
+       </rect>
       </property>
-      <widget class="QWidget" name="gridLayoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>231</width>
-         <height>211</height>
-        </rect>
-       </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QRadioButton" name="radioButton">
+         <property name="text">
+          <string>Monte Carlo</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QRadioButton" name="radioButton_2">
+         <property name="text">
+          <string>My FLD</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>200</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Optical Parameters</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
        <layout class="QGridLayout" name="gridLayout">
         <property name="sizeConstraint">
          <enum>QLayout::SetDefaultConstraint</enum>
@@ -57,13 +89,6 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QLabel" name="label_3">
-          <property name="text">
-           <string>g</string>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="2">
          <widget class="QSlider" name="horizontalSlider_2">
           <property name="value">
@@ -81,20 +106,17 @@
           </property>
          </widget>
         </item>
+        <item row="2" column="1">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>g</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="1">
          <widget class="QLabel" name="label">
           <property name="text">
            <string>sigma_t</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="3">
-         <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
-          <property name="maximum">
-           <double>1.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.010000000000000</double>
           </property>
          </widget>
         </item>
@@ -105,19 +127,6 @@
           </property>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3">
-         <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
-          <property name="maximum">
-           <double>1.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.010000000000000</double>
-          </property>
-          <property name="value">
-           <double>0.950000000000000</double>
           </property>
          </widget>
         </item>
@@ -134,29 +143,26 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="2">
-         <widget class="QSlider" name="horizontalSlider_4">
+        <item row="1" column="3">
+         <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
           <property name="maximum">
-           <number>100</number>
+           <double>1.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.010000000000000</double>
           </property>
           <property name="value">
-           <number>2</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <double>0.950000000000000</double>
           </property>
          </widget>
         </item>
-        <item row="0" column="3">
-         <widget class="QDoubleSpinBox" name="doubleSpinBox">
+        <item row="2" column="3">
+         <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
           <property name="maximum">
-           <double>10.000000000000000</double>
+           <double>1.000000000000000</double>
           </property>
           <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>2.000000000000000</double>
+           <double>0.010000000000000</double>
           </property>
          </widget>
         </item>
@@ -180,13 +186,26 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="2">
-         <widget class="QSlider" name="horizontalSlider_5">
+        <item row="0" column="3">
+         <widget class="QDoubleSpinBox" name="doubleSpinBox">
+          <property name="maximum">
+           <double>10.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>2.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QSlider" name="horizontalSlider_4">
           <property name="maximum">
            <number>100</number>
           </property>
           <property name="value">
-           <number>1</number>
+           <number>2</number>
           </property>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -197,6 +216,23 @@
          <widget class="QLabel" name="label_5">
           <property name="text">
            <string>Sharpness</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="1">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Light</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="3">
+         <widget class="QDoubleSpinBox" name="doubleSpinBox_6">
+          <property name="maximum">
+           <double>10.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>1.000000000000000</double>
           </property>
          </widget>
         </item>
@@ -213,26 +249,6 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="1">
-         <widget class="QCheckBox" name="checkBox_4">
-          <property name="text">
-           <string>BG</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-          <property name="tristate">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="1">
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>Light</string>
-          </property>
-         </widget>
-        </item>
         <item row="7" column="2">
          <widget class="QSlider" name="horizontalSlider_6">
           <property name="maximum">
@@ -246,96 +262,118 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="3">
-         <widget class="QDoubleSpinBox" name="doubleSpinBox_6">
+        <item row="6" column="1">
+         <widget class="QCheckBox" name="checkBox_4">
+          <property name="text">
+           <string>BG</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="2">
+         <widget class="QSlider" name="horizontalSlider_5">
           <property name="maximum">
-           <double>10.000000000000000</double>
+           <number>100</number>
           </property>
           <property name="value">
-           <double>1.000000000000000</double>
+           <number>1</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
          </widget>
         </item>
        </layout>
-      </widget>
-     </widget>
-    </item>
-    <item>
-     <widget class="QGroupBox" name="groupBox_3">
-      <property name="title">
-       <string>Light Source</string>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>170</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Light Source</string>
+     </property>
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>231</width>
+        <height>131</height>
+       </rect>
       </property>
-      <widget class="QWidget" name="layoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>30</y>
-         <width>181</width>
-         <height>171</height>
-        </rect>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <widget class="QCheckBox" name="checkBox">
-          <property name="text">
-           <string>Area Light</string>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="3" column="0">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="title">
+          <string>HDR</string>
+         </property>
+         <widget class="QWidget" name="layoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>20</y>
+            <width>151</width>
+            <height>40</height>
+           </rect>
           </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QComboBox" name="comboBox"/>
+           </item>
+          </layout>
          </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="checkBox_5">
-          <property name="text">
-           <string>Cornel Box</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="checkBox_2">
-          <property name="text">
-           <string>HDR Light</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="title">
-           <string>HDR</string>
-          </property>
-          <widget class="QWidget" name="layoutWidget">
-           <property name="geometry">
-            <rect>
-             <x>20</x>
-             <y>20</y>
-             <width>151</width>
-             <height>31</height>
-            </rect>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_4">
-            <item>
-             <widget class="QComboBox" name="comboBox"/>
-            </item>
-           </layout>
-          </widget>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="checkBox_2">
+         <property name="text">
+          <string>HDR Light</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="checkBox_5">
+         <property name="text">
+          <string>Cornel Box</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="checkBox">
+         <property name="text">
+          <string>Area Light</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
-    </item>
-   </layout>
-  </widget>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
