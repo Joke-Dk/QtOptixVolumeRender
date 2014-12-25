@@ -97,7 +97,7 @@ void PathTracerScene::initScene( InitialCameraData& camera_data )
 
 	// Create scene geometry
 
-	createEnvironmentScene(1);
+	createEnvironmentScene();
 
 	// Finalize
 	m_context->validate();
@@ -329,7 +329,7 @@ void PathTracerScene::updateGeometryInstance()
 	m_context["top_object"]->set( geometry_group );
 }
 
-void PathTracerScene::createEnvironmentScene(int sceneKind)
+void PathTracerScene::createEnvironmentScene()
 {
 	// init Geometry Instance
 
@@ -494,11 +494,25 @@ void PathTracerScene::createEnvironmentScene(int sceneKind)
 	Program exception_program2 = m_context->createProgramFromPTXFile( ptx_path2, "exception" );
 	m_context->setExceptionProgram( 1, exception_program2 );
 	m_context->setMissProgram( 1, m_context->createProgramFromPTXFile( ptx_path2, "envmap_miss" ) );
-	// Setup output buffer 2
+
+	//////////////////////////////////////////////////////////////////////////
+	// Setup programs 3
+	//std::string ptx_path3 = my_ptxpath("MultiCompution.cu" );
+	//Program ray_gen_program3 = m_context->createProgramFromPTXFile( ptx_path3, "MultiCompution" );
+	//m_context->setRayGenerationProgram( 2, ray_gen_program3 );
+	//Program exception_program3 = m_context->createProgramFromPTXFile( ptx_path3, "exception" );
+	//m_context->setExceptionProgram( 2, exception_program3 );
+	//////////////////////////////////////////////////////////////////////////
+	// Setup output buffer 2, 3
 	//m_context["gridBuffer"]->set(createOutputBuffer( RT_FORMAT_FLOAT4, 100, 100, 40));
 
 	optix::Buffer gridData = m_context->createBuffer(RT_BUFFER_INPUT_OUTPUT);
 	gridData->setFormat(RT_FORMAT_FLOAT3);
 	gridData->setSize(index_x*index_y*index_z);
 	m_context["gridBuffer"]->setBuffer( gridData );
+
+	optix::Buffer gridFluence = m_context->createBuffer(RT_BUFFER_INPUT_OUTPUT);
+	gridFluence->setFormat(RT_FORMAT_FLOAT3);
+	gridFluence->setSize(index_x*index_y*index_z);
+	m_context["gridFluence"]->setBuffer( gridFluence );
 }

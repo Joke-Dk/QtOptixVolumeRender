@@ -5,7 +5,7 @@ rtDeclareVariable(uint, gridIndex, rtLaunchIndex, );
 rtDeclareVariable(int, numSampling, , );
 rtDeclareVariable(unsigned int,  numCompution, , );
 //rtBuffer<float4, 3>    gridBuffer;
-static __device__ __inline__ float3 GetPosition( uint3 index)
+static __device__ __inline__ float3 GetPosition( int3 index)
 {
 	float3 p01 = P1-P0;
 	return make_float3(p01.x/(float)(index_x-1)*(float)(index.x)+P0.x, p01.y/(float)(index_y-1)*(float)(index.y)+P0.y, p01.z/(float)(index_z-1)*(float)(index.z)+P0.z );

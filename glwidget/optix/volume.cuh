@@ -17,9 +17,9 @@ rtDeclareVariable(float,        CloudSharpness, , );
 //Precomputation Intensity
 rtBuffer<float3, 1>    gridBuffer;
 
-static __device__ __inline__ uint3 i2xyz(int i)
+static __device__ __inline__ int3 i2xyz(int i)
 {
-	uint3 xyz;
+	int3 xyz;
 	xyz.x = i%(index_x);
 	xyz.y = i/(index_x)%(index_y);
 	xyz.z = i/(index_x)/(index_y);
@@ -29,6 +29,11 @@ static __device__ __inline__ uint3 i2xyz(int i)
 static __device__ __inline__ int xyz2i(int x, int y, int z)
 {
 	return z*index_x*index_y+ y*index_x+x;
+}
+
+static __device__ __inline__ int xyz2i(int3 xyz)
+{
+	return xyz.z*index_x*index_y+ xyz.y*index_x+xyz.x;
 }
 
 static __device__  __inline__ float CloudExpCurve(float v)

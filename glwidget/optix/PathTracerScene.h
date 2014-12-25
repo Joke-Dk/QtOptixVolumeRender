@@ -65,7 +65,7 @@ private:
 	optix::Buffer light_buffer;
 	// Should return true if key was handled, false otherwise.
 	virtual bool keyPressed(unsigned char key, int x, int y);
-	void createEnvironmentScene(int sceneKind);
+	void createEnvironmentScene( );
 
 	optix::GeometryInstance createParallelogram( const float3& anchor,
 		const float3& offset1,
