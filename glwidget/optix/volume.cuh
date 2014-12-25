@@ -16,6 +16,9 @@ rtDeclareVariable(float,        CloudSharpness, , );
 
 //Precomputation Intensity
 rtBuffer<float3, 1>    gridBuffer;
+rtBuffer<float3, 1>    gridFluence;
+
+rtDeclareVariable(float,        isFLDSingle, , );
 
 static __device__ __inline__ int3 i2xyz(int i)
 {
@@ -116,15 +119,28 @@ static __device__ __inline__ float3 interpolation(float3 p)
 		int y1=y0+1;
 		int z1=z0+1;
 
-		
-		float3 d000=gridBuffer[xyz2i(x0,y0,z0)];
-		float3 d100=gridBuffer[xyz2i(x0,y0,z1)];
-		float3 d010=gridBuffer[xyz2i(x0,y1,z0)];
-		float3 d110=gridBuffer[xyz2i(x0,y1,z1)];
-		float3 d001=gridBuffer[xyz2i(x1,y0,z0)];
-		float3 d101=gridBuffer[xyz2i(x1,y0,z1)];
-		float3 d011=gridBuffer[xyz2i(x1,y1,z0)];
-		float3 d111=gridBuffer[xyz2i(x1,y1,z1)];
+
+
+		float3 d000=gridFluence[xyz2i(x0,y0,z0)];
+		float3 d100=gridFluence[xyz2i(x0,y0,z1)];
+		float3 d010=gridFluence[xyz2i(x0,y1,z0)];
+		float3 d110=gridFluence[xyz2i(x0,y1,z1)];
+		float3 d001=gridFluence[xyz2i(x1,y0,z0)];
+		float3 d101=gridFluence[xyz2i(x1,y0,z1)];
+		float3 d011=gridFluence[xyz2i(x1,y1,z0)];
+		float3 d111=gridFluence[xyz2i(x1,y1,z1)];
+		if(isFLDSingle>0.5f)
+		{
+			d000=gridBuffer[xyz2i(x0,y0,z0)];
+			d100=gridBuffer[xyz2i(x0,y0,z1)];
+			d010=gridBuffer[xyz2i(x0,y1,z0)];
+			d110=gridBuffer[xyz2i(x0,y1,z1)];
+			d001=gridBuffer[xyz2i(x1,y0,z0)];
+			d101=gridBuffer[xyz2i(x1,y0,z1)];
+			d011=gridBuffer[xyz2i(x1,y1,z0)];
+			d111=gridBuffer[xyz2i(x1,y1,z1)];
+		}
+
 	
 		//p>p0
 		float3 w1 = make_float3(x0f, y0f, z0f);

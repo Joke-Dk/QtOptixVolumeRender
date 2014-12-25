@@ -86,6 +86,7 @@ private:
 	
 	optix::Program        m_pgram_bounding_box;
 	optix::Program        m_pgram_intersection;
+	optix::Program		  ray_gen_program_multi;
 
 	unsigned int   m_rr_begin_depth;
 	unsigned int   m_max_depth;

@@ -47,8 +47,8 @@ Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
 	connect( ui.comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotComboBox()));
 
 	// UI: Method selection: Monte Carlo and FLD
-	connect(ui.radioButton, SIGNAL(clicked(bool)), this, SLOT(slotRadioButton()));
-	connect(ui.radioButton_2, SIGNAL(clicked(bool)), this, SLOT(slotRadioButton2()));	
+	connect(ui.radioButton, SIGNAL(toggled(bool)), this, SLOT(slotRadioButton()));
+	connect(ui.radioButton_3, SIGNAL(toggled(bool)), this, SLOT(slotRadioButton3()));	
 
 	SetDeafaultParamater();
 }
@@ -71,7 +71,9 @@ void Widget::SetDeafaultParamater()
 	UpdataParameterAndRefresh("hasArea", ui.checkBox->isChecked()?1.f:0.f, false);
 	UpdataParameterAndRefresh("hasHDR", ui.checkBox_2->isChecked()?1.f:0.f, false);
 
+
 	UpdataParameterAndRefresh("isFLDMethod", ui.radioButton->isChecked()?0.f:1.f , false);
+	UpdataParameterAndRefresh("isFLDSingle", ui.radioButton_3->isChecked()?1.f:0.f, false);
 }
 
 void Widget::slotDoubleSpinbox_Slider()
@@ -294,7 +296,7 @@ void Widget::slotRadioButton()
 	UpdataParameterAndRefresh("isFLDMethod", ui.radioButton->isChecked()?0.f:1.f);
 }
 
-void Widget::slotRadioButton2()
+void Widget::slotRadioButton3()
 {
-	UpdataParameterAndRefresh("isFLDMethod", ui.radioButton_2->isChecked()?1.f:0.f);
+	UpdataParameterAndRefresh("isFLDSingle", ui.radioButton_3->isChecked()?1.f:0.f);
 }

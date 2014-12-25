@@ -148,13 +148,21 @@ void PathTracerScene::PreCompution()
 	updateParameter( "isSingle", 0.f);
 	updateParameter("isRayMarching", 0.f);
 	updateParameter( "isPreCompution", 1.f);
+	updateParameter( "curIterator", 0);
 	Buffer buffer = m_context["gridBuffer"]->getBuffer();
 	RTsize buffer_x;
 	buffer->getSize( buffer_x);
-	int maxCompution = 50;
+	int maxCompution = 20;
 	for (int i=1; i<maxCompution; ++i)
 	{
 		updateParameter( "numCompution", unsigned int(i));
+		m_context->launch( 1,static_cast<unsigned int>(buffer_x));
+	}
+
+	m_context->setRayGenerationProgram( 1, ray_gen_program_multi );
+	for (int i=1; i<100; ++i)
+	{
+		updateParameter( "curIterator", i);
 		m_context->launch( 1,static_cast<unsigned int>(buffer_x));
 	}
 	
@@ -489,11 +497,13 @@ void PathTracerScene::createEnvironmentScene()
 	//////////////////////////////////////////////////////////////////////////
 	// Setup programs 2
 	std::string ptx_path2 = my_ptxpath("PreCompution.cu" );
-	Program ray_gen_program2 = m_context->createProgramFromPTXFile( ptx_path2, "PreCompution" );
-	m_context->setRayGenerationProgram( 1, ray_gen_program2 );
+	Program ray_gen_program_single = m_context->createProgramFromPTXFile( ptx_path2, "PreCompution" );
+	m_context->setRayGenerationProgram( 1, ray_gen_program_single );
 	Program exception_program2 = m_context->createProgramFromPTXFile( ptx_path2, "exception" );
 	m_context->setExceptionProgram( 1, exception_program2 );
 	m_context->setMissProgram( 1, m_context->createProgramFromPTXFile( ptx_path2, "envmap_miss" ) );
+
+	ray_gen_program_multi = m_context->createProgramFromPTXFile( ptx_path2, "MultiCompution" );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Setup programs 3
@@ -506,6 +516,12 @@ void PathTracerScene::createEnvironmentScene()
 	// Setup output buffer 2, 3
 	//m_context["gridBuffer"]->set(createOutputBuffer( RT_FORMAT_FLOAT4, 100, 100, 40));
 
+	//////////////////////////////////////////////////////////////////////////
+	// Set the parameter of the FLD 
+	m_context["ee"]->setFloat( 10e-20);
+	m_context["dx"]->setFloat( 0.2f);
+	m_context["weight"]->setFloat( 1.4f);
+	m_context["J_mean"]->setFloat( 1.f);
 	optix::Buffer gridData = m_context->createBuffer(RT_BUFFER_INPUT_OUTPUT);
 	gridData->setFormat(RT_FORMAT_FLOAT3);
 	gridData->setSize(index_x*index_y*index_z);

@@ -42,7 +42,7 @@ public:
 	void slotComboBox();
 
 	void slotRadioButton();
-	void slotRadioButton2();
+	void slotRadioButton3();
 private:
 	Ui::WidgetClass ui;
 };
