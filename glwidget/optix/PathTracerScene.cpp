@@ -117,12 +117,11 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 	if(getParameter( "isFLDMethod")<0.5f)
 	{
 		updateParameter("isRayMarching", 0.f);
-		updateParameter( "isSingle", 0.f);	
 	}
-	if(getParameter("isSingle")>0.5f)
-	{
-		updateParameter("max_depth", unsigned int(3));
-	}
+	//if(getParameter("isSingle")>0.5f)
+	//{
+	//	updateParameter("max_depth", unsigned int(3));
+	//}
 	m_context["eye"]->setFloat( camera_data.eye );
 	m_context["U"]->setFloat( camera_data.U );
 	m_context["V"]->setFloat( camera_data.V );
@@ -152,7 +151,7 @@ void PathTracerScene::PreCompution()
 	Buffer buffer = m_context["gridBuffer"]->getBuffer();
 	RTsize buffer_x;
 	buffer->getSize( buffer_x);
-	int maxCompution = 100;
+	int maxCompution = 10;
 	for (int i=1; i<maxCompution; ++i)
 	{
 		updateParameter( "numCompution", unsigned int(i));
@@ -160,7 +159,7 @@ void PathTracerScene::PreCompution()
 	}
 
 	m_context->setRayGenerationProgram( 1, ray_gen_program_multi );
-	for (int i=1; i<300; ++i)
+	for (int i=1; i<30; ++i)
 	{
 		updateParameter( "curIterator", i);
 		m_context->launch( 1,static_cast<unsigned int>(buffer_x));

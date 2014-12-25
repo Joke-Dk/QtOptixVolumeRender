@@ -14,6 +14,7 @@ public:
 	~Widget();
 	void UpdataParameterAndRefresh(std::string str, float value, bool refresh=true);
 	void UpdataParameterAndRefreshInt(std::string str, int value, bool refresh=true);
+	void UpdataParameterAndRefreshUInt(std::string str, unsigned int value, bool refresh=true);
 	float GetParameterValue(std::string str);
 	void SetDeafaultParamater();
 	void UpdataEnvironmentLight(int idEnv, bool refresh=true);
@@ -43,6 +44,8 @@ public:
 
 	void slotRadioButton();
 	void slotRadioButton3();
+	void slotRadioButton4();
+	void slotRadioButton5();
 private:
 	Ui::WidgetClass ui;
 };

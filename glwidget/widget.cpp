@@ -49,7 +49,8 @@ Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
 	// UI: Method selection: Monte Carlo and FLD
 	connect(ui.radioButton, SIGNAL(toggled(bool)), this, SLOT(slotRadioButton()));
 	connect(ui.radioButton_3, SIGNAL(toggled(bool)), this, SLOT(slotRadioButton3()));	
-
+	connect(ui.radioButton_4, SIGNAL(toggled(bool)), this, SLOT(slotRadioButton4()));	
+	connect(ui.radioButton_5, SIGNAL(toggled(bool)), this, SLOT(slotRadioButton5()));	
 	SetDeafaultParamater();
 }
 
@@ -72,8 +73,10 @@ void Widget::SetDeafaultParamater()
 	UpdataParameterAndRefresh("hasHDR", ui.checkBox_2->isChecked()?1.f:0.f, false);
 
 
-	UpdataParameterAndRefresh("isFLDMethod", ui.radioButton->isChecked()?0.f:1.f , false);
-	UpdataParameterAndRefresh("isFLDSingle", ui.radioButton_3->isChecked()?1.f:0.f, false);
+	UpdataParameterAndRefresh("isFLDMethod", ui.radioButton->isChecked()||ui.radioButton_4->isChecked()?0.f:1.f , false);
+	UpdataParameterAndRefresh("isFLDSingle", ui.radioButton_3->isChecked()?1.f:ui.radioButton_5->isChecked()?-1.f:0.f, false);
+	UpdataParameterAndRefreshUInt("max_depth", ui.radioButton_4->isChecked()?unsigned int(3):unsigned int(100), false);
+	UpdataParameterAndRefresh("isSingle", 0.f, false);
 }
 
 void Widget::slotDoubleSpinbox_Slider()
@@ -160,7 +163,7 @@ void Widget::slotDoubleSpinbox_Slider5()
 
 void Widget::slotSlider_DoubleSpinbox5()
 {
-	double scale = 100;
+	double scale = 1000;
 	if(int(ui.doubleSpinBox_5->value()*scale) == ui.horizontalSlider_5->value())
 		return;
 	ui.doubleSpinBox_5->setValue((double)(ui.horizontalSlider_5->value())/scale);
@@ -230,6 +233,16 @@ void Widget::UpdataParameterAndRefreshInt(std::string str, int value, bool refre
 	}
 }
 
+void Widget::UpdataParameterAndRefreshUInt(std::string str, unsigned int value, bool refresh)
+{
+	PathTracerScene* scene= dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene);
+	scene->updateParameter(str , value);
+	if(refresh)
+	{
+		_glWidget->resizeGL(scene->m_width, scene->m_height);
+	}
+}
+
 void Widget::UpdataParameterAndRefresh(std::string str, float value, bool refresh)
 {
 	PathTracerScene* scene= dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene);
@@ -239,6 +252,7 @@ void Widget::UpdataParameterAndRefresh(std::string str, float value, bool refres
 		_glWidget->resizeGL(scene->m_width, scene->m_height);
 	}
 }
+
 
 void Widget::UpdataEnvironmentLight(int idEnv, bool refresh)
 {
@@ -299,4 +313,16 @@ void Widget::slotRadioButton()
 void Widget::slotRadioButton3()
 {
 	UpdataParameterAndRefresh("isFLDSingle", ui.radioButton_3->isChecked()?1.f:0.f);
+}
+
+void Widget::slotRadioButton4()
+{
+	UpdataParameterAndRefresh("isFLDMethod", ui.radioButton_4->isChecked()?0.f:1.f, false);
+	UpdataParameterAndRefreshUInt("max_depth", ui.radioButton_4->isChecked()?unsigned int(3):unsigned int(100), false);
+	UpdataParameterAndRefresh("isSingle", ui.radioButton_4->isChecked()?1.f:0.f);
+}
+
+void Widget::slotRadioButton5()
+{
+	UpdataParameterAndRefresh("isFLDSingle", ui.radioButton_5->isChecked()?-1.f:0.f);
 }

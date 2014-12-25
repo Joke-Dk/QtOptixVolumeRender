@@ -137,6 +137,17 @@ static __device__ __inline__ float3 interpolation(float3 p)
 		float3 d111=gridFluence[xyz2i(x1,y1,z1)];
 		if(isFLDSingle>0.5f)
 		{
+			d000=gridBuffer[xyz2i(x0,y0,z0)];
+			d100=gridBuffer[xyz2i(x0,y0,z1)];
+			d010=gridBuffer[xyz2i(x0,y1,z0)];
+			d110=gridBuffer[xyz2i(x0,y1,z1)];
+			d001=gridBuffer[xyz2i(x1,y0,z0)];
+			d101=gridBuffer[xyz2i(x1,y0,z1)];
+			d011=gridBuffer[xyz2i(x1,y1,z0)];
+			d111=gridBuffer[xyz2i(x1,y1,z1)];
+		}
+		else if(isFLDSingle<-0.5f)
+		{
 			d000+=gridBuffer[xyz2i(x0,y0,z0)];
 			d100+=gridBuffer[xyz2i(x0,y0,z1)];
 			d010+=gridBuffer[xyz2i(x0,y1,z0)];
