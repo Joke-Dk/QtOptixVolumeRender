@@ -136,7 +136,7 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 		m_camera_changed = false;
 		m_frame = 1;
 	}
-
+	//m_frame = 1;
 	m_context["frame_number"]->setUint( m_frame++ );
 
 	m_context->launch( 0,static_cast<unsigned int>(buffer_width),static_cast<unsigned int>(buffer_height));
@@ -144,7 +144,7 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 
 void PathTracerScene::PreCompution()
 {
-	updateParameter( "numSampling", 2);
+	updateParameter( "numSampling", 5);
 	updateParameter( "isSingle", 0.f);
 	updateParameter("isRayMarching", 0.f);
 	updateParameter( "isPreCompution", 1.f);
@@ -152,7 +152,7 @@ void PathTracerScene::PreCompution()
 	Buffer buffer = m_context["gridBuffer"]->getBuffer();
 	RTsize buffer_x;
 	buffer->getSize( buffer_x);
-	int maxCompution = 20;
+	int maxCompution = 100;
 	for (int i=1; i<maxCompution; ++i)
 	{
 		updateParameter( "numCompution", unsigned int(i));
@@ -160,12 +160,11 @@ void PathTracerScene::PreCompution()
 	}
 
 	m_context->setRayGenerationProgram( 1, ray_gen_program_multi );
-	for (int i=1; i<100; ++i)
+	for (int i=1; i<300; ++i)
 	{
 		updateParameter( "curIterator", i);
 		m_context->launch( 1,static_cast<unsigned int>(buffer_x));
 	}
-	
 	//updateParameter( "isPreCompution", 0.f);
 	//updateParameter("isRayMarching", 1.f);
 }
@@ -384,7 +383,7 @@ void PathTracerScene::createEnvironmentScene()
 	light.v1       = make_float3( -4.0f, 0.0f, 0.0f);
 	light.v2       = make_float3( 0.0f, 0.0f, 4.0f);
 	light.normal   = normalize( cross(light.v1, light.v2) );
-	m_context["light_em"]->setFloat( 30.f);
+	m_context["light_em"]->setFloat( 10.f);
 
 	light_buffer = m_context->createBuffer( RT_BUFFER_INPUT );
 	light_buffer->setFormat( RT_FORMAT_USER );
@@ -520,7 +519,7 @@ void PathTracerScene::createEnvironmentScene()
 	// Set the parameter of the FLD 
 	m_context["ee"]->setFloat( 10e-20);
 	m_context["dx"]->setFloat( 0.2f);
-	m_context["weight"]->setFloat( 1.4f);
+	m_context["weight"]->setFloat( 1.3f);
 	m_context["J_mean"]->setFloat( 1.f);
 	optix::Buffer gridData = m_context->createBuffer(RT_BUFFER_INPUT_OUTPUT);
 	gridData->setFormat(RT_FORMAT_FLOAT3);

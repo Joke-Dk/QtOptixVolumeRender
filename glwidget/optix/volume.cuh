@@ -47,6 +47,13 @@ static __device__  __inline__ float CloudExpCurve(float v)
 	return cloudDensity;
 }
 
+static __device__ __inline__ float GetDensity(int index)
+{
+	if(isCurve>0.5f)
+		return  CloudExpCurve(volume_density[index]);//*.densityMultiplier//*CloudExpCurve(res)
+	return volume_density[index];
+}
+
 static __device__ __inline__ float get_density(float3 p)
 {
 	//return 1.f
@@ -88,9 +95,8 @@ static __device__ __inline__ float get_density(float3 p)
 		//return 1.f
 		float res = (((d000 * w0.x + d001 * w1.x) * w0.y +  (d010 * w0.x + d011 * w1.x) * w1.y) * w0.z +  ((d100 * w0.x + d101 * w1.x) * w0.y + (d110 * w0.x + d111 * w1.x) * w1.y) * w1.z); 
 		if(isCurve>0.5f)
-			return  CloudExpCurve(res);//*.densityMultiplier//*CloudExpCurve(res)
-		else 
-			return res;
+			return  CloudExpCurve(res);
+		return res;
 	}
 		return 0.0000f;
 }
@@ -131,14 +137,14 @@ static __device__ __inline__ float3 interpolation(float3 p)
 		float3 d111=gridFluence[xyz2i(x1,y1,z1)];
 		if(isFLDSingle>0.5f)
 		{
-			d000=gridBuffer[xyz2i(x0,y0,z0)];
-			d100=gridBuffer[xyz2i(x0,y0,z1)];
-			d010=gridBuffer[xyz2i(x0,y1,z0)];
-			d110=gridBuffer[xyz2i(x0,y1,z1)];
-			d001=gridBuffer[xyz2i(x1,y0,z0)];
-			d101=gridBuffer[xyz2i(x1,y0,z1)];
-			d011=gridBuffer[xyz2i(x1,y1,z0)];
-			d111=gridBuffer[xyz2i(x1,y1,z1)];
+			d000+=gridBuffer[xyz2i(x0,y0,z0)];
+			d100+=gridBuffer[xyz2i(x0,y0,z1)];
+			d010+=gridBuffer[xyz2i(x0,y1,z0)];
+			d110+=gridBuffer[xyz2i(x0,y1,z1)];
+			d001+=gridBuffer[xyz2i(x1,y0,z0)];
+			d101+=gridBuffer[xyz2i(x1,y0,z1)];
+			d011+=gridBuffer[xyz2i(x1,y1,z0)];
+			d111+=gridBuffer[xyz2i(x1,y1,z1)];
 		}
 
 	

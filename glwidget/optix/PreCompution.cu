@@ -16,7 +16,7 @@ RT_PROGRAM void MultiCompution()
 {
 	if (curIterator==1)
 	{
-		//gridBuffer[gridIndex] *= volume_density[gridIndex]*sigma_t;
+		//gridBuffer[gridIndex] *= GetDensity(gridIndex)*sigma_t;
 		gridFluence[ gridIndex] = make_float3(1.f)*ee*dx*J_mean;
 		return;
 	}
@@ -29,9 +29,10 @@ RT_PROGRAM void MultiCompution()
 	float3 sigmaP = GetSigmaT0( i);
 	float3 Dp = GetDp( i);
 
-	if ( 0)//volume_density[ i] == 0.f)
+	if ( GetDensity( i) == 0.f)
 	{
-
+		gridFluence[ gridIndex] = gridBuffer[i];
+		return;
 	}
 	else
 	{
@@ -51,7 +52,7 @@ RT_PROGRAM void MultiCompution()
 		float3 fluence30 = safeGetFlue(  i, 0,  0, -1);
 		float3 fluence31 = safeGetFlue(  i, 0,  0,  1);
 
-		float3 numerator = volume_density[i]*sigma_t*dx*dx*gridBuffer[i]+(Ds10*fluence10 + Ds11*fluence11 + Ds20*fluence20+Ds21*fluence21+Ds30*fluence30+Ds31*fluence31);
+		float3 numerator = GetDensity(i)*sigma_t*dx*dx*gridBuffer[i]+(Ds10*fluence10 + Ds11*fluence11 + Ds20*fluence20+Ds21*fluence21+Ds30*fluence30+Ds31*fluence31);
 		float3 denominator = (1.f-alpha_value)*sigmaP*dx*dx+(Ds10+Ds11+Ds20+Ds21+Ds30+Ds31);
 		//error_p = (numerator - $fluence[i]*denominator)/$dx/$dx
 		update_fluence = numerator/denominator;

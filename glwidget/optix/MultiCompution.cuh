@@ -7,11 +7,11 @@ rtDeclareVariable(float, weight, , );
 
 static __device__ __inline__ float3  GetSigmaT0( int i)	
 {
-	return volume_density[i]*sigma_t*make_float3(1.f);
+	return GetDensity(i)*sigma_t*make_float3(1.f);
 }
 static __device__ __inline__ float3  GetSigmaT1( int i)	
 {
-	return max(volume_density[i]*sigma_t, 1.f/pow(10.f, 3)/20.f)*make_float3(1.f);
+	return max(GetDensity(i)*sigma_t, 1.f/pow(10.f, 3)/20.f)*make_float3(1.f);
 }
 
 static __device__ __inline__ float3  max( float3 a, float3 b)

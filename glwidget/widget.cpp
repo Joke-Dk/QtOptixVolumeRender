@@ -151,7 +151,7 @@ void Widget::slotSlider_DoubleSpinbox4()
 
 void Widget::slotDoubleSpinbox_Slider5()
 {
-	double scale = 100;
+	double scale = 1000;
 	if(int(ui.doubleSpinBox_5->value()*scale) == ui.horizontalSlider_5->value())
 		return;
 	ui.horizontalSlider_5->setValue((int)(ui.doubleSpinBox_5->value()*scale));
