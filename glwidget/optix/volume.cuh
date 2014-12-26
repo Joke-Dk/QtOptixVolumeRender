@@ -1,3 +1,6 @@
+#ifndef _VOLUME_CUH_
+#define _VOLUME_CUH_
+
 #include "ray.cuh"
 
 rtBuffer<float> volume_density;
@@ -229,5 +232,5 @@ static __device__ __inline__ float3 cosineHemisphere( const float u1, const floa
 }
 
 
-
+#endif
 	

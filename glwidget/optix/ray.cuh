@@ -1,3 +1,6 @@
+#ifndef _RAY_CUH_
+#define _RAY_CUH_
+
 #include <optix.h>
 #include <optixu/optixu_math_namespace.h>
 //#include "helpers.h"
@@ -55,3 +58,4 @@ rtDeclareVariable(float3,        bad_color, , );
 // For shadow program
 rtDeclareVariable(PerRayData_pathtrace_shadow, current_prd_shadow, rtPayload, );
 
+#endif

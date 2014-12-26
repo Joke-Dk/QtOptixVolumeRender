@@ -118,10 +118,6 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 	{
 		updateParameter("isRayMarching", 0.f);
 	}
-	//if(getParameter("isSingle")>0.5f)
-	//{
-	//	updateParameter("max_depth", unsigned int(3));
-	//}
 	m_context["eye"]->setFloat( camera_data.eye );
 	m_context["U"]->setFloat( camera_data.U );
 	m_context["V"]->setFloat( camera_data.V );
@@ -135,7 +131,7 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 		m_camera_changed = false;
 		m_frame = 1;
 	}
-	//m_frame = 1;
+
 	m_context["frame_number"]->setUint( m_frame++ );
 
 	m_context->launch( 0,static_cast<unsigned int>(buffer_width),static_cast<unsigned int>(buffer_height));
@@ -151,7 +147,7 @@ void PathTracerScene::PreCompution()
 	Buffer buffer = m_context["gridBuffer"]->getBuffer();
 	RTsize buffer_x;
 	buffer->getSize( buffer_x);
-	int maxCompution = 10;
+	int maxCompution = 20;
 	for (int i=1; i<maxCompution; ++i)
 	{
 		updateParameter( "numCompution", unsigned int(i));
@@ -308,6 +304,7 @@ void PathTracerScene::switchEnvironmentLight( int envId)
 	default:envmapPath += "CedarCity.hdr";break;
 	}
 	m_context["envmap"]->setTextureSampler( loadTexture( m_context, envmapPath, default_color) );
+	envMap.setup( m_context);
 }
 
 void PathTracerScene::updateGeometryInstance()

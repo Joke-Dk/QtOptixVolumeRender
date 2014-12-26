@@ -2,6 +2,7 @@
 #include <optixu/optixu_math_namespace.h>
 #include "volume.cuh"
 #include "MultiCompution.cuh"
+#include "envmap.cuh"
 rtDeclareVariable(uint, gridIndex, rtLaunchIndex, );
 rtDeclareVariable(int, numSampling, , );
 rtDeclareVariable(unsigned int,  numCompution, , );

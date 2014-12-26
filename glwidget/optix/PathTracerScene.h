@@ -5,7 +5,7 @@
 //#include <optixu/optixu_math_stream_namespace.h>
 #include <GLUTDisplay.h>
 #include <ObjLoader.h>
-
+#include "envmapSampler.h"
 
 //-----------------------------------------------------------------------------
 //
@@ -45,6 +45,7 @@ public:
 
 	unsigned int   m_width;
 	unsigned int   m_height;
+	EnvironmentMap envMap;
 private:
 	// create geometry instances
 	std::vector<optix::GeometryInstance> gis0volume;

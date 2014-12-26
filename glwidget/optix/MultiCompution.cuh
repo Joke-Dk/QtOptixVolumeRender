@@ -1,3 +1,6 @@
+#ifndef _MULTICOMPUTION_CUH_
+#define _MULTICOMPUTION_CUH_
+
 //rtDeclareVariable(int, maxIterator, , );
 rtDeclareVariable(int, curIterator, , );
 rtDeclareVariable(float, ee, , );
@@ -119,7 +122,7 @@ static __device__ __inline__ float3 safeGetDp(  int i,  int addx, int addy, int 
 }
 
 
-
+#endif
 
 
 

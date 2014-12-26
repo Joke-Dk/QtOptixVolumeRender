@@ -351,6 +351,34 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="envmap"
+					>
+					<File
+						RelativePath=".\optix\discrete.cuh"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\discrete.h"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\envmap.cuh"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\envmap_distr.cuh"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\envmapSampler.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\envmapSampler.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
