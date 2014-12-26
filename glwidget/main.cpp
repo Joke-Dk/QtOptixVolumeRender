@@ -46,6 +46,12 @@
 int main(int argc, char **argv)
 {
 	//////////////////////////////////////////////////////////////////////////
+	//  Display debug information in console window.
+	AllocConsole();
+	FILE* pFile;
+	freopen_s(&pFile,"CONOUT$","w+t",stdout);
+
+	//////////////////////////////////////////////////////////////////////////
 	//Optix Init
 	QTGLUTDisplay::init( argc, argv );
 	// Process command line options

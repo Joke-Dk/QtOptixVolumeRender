@@ -48,7 +48,6 @@ Window::Window( int argc, char** argv )
 {
     glWidget = new QTGLUTDisplay( argc, argv);
 	uiwidget = new Widget(glWidget);
-
 //! [0]
 
 //! [1]
@@ -56,9 +55,10 @@ Window::Window( int argc, char** argv )
     mainLayout->addWidget(uiwidget);
 	mainLayout->addWidget(glWidget);
     setLayout(mainLayout);
-
+	
 
     setWindowTitle(tr("Volume Rendering"));
+	SetStyle();
 }
 //! [1]
 
@@ -74,6 +74,17 @@ Window::Window( int argc, char** argv )
 //    return slider;
 //}
 //! [2]
+
+void Window::SetStyle()
+{
+	QFile file(":/ui/ui/common.qss");
+	if (!file.open(QFile::ReadOnly)) {
+		printf("do not find stylization file\n");
+		return ;
+	}
+	QString stylesheet(file.readAll());
+	setStyleSheet(stylesheet);
+}
 
 void Window::keyPressEvent(QKeyEvent *e)
 {

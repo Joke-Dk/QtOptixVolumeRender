@@ -19,7 +19,7 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>85</height>
+       <height>90</height>
       </size>
      </property>
      <property name="title">
@@ -31,7 +31,7 @@
         <x>10</x>
         <y>20</y>
         <width>231</width>
-        <height>62</height>
+        <height>69</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
@@ -41,7 +41,7 @@
           <string>My FLD</string>
          </property>
          <property name="checked">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -51,7 +51,7 @@
           <string>Monte Carlo</string>
          </property>
          <property name="checked">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -73,6 +73,13 @@
         <widget class="QRadioButton" name="radioButton_5">
          <property name="text">
           <string>Single + FLD</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>FLD</string>
          </property>
         </widget>
        </item>

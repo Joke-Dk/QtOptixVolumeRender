@@ -46,6 +46,8 @@ public:
 	void slotRadioButton3();
 	void slotRadioButton4();
 	void slotRadioButton5();
+
+	void slotPushButton();
 private:
 	Ui::WidgetClass ui;
 };

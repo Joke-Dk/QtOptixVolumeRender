@@ -52,6 +52,9 @@ Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
 	connect(ui.radioButton_4, SIGNAL(toggled(bool)), this, SLOT(slotRadioButton4()));	
 	connect(ui.radioButton_5, SIGNAL(toggled(bool)), this, SLOT(slotRadioButton5()));	
 	SetDeafaultParamater();
+
+	// UI: FLD Precompution button
+	connect(ui.pushButton, SIGNAL(clicked(bool)), this, SLOT(slotPushButton()));
 }
 
 void Widget::SetDeafaultParamater()
@@ -325,4 +328,11 @@ void Widget::slotRadioButton4()
 void Widget::slotRadioButton5()
 {
 	UpdataParameterAndRefresh("isFLDSingle", ui.radioButton_5->isChecked()?-1.f:0.f);
+}
+
+
+void Widget::slotPushButton()
+{
+	dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene)->PreCompution();
+	ui.radioButton_2->setChecked( 1);
 }

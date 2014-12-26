@@ -250,7 +250,7 @@ void QTGLUTDisplay::initializeGL()
 
 	// Enter main loop
 	//glutMainLoop();
-	dynamic_cast<PathTracerScene *>(_scene)->PreCompution();
+	//dynamic_cast<PathTracerScene *>(_scene)->PreCompution();
 }
 void QTGLUTDisplay::paintGL()
 {

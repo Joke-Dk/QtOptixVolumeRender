@@ -1,4 +1,50 @@
 <RCC>
-    <qresource prefix="GLWidget">
+    <qresource prefix="/GLWidget"/>
+    <qresource prefix="/ui">
+        <file>ui/common.qss</file>
+        <file>ui/images/areaLight.png</file>
+        <file>ui/images/branch-closed.png</file>
+        <file>ui/images/branch-end.png</file>
+        <file>ui/images/branch-more.png</file>
+        <file>ui/images/branch-open.png</file>
+        <file>ui/images/checkbox_checked.png</file>
+        <file>ui/images/checkbox_checked_disabled.png</file>
+        <file>ui/images/checkbox_checked_disabled_locked.png</file>
+        <file>ui/images/checkbox_checked_hover.png</file>
+        <file>ui/images/checkbox_unchecked.png</file>
+        <file>ui/images/checkbox_unchecked_hover.png</file>
+        <file>ui/images/checkbox_unchecked_locked.png</file>
+        <file>ui/images/chunk.png</file>
+        <file>ui/images/close.png</file>
+        <file>ui/images/combobox.png</file>
+        <file>ui/images/DirectionLight.png</file>
+        <file>ui/images/DirectionLight_Shadow.png</file>
+        <file>ui/images/down_arrow.png</file>
+        <file>ui/images/down_arrow_disabled.png</file>
+        <file>ui/images/float.png</file>
+        <file>ui/images/left_arrow.png</file>
+        <file>ui/images/menu_arrow.png</file>
+        <file>ui/images/PointLight.png</file>
+        <file>ui/images/PointLight_Shadow.png</file>
+        <file>ui/images/radiobutton_checked.png</file>
+        <file>ui/images/radiobutton_checked_hover.png</file>
+        <file>ui/images/radiobutton_disabled.png</file>
+        <file>ui/images/radiobutton_disabled_locked.png</file>
+        <file>ui/images/radiobutton_unchecked.png</file>
+        <file>ui/images/radiobutton_unchecked_hover.png</file>
+        <file>ui/images/radiobutton_unchecked_locked.png</file>
+        <file>ui/images/right_arrow.png</file>
+        <file>ui/images/slider_handle.png</file>
+        <file>ui/images/slider_handle_disabled.png</file>
+        <file>ui/images/SpotLight.png</file>
+        <file>ui/images/SpotLight_Shadow.png</file>
+        <file>ui/images/up_arrow.png</file>
+        <file>ui/images/vline.png</file>
+        <file>ui/images/x.png</file>
+        <file>ui/images/x_sel.png</file>
+        <file>ui/images/y.png</file>
+        <file>ui/images/y_sel.png</file>
+        <file>ui/images/z.png</file>
+        <file>ui/images/z_sel.png</file>
     </qresource>
 </RCC>

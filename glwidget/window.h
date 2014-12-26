@@ -63,6 +63,7 @@ private:
     QSlider *createSlider();
 	Widget *uiwidget;
     QTGLUTDisplay *glWidget;
+	void SetStyle();
 };
 //! [0]
 
