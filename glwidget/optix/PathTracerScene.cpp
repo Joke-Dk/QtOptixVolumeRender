@@ -496,7 +496,7 @@ void PathTracerScene::createEnvironmentScene()
 	m_context->setRayGenerationProgram( 1, ray_gen_program_single );
 	Program exception_program2 = m_context->createProgramFromPTXFile( ptx_path2, "exception" );
 	m_context->setExceptionProgram( 1, exception_program2 );
-	m_context->setMissProgram( 1, m_context->createProgramFromPTXFile( ptx_path2, "envmap_miss" ) );
+	//m_context->setMissProgram( 1, m_context->createProgramFromPTXFile( ptx_path2, "envmap_miss" ) );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Set the parameter of the FLD 

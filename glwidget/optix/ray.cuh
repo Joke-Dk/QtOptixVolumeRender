@@ -9,7 +9,7 @@
 
 using namespace optix;
 
-rtTextureSampler<float4, 2> envmap;
+
 rtDeclareVariable(float,        isSingle, , );
 struct PerRayData_pathtrace
 {

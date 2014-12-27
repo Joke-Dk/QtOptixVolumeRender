@@ -96,9 +96,10 @@ RT_PROGRAM void PreCompution()
 		prd.seed = seed;
 
 		float3 tmpVec;
-		ray_direction = sampleEnvmap( tmpVec, prd.seed);
+		ray_direction = sampleEnvmap( tmpVec, rnd(prd.seed), rnd(prd.seed));
 		//ray_direction = make_float3(1.f, 0.f, 0.f);
-		//prd.attenuation*=tmpVec.z;
+		prd.attenuation/=tmpVec.z;//*10.f;
+		//prd.attenuation = 1.f/envmapEvalL(ray.direction);
 		//ray_direction = uniformSphere( rnd(prd.seed), rnd(prd.seed), make_float3(1.f, 0.f, 0.f));
 		ray_origin = p;
 		while(1)
@@ -154,15 +155,15 @@ RT_PROGRAM void exception()
 
 
 
-RT_PROGRAM void envmap_miss()
-{
-	float theta = atan2f( ray.direction.x, ray.direction.z );
-	float phi   = M_PIf * 0.5f -  acosf( ray.direction.y );
-	float u     = (theta + M_PIf) * (0.5f * M_1_PIf);
-	float v     = 0.5f * ( 1.0f + sin(phi) );
-	//current_prd.radiance = bg_color*100.f;
-	current_prd.radiance = make_float3( tex2D(envmap, u, v) )*1.f;
-	
-	current_prd.done = true;
-	//current_prd.attenuation *= 0.1f;
-}
+//RT_PROGRAM void envmap_miss()
+//{
+//	float theta = atan2f( ray.direction.x, ray.direction.z );
+//	float phi   = M_PIf * 0.5f -  acosf( ray.direction.y );
+//	float u     = (theta + M_PIf) * (0.5f * M_1_PIf);
+//	float v     = 0.5f * ( 1.0f + sin(phi) );
+//	//current_prd.radiance = bg_color*100.f;
+//	current_prd.radiance = make_float3( tex2D(envmap, u, v) )*1.f;
+//	
+//	current_prd.done = true;
+//	//current_prd.attenuation *= 0.1f;
+//}

@@ -1,12 +1,15 @@
 #ifndef _TRACY_ENVMAP_DISTR_CUH_
 #define _TRACY_ENVMAP_DISTR_CUH_
 
+
+
+
 //////////////////////////////////////////////////////////////////////////
 // importance sample envmap
 rtBuffer<float, 1> cdfMarginal; // cdf(vi)  //  sum_j(vi,uj)
 rtBuffer<float, 2> cdfConditional; // cdf(uj|vi)
-//rtDeclareVariable(uint, envmapWidth,,); // nu
-//rtDeclareVariable(uint, envmapHeight,,); // nv
+rtDeclareVariable(uint, envmapWidth,,); // nu
+rtDeclareVariable(uint, envmapHeight,,); // nv
 
 
 // ----- sampling marginal cdf
@@ -71,9 +74,9 @@ static __device__ __inline__ float2 sample_env_conditional(float u,uint v)
 
 
 // return (u,v,pdf)
-static __device__ __inline__ float3 sampleEnvmap( float3& vec3, uint& seed)
+static __device__ __inline__ float3 sampleEnvmap( float3& vec3, const float u1, const float u2)
 {
-	float u1=rnd(seed),u2=rnd(seed);
+	//float u1=rnd(seed),u2=rnd(seed);
 	uint iv;
 	float2 v=sample_env_marginal(u2,&iv);
 	float2 u=sample_env_conditional(u1,iv);

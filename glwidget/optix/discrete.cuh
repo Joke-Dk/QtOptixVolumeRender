@@ -5,9 +5,9 @@
 
 // first ele not less than key
 
-const float M_TWOPI = 2.f*M_PIf;
-const float INV_TWOPI = 1.f/2.f/M_PIf;
-const float INV_PI = 1.f/M_PIf;
+#define M_TWOPI  (2.f*M_PIf)
+#define INV_TWOPI (1.f/2.f/M_PIf)
+#define INV_PI (1.f/M_PIf)
 
 static __device__ __inline__ uint LOWER_BOUND_FUNC(int size,float key,uint v=0)
 {

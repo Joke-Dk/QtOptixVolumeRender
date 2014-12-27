@@ -1,5 +1,5 @@
 #include "ray.cuh"
-
+#include "envmap.cuh"
 rtDeclareVariable(uint2,      launch_index, rtLaunchIndex, );
 
 rtDeclareVariable(float3,        eye, , );
@@ -12,6 +12,7 @@ rtBuffer<float4, 2>              output_buffer;
 rtDeclareVariable(float,  hasBackground, , );
 rtDeclareVariable(float,  radianceMultipler, , );
 //rtDeclareVariable(float,  hasHDR, , );
+
 
 //-----------------------------------------------------------------------------
 //
@@ -129,7 +130,7 @@ RT_PROGRAM void envmap_miss()
 	current_prd.radiance = bg_color;
 	if(hasBackground>0.5f || current_prd.depth>2)
 	{
-		current_prd.radiance = make_float3( tex2D(envmap, u, v) )*1.f;
+		current_prd.radiance = envmapEvalL(ray.direction);//make_float3( tex2D(envmap, u, v) )*1.f;
 	}
 	current_prd.done = true;
 	//current_prd.attenuation *= 0.1f;
