@@ -25,10 +25,7 @@ static __device__ __inline__ float3  max( float3 a, float3 b)
 	ret.z = max(a.y, b.z);
 	return ret;
 }
-//static __device__ __inline__ bool compare(int3 a, int3 b)
-//{
-//
-//}
+
 
 static __device__ __inline__ bool safe_index(int3& xyz,  int addx, int addy, int addz)
 {

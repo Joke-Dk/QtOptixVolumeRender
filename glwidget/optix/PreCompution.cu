@@ -35,6 +35,7 @@ RT_PROGRAM void MultiCompution()
 		gridFluence[ gridIndex] = gridBuffer[i];
 		return;
 	}
+
 	else
 	{
 		float3 Ds10 = (safeGetDp(i, -1, 0, 0)+Dp)/2.f;
@@ -59,6 +60,7 @@ RT_PROGRAM void MultiCompution()
 		update_fluence = numerator/denominator;
 	}
 	gridFluence[i] = max(weight*update_fluence+(1.f-weight)* gridFluence[i], make_float3(0.f,0.f,0.f));
+
 }
 
 //-----------------------------------------------------------------------------
@@ -92,7 +94,12 @@ RT_PROGRAM void PreCompution()
 		prd.inside = true;
 		prd.depth = 0;
 		prd.seed = seed;
-		ray_direction = uniformSphere( rnd(prd.seed), rnd(prd.seed), make_float3(1.f, 0.f, 0.f));
+
+		float3 tmpVec;
+		ray_direction = sampleEnvmap( tmpVec, prd.seed);
+		//ray_direction = make_float3(1.f, 0.f, 0.f);
+		//prd.attenuation*=tmpVec.z;
+		//ray_direction = uniformSphere( rnd(prd.seed), rnd(prd.seed), make_float3(1.f, 0.f, 0.f));
 		ray_origin = p;
 		while(1)
 		{

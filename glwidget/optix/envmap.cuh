@@ -14,19 +14,9 @@ rtDeclareVariable(uint, envmapHeight,,); // nv
 // sample by M-H
 //#include "envmap_metro.cuh"
 
-const float M_TWOPI = 2.f*M_PIf;
-const float INV_TWOPI = 1.f/2.f/M_PIf;
-const float INV_PI = 1.f/M_PIf;
 
-static __device__ __inline__ float sphericalTheta(const float3 &v) // 0 pi
-{
-	return acosf(clamp(v.z, -1.f, 1.f));
-}
-static __device__ __inline__ float sphericalPhi(const float3 &v) // 0 2pi
-{
-	float p = atan2f(v.y, v.x);
-	return (p < 0.f) ? p + M_TWOPI : p;
-}
+
+
 static __device__ __inline__ float2 spherical_uv(const float3& w)
 {
 	return make_float2(INV_TWOPI*sphericalPhi(w),INV_PI*sphericalTheta(w));

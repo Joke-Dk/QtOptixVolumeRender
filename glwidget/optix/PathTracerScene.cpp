@@ -147,7 +147,7 @@ void PathTracerScene::PreCompution()
 	Buffer buffer = m_context["gridBuffer"]->getBuffer();
 	RTsize buffer_x;
 	buffer->getSize( buffer_x);
-	int maxCompution = 20;
+	int maxCompution = 10;
 	for (int i=1; i<maxCompution; ++i)
 	{
 		updateParameter( "numCompution", unsigned int(i));
@@ -155,7 +155,7 @@ void PathTracerScene::PreCompution()
 	}
 
 	m_context->setRayGenerationProgram( 1, ray_gen_program_multi );
-	for (int i=1; i<30; ++i)
+	for (int i=1; i<10; ++i)
 	{
 		updateParameter( "curIterator", i);
 		m_context->launch( 1,static_cast<unsigned int>(buffer_x));
@@ -498,6 +498,17 @@ void PathTracerScene::createEnvironmentScene()
 	m_context->setExceptionProgram( 1, exception_program2 );
 	m_context->setMissProgram( 1, m_context->createProgramFromPTXFile( ptx_path2, "envmap_miss" ) );
 
+	//////////////////////////////////////////////////////////////////////////
+	// Set the parameter of the FLD 
+	m_context["ee"]->setFloat( 10e-20);
+	m_context["dx"]->setFloat( 0.2f);
+	m_context["weight"]->setFloat( 1.3f);
+	m_context["J_mean"]->setFloat( 1.f);
+	//updateParameter( "numSampling", 5);
+	//updateParameter( "isSingle", 0.f);
+	//updateParameter("isRayMarching", 0.f);
+	//updateParameter( "isPreCompution", 1.f);
+	//updateParameter( "curIterator", 0);
 	ray_gen_program_multi = m_context->createProgramFromPTXFile( ptx_path2, "MultiCompution" );
 
 	//////////////////////////////////////////////////////////////////////////
@@ -511,12 +522,7 @@ void PathTracerScene::createEnvironmentScene()
 	// Setup output buffer 2, 3
 	//m_context["gridBuffer"]->set(createOutputBuffer( RT_FORMAT_FLOAT4, 100, 100, 40));
 
-	//////////////////////////////////////////////////////////////////////////
-	// Set the parameter of the FLD 
-	m_context["ee"]->setFloat( 10e-20);
-	m_context["dx"]->setFloat( 0.2f);
-	m_context["weight"]->setFloat( 1.3f);
-	m_context["J_mean"]->setFloat( 1.f);
+
 	optix::Buffer gridData = m_context->createBuffer(RT_BUFFER_INPUT_OUTPUT);
 	gridData->setFormat(RT_FORMAT_FLOAT3);
 	gridData->setSize(index_x*index_y*index_z);
@@ -526,4 +532,5 @@ void PathTracerScene::createEnvironmentScene()
 	gridFluence->setFormat(RT_FORMAT_FLOAT3);
 	gridFluence->setSize(index_x*index_y*index_z);
 	m_context["gridFluence"]->setBuffer( gridFluence );
+
 }

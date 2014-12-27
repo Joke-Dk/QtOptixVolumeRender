@@ -48,6 +48,7 @@ static __device__ __inline__ float2 sample_env_marginal(float u,uint* offset)
 #define LOWER_BOUND_FUNC lower_bound
 #define UPPER_BOUND_FUNC upper_bound
 
+
 //#include "../core/discrete.cuh"
 
 // return (sampled_u, pdf)
@@ -70,13 +71,15 @@ static __device__ __inline__ float2 sample_env_conditional(float u,uint v)
 
 
 // return (u,v,pdf)
-static __device__ __inline__ float3 sampleEnvmap(const float3& /*nrm*/,uint& seed)
+static __device__ __inline__ float3 sampleEnvmap( float3& vec3, uint& seed)
 {
 	float u1=rnd(seed),u2=rnd(seed);
 	uint iv;
 	float2 v=sample_env_marginal(u2,&iv);
 	float2 u=sample_env_conditional(u1,iv);
-	return make_float3(u.x,v.x,u.y*v.y);
+	float3 dir = spherical2cartesian( v.x*M_PIf, u.x*2.f*M_PIf);
+	vec3 = make_float3(u.x,v.x,u.y*v.y);
+	return dir;
 }
 
 static __device__ __inline__ float envmapMapPdf(float u,float v)
