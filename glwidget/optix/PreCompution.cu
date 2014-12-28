@@ -102,6 +102,7 @@ RT_PROGRAM void PreCompution()
 		if(gridIndex==10001)
 		{
 			printf("%lf\n",pdf.z);
+			//pixelIsSampled[10] = 1.f;
 			//tex2D(envmap,pdf.x,pdf.y);// = make_float3(1.f, 0.f, 0.f);
 		}
 		//ray_direction = uniformSphere( rnd(prd.seed), rnd(prd.seed), make_float3(1.f, 0.f, 0.f));

@@ -3,6 +3,7 @@
 
 
 rtTextureSampler<float4, 2>		envmap;
+rtBuffer<float, 1>              pixelIsSampled;
 rtDeclareVariable(float,		envmap_scale,,); // store explicitly for envmap eval
 //rtDeclareVariable(Frame,		envmap_frame,,); // store explicitly for envmap eval
 
