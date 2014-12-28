@@ -97,11 +97,15 @@ RT_PROGRAM void PreCompution()
 
 		float3 pdf;
 		ray_direction = sampleEnvmap( pdf, rnd(prd.seed), rnd(prd.seed));
+
+		uint2 iuv = uv2iuv(make_float2(pdf));
 		//ray_direction = make_float3(1.f, 0.f, 0.f);
 		//prd.attenuation/=tmpVec.z;//*10.f;
-		if(gridIndex==10001)
+		atomicAdd(&pixelIsSampled[iuv],1);
+		if(0)//(gridIndex==10001)
 		{
 			printf("%lf\n",pdf.z);
+			//pixelIsSampled[make_uint2(u, v)] = 1;
 			//tex2D(envmap,pdf.x,pdf.y);// = make_float3(1.f, 0.f, 0.f);
 		}
 		//ray_direction = uniformSphere( rnd(prd.seed), rnd(prd.seed), make_float3(1.f, 0.f, 0.f));
