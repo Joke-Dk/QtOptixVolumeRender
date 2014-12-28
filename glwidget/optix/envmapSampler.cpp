@@ -24,4 +24,5 @@ void EnvironmentMap::setup( optix::Context& optixCtx)
 	optixCtx["cdfMarginal"]->set(dist2.pMarginal);
 	optixCtx["cdfConditional"]->set(dist2.pConditionalV);
 	_buffer->unmap();
+
 }

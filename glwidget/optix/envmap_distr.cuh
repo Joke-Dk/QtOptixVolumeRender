@@ -81,20 +81,20 @@ static __device__ __inline__ float3 sampleEnvmap( float3& vec3, const float u1, 
 	float2 v=sample_env_marginal(u2,&iv);
 	float2 u=sample_env_conditional(u1,iv);
 	float3 dir = spherical2cartesian( v.x*M_PIf, u.x*2.f*M_PIf);
-	vec3 = make_float3(u.x,v.x,u.y*v.y);
+	vec3 = make_float3(u.x,v.x,u.y);
 	return dir;
 }
 
-static __device__ __inline__ float envmapMapPdf(float u,float v)
+static __device__ __inline__ float envmapMapPdf(float uu,float vv)
 {
-	uint iu = clamp((uint)(u * envmapWidth), 0u,	envmapWidth-1u);
-	uint iv = clamp((uint)(v * envmapHeight), 0u,	envmapHeight-1u);
+	uint u = clamp((uint)(uu * envmapWidth), 0u,	envmapWidth-1u);
+	uint v = clamp((uint)(vv * envmapHeight), 0u,	envmapHeight-1u);
 
 	// return product of { func_value[i]/func_int }
 	// which is equivalent to (cdf[i+1]-cdf[i])*count
 	// because cdf[i+1]=cdf[i]+func_value[i]/count/func_int
-	return (cdfMarginal[iv+1]-cdfMarginal[iv])*envmapHeight
-		*(cdfConditional[make_uint2(iu+1,iv)]-cdfConditional[make_uint2(iu,iv)])*envmapWidth;
+	return (cdfMarginal[v+1]-cdfMarginal[v])*envmapHeight
+		*(ARRAY_GET(u+1)-ARRAY_GET(u))*envmapWidth;
 }
 
 #endif

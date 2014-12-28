@@ -100,7 +100,10 @@ RT_PROGRAM void PreCompution()
 		//ray_direction = make_float3(1.f, 0.f, 0.f);
 		//prd.attenuation/=tmpVec.z;//*10.f;
 		if(gridIndex==10001)
+		{
 			printf("%lf\n",pdf.z);
+			//tex2D(envmap,pdf.x,pdf.y);// = make_float3(1.f, 0.f, 0.f);
+		}
 		//ray_direction = uniformSphere( rnd(prd.seed), rnd(prd.seed), make_float3(1.f, 0.f, 0.f));
 		ray_origin = p;
 		float3 envmapColor = envmapEvalLandPdf(ray_direction);//pdf.z;

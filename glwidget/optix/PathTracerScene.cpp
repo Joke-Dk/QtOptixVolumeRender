@@ -535,4 +535,5 @@ void PathTracerScene::createEnvironmentScene()
 	gridFluence->setSize(index_x*index_y*index_z);
 	m_context["gridFluence"]->setBuffer( gridFluence );
 
+
 }
