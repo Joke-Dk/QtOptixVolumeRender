@@ -26,7 +26,7 @@ void EnvironmentMap::setup( optix::Context& optixCtx)
 	_buffer->unmap();
 
 	optix::Buffer pixelIsSampled = optixCtx->createBuffer(RT_BUFFER_INPUT_OUTPUT);
-	pixelIsSampled->setFormat(RT_FORMAT_FLOAT);
-	pixelIsSampled->setSize(width*height);
-	optixCtx["gridFluence"]->setBuffer( pixelIsSampled );
+	pixelIsSampled->setFormat(RT_FORMAT_INT);
+	pixelIsSampled->setSize(width,height);
+	optixCtx["pixelIsSampled"]->setBuffer( pixelIsSampled );
 }

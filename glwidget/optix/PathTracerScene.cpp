@@ -149,7 +149,7 @@ void PathTracerScene::PreCompution()
 	Buffer buffer = m_context["gridBuffer"]->getBuffer();
 	RTsize buffer_x;
 	buffer->getSize( buffer_x);
-	int maxCompution = 40;
+	int maxCompution = 100;
 	for (int i=1; i<maxCompution; ++i)
 	{
 		updateParameter( "numCompution", unsigned int(i));

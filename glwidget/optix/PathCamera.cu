@@ -123,14 +123,15 @@ RT_PROGRAM void miss()
 
 RT_PROGRAM void envmap_miss()
 {
-	float theta = atan2f( ray.direction.x, ray.direction.z );
-	float phi   = M_PIf * 0.5f -  acosf( ray.direction.y );
-	float u     = (theta + M_PIf) * (0.5f * M_1_PIf);
-	float v     = 0.5f * ( 1.0f + sin(phi) );
+	//float theta = atan2f( ray.direction.x, ray.direction.z );
+	//float phi   = M_PIf * 0.5f -  acosf( ray.direction.y );
+	//float u     = (theta + M_PIf) * (0.5f * M_1_PIf);
+	//float v     = 0.5f * ( 1.0f + sin(phi) );
 	current_prd.radiance = bg_color;
 	if(hasBackground>0.5f || current_prd.depth>2)
 	{
 		current_prd.radiance = envmapEvalL(ray.direction);//envmapEvalLandPdf(ray.direction);
+		//current_prd.radiance = float(pixelIsSampled[uv2iuv(spherical_uv(ray.direction))])/20.f*make_float3(1.f);
 		//current_prd.radiance = make_float3( tex2D(envmap, u, v) )*1.f;
 	}
 	current_prd.done = true;

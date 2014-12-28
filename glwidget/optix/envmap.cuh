@@ -3,7 +3,7 @@
 
 
 rtTextureSampler<float4, 2>		envmap;
-rtBuffer<float, 1>              pixelIsSampled;
+rtBuffer<int, 2>              pixelIsSampled;
 rtDeclareVariable(float,		envmap_scale,,); // store explicitly for envmap eval
 //rtDeclareVariable(Frame,		envmap_frame,,); // store explicitly for envmap eval
 
@@ -40,7 +40,7 @@ static __device__ __inline__ float3 envmapEvalLandPdf(const float3& W)
 	float3 L=make_float3(tex2D(envmap,u,v));
 
 	float sintheta=max(sinf(theta),0.01f); // check this!!!
-	float pdf=envmapMapPdf(u,v)/(2.f*M_PIf*M_PIf*sintheta);
+	float pdf=envmapMapPdf(u,v);//(sintheta);
 
 	return L/pdf;
 }

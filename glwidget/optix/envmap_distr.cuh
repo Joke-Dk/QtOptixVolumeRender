@@ -1,8 +1,27 @@
 #ifndef _TRACY_ENVMAP_DISTR_CUH_
 #define _TRACY_ENVMAP_DISTR_CUH_
 
+#define M_TWOPI  (2.f*M_PIf)
+#define INV_TWOPI (1.f/2.f/M_PIf)
+#define INV_PI (1.f/M_PIf)
 
+static __device__ __inline__ float sphericalTheta(const float3 &v) // 0 pi
+{
+	return acosf(clamp(-v.y, -1.f, 1.f));
+}
+static __device__ __inline__ float sphericalPhi(const float3 &v) // 0 2pi
+{
+	float p = atan2f(v.x, -v.z); // mitsuba use -v.z???
+	return (p < 0.f) ? p + M_TWOPI : p;
+}
 
+static __device__ __inline__ float3 spherical2cartesian(float theta, float phi) 
+{
+	return optix::make_float3(
+		sinf(theta) * sinf(phi),
+		-cosf(theta), // theta starts from -y
+		-sinf(theta) * cosf(phi));
+}
 
 //////////////////////////////////////////////////////////////////////////
 // importance sample envmap
@@ -16,8 +35,8 @@ rtDeclareVariable(uint, envmapHeight,,); // nv
 #define ARRAY_GET(i) cdfMarginal[i]
 // size of the pdf array, cdf array size is ARRAY_SIZE+1
 #define ARRAY_SIZE envmapHeight
-#define LOWER_BOUND_FUNC lower_bound
-#define UPPER_BOUND_FUNC upper_bound
+#define LOWER_BOUND_FUNC lower_bound1
+#define UPPER_BOUND_FUNC upper_bound1
 
 #include "discrete.cuh"
 
@@ -42,17 +61,24 @@ static __device__ __inline__ float2 sample_env_marginal(float u,uint* offset)
 
 
 // ----- sampling conditional cdf
-#undef ARRAY_GET
-#undef ARRAY_SIZE
-#undef LOWER_BOUND_FUNC
-#undef UPPER_BOUND_FUNC
+//#undef ARRAY_GET
+//#undef ARRAY_SIZE
+//#undef LOWER_BOUND_FUNC
+//#undef UPPER_BOUND_FUNC
 #define ARRAY_GET(i) cdfConditional[make_uint2(i,v)]
 #define ARRAY_SIZE envmapWidth
-#define LOWER_BOUND_FUNC lower_bound
-#define UPPER_BOUND_FUNC upper_bound
+#define LOWER_BOUND_FUNC lower_bound2
+#define UPPER_BOUND_FUNC upper_bound2
 
 
-//#include "../core/discrete.cuh"
+static __device__ __inline__ uint2 uv2iuv(const float2& uv)
+{
+	uint2 iuv;
+	iuv.x = clamp((uint)(uv.x * envmapWidth), 0u,	envmapWidth-1u);
+	iuv.y = clamp((uint)(uv.y * envmapHeight), 0u,	envmapHeight-1u);
+	return iuv;
+}
+#include "discrete.cuh"
 
 // return (sampled_u, pdf)
 static __device__ __inline__ float2 sample_env_conditional(float u,uint v)
