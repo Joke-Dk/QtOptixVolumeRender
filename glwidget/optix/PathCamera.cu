@@ -130,7 +130,8 @@ RT_PROGRAM void envmap_miss()
 	current_prd.radiance = bg_color;
 	if(hasBackground>0.5f || current_prd.depth>2)
 	{
-		current_prd.radiance = envmapEvalL(ray.direction);//make_float3( tex2D(envmap, u, v) )*1.f;
+		current_prd.radiance = envmapEvalL(ray.direction);//envmapEvalLandPdf(ray.direction);
+		//current_prd.radiance = make_float3( tex2D(envmap, u, v) )*1.f;
 	}
 	current_prd.done = true;
 	//current_prd.attenuation *= 0.1f;

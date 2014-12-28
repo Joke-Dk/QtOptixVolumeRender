@@ -42,7 +42,9 @@ float PathTracerScene::getParameter( std::string str)
 
 void PathTracerScene::initScene( InitialCameraData& camera_data )
 {
-	m_context->setPrintEnabled(true);
+	//m_context->setPrintEnabled(true);
+	//m_context->setPrintBufferSize(4096);
+
 
 
 	m_context->setRayTypeCount( 3 );
@@ -147,7 +149,7 @@ void PathTracerScene::PreCompution()
 	Buffer buffer = m_context["gridBuffer"]->getBuffer();
 	RTsize buffer_x;
 	buffer->getSize( buffer_x);
-	int maxCompution = 10;
+	int maxCompution = 40;
 	for (int i=1; i<maxCompution; ++i)
 	{
 		updateParameter( "numCompution", unsigned int(i));

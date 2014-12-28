@@ -26,21 +26,22 @@ static __device__ __inline__ float3 envmapEvalL(const float3& W)
 	float3 w=W;
 	float2 uv=spherical_uv(w);
 	return make_float3(tex2D(envmap,uv.x,uv.y))*1.f;
+	//return make_float3(1.f)*envmapMapPdf( uv.x, uv.y);//test pdf
 }
 
-static __device__ __inline__ float4 envmapEvalLandPdf(const float3& ref_p,const float3& W)
+static __device__ __inline__ float3 envmapEvalLandPdf(const float3& W)
 {
 	float3 w=W;
 	float theta=sphericalTheta(w),
 		phi=sphericalPhi(w);
-	float u=M_TWOPI*phi,v=INV_PI*theta;
+	float u=INV_TWOPI*phi,v=INV_PI*theta;
 
-	float3 L=make_float3(tex2D(envmap,u,v))*envmap_scale;
+	float3 L=make_float3(tex2D(envmap,u,v));
 
 	float sintheta=max(sinf(theta),0.01f); // check this!!!
 	float pdf=envmapMapPdf(u,v)/(2.f*M_PIf*M_PIf*sintheta);
 
-	return make_float4(L,pdf);
+	return L/pdf;
 }
 
 

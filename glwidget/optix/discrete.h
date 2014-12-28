@@ -20,7 +20,7 @@ class Distribution1D
 public:
 	Distribution1D(float* data,int n)
 	{
-		//Assert(data&&n>0);
+		assert(data&&n>0);
 
 		float inv_n=1.f/n;
 		cdf=new float[n+1];
@@ -31,7 +31,7 @@ public:
 		}
 		intValue=cdf[n];
 
-		// Assert(intValue>0.f);
+		assert(intValue>0.f);
 		if(intValue==0.f)
 		{
 			for(int i=1;i<n+1;++i)

@@ -95,20 +95,22 @@ RT_PROGRAM void PreCompution()
 		prd.depth = 0;
 		prd.seed = seed;
 
-		float3 tmpVec;
-		ray_direction = sampleEnvmap( tmpVec, rnd(prd.seed), rnd(prd.seed));
+		float3 pdf;
+		ray_direction = sampleEnvmap( pdf, rnd(prd.seed), rnd(prd.seed));
 		//ray_direction = make_float3(1.f, 0.f, 0.f);
-		prd.attenuation/=tmpVec.z;//*10.f;
-		//prd.attenuation = 1.f/envmapEvalL(ray.direction);
+		//prd.attenuation/=tmpVec.z;//*10.f;
+		if(gridIndex==10001)
+			printf("%lf\n",pdf.z);
 		//ray_direction = uniformSphere( rnd(prd.seed), rnd(prd.seed), make_float3(1.f, 0.f, 0.f));
 		ray_origin = p;
+		float3 envmapColor = envmapEvalLandPdf(ray_direction);//pdf.z;
 		while(1)
 		{
 			ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
 			rtTrace(top_object, ray, prd);
 			if(prd.done ||(prd.depth >= maxDepth))
 			{
-				prd.result += prd.radiance * prd.attenuation;
+				if(prd.done) prd.result = envmapColor;//prd.radiance * prd.attenuation;
 				break;
 			}
 			prd.depth++;
