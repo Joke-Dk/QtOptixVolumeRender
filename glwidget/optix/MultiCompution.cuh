@@ -21,8 +21,8 @@ static __device__ __inline__ float3  max( float3 a, float3 b)
 {
 	float3 ret;
 	ret.x = max(a.x, b.x);
-	ret.y = max(a.y, b.z);
-	ret.z = max(a.y, b.z);
+	ret.y = max(a.y, b.y);
+	ret.z = max(a.z, b.z);
 	return ret;
 }
 
@@ -32,14 +32,14 @@ static __device__ __inline__ bool safe_index(int3& xyz,  int addx, int addy, int
 	xyz += make_int3(addx, addy, addz);
 	int3 minIndex = make_int3(0);
 	int3 maxIndex = make_int3(index_x-1, index_y-1, index_z-1);
-	//if (xyz.x>index_x-1 || xyz.x<0)
-	//	return 0;	
-	//if (xyz.y>index_y-1 || xyz.y<0)
-	//	return 0;	
-	//if (xyz.z>index_z-1 || xyz.z<0)
-	//	return 0;	
-	if (min(xyz, minIndex)!= minIndex) return 0;
-	if (max(xyz, maxIndex)!= maxIndex) return 0;
+	if (xyz.x>index_x-1 || xyz.x<0)
+		return 0;	
+	if (xyz.y>index_y-1 || xyz.y<0)
+		return 0;	
+	if (xyz.z>index_z-1 || xyz.z<0)
+		return 0;	
+	//if (min(xyz, minIndex)!= minIndex) return 0;
+	//if (max(xyz, maxIndex)!= maxIndex) return 0;
 	return 1;
 }
 
@@ -91,9 +91,10 @@ static __device__ __inline__ float3 GetRp( int i)
 
 static __device__ __inline__ float GetFr( float rp)
 {
-	return 2.f/(3.f + sqrt( 9.f+4.f*pow( rp, 2.f)));
+	return 1.f/max(3.f, rp);
+	//return 2.f/(3.f + sqrt( 9.f+4.f*rp*rp));
 }
-static __device__ __inline__ float3 GetFr( float3 rp)
+static __device__ __inline__ float3 GetFr( const float3& rp)
 {
 	float3 ret;
 	ret.x = GetFr(rp.x); 
