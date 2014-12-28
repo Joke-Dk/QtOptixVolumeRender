@@ -149,7 +149,7 @@ void PathTracerScene::PreCompution()
 	Buffer buffer = m_context["gridBuffer"]->getBuffer();
 	RTsize buffer_x;
 	buffer->getSize( buffer_x);
-	int maxCompution = 100;
+	int maxCompution = 20;
 	for (int i=1; i<maxCompution; ++i)
 	{
 		updateParameter( "numCompution", unsigned int(i));
@@ -157,7 +157,7 @@ void PathTracerScene::PreCompution()
 	}
 
 	m_context->setRayGenerationProgram( 1, ray_gen_program_multi );
-	for (int i=1; i<10; ++i)
+	for (int i=1; i<200; ++i)
 	{
 		updateParameter( "curIterator", i);
 		m_context->launch( 1,static_cast<unsigned int>(buffer_x));

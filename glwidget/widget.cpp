@@ -67,8 +67,8 @@ void Widget::SetDeafaultParamater()
 	UpdataParameterAndRefresh("isCurve", ui.checkBox_3->isChecked()?1.f:0.f, false);
 	UpdataParameterAndRefresh("hasBackground", ui.checkBox_4->isChecked()?1.f:0.f, false);
 	UpdataParameterAndRefresh("radianceMultipler", ui.doubleSpinBox_6->value(), false);
-	//UpdataEnvironmentLight( ui.comboBox->currentIndex() , false);
-	UpdataEnvironmentLight( 1, false);
+	UpdataEnvironmentLight( ui.comboBox->currentIndex() , false);
+	//UpdataEnvironmentLight( 1, false);
 	
 	UpdataParameterAndRefresh("hasCornell", ui.checkBox_5->isChecked()?1.f:0.f, false);
 	//UpdataHasHDR( ui.checkBox_2->isChecked(), false);

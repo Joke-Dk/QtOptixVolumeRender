@@ -73,7 +73,7 @@ int main(int argc, char **argv)
     QApplication app(argc, argv);
     Window window(argc, argv);
     //window.resize(window.sizeHint());
-	window.resize(800, 534);
+	window.resize(810, 534);
     int desktopArea = QApplication::desktop()->width() *
                      QApplication::desktop()->height();
     int widgetArea = window.width() * window.height();
