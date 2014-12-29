@@ -12,7 +12,7 @@ rtBuffer<float4, 2>              output_buffer;
 rtDeclareVariable(float,  hasBackground, , );
 rtDeclareVariable(float,  radianceMultipler, , );
 //rtDeclareVariable(float,  hasHDR, , );
-
+rtDeclareVariable(float,        isPreCompution, , );
 
 //-----------------------------------------------------------------------------
 //
@@ -128,7 +128,7 @@ RT_PROGRAM void envmap_miss()
 	//float u     = (theta + M_PIf) * (0.5f * M_1_PIf);
 	//float v     = 0.5f * ( 1.0f + sin(phi) );
 	current_prd.radiance = bg_color;
-	if(hasBackground>0.5f || current_prd.depth>2)
+	if(isPreCompution>0.5f||hasBackground>0.5f || current_prd.depth>2)
 	{
 		current_prd.radiance = envmapEvalL(ray.direction);//envmapEvalLandPdf(ray.direction);
 		//current_prd.radiance = float(pixelIsSampled[uv2iuv(spherical_uv(ray.direction))])/20.f*make_float3(1.f);

@@ -17,6 +17,31 @@ static __device__ __inline__ float3  GetSigmaT1( int i)
 	return max(GetDensity(i)*sigma_t, 1.f/pow(10.f, 3)/20.f)*make_float3(1.f);
 }
 
+static __device__ __inline__ float findNeighbour( int ii)
+{
+	int3 xyz = i2xyz( ii);
+	float sum_volume = 0.f;
+	int count = 0;
+	for (int i=max( xyz.x-1, 0); i<=min(xyz.x+1, index_x-1); ++i)
+		for (int j=max( xyz.y-1, 0); j<=min(xyz.y+1, index_y-1); ++j)
+			for (int k=max( xyz.z-1, 0); k<=min(xyz.z+1, index_z-1); ++k)
+			{
+				//if .volume_density[xyz2i(i, j, k)]!=0.f
+				count++;
+				sum_volume += GetDensity(xyz2i(i, j, k));
+			}
+	if (count==0)
+		return 0.f;				
+	return sum_volume/(float)count;
+}
+
+static __device__ __inline__ float3  GetSigmaT2( int i)	
+{
+	if (GetDensity(i)==0.f)
+		return 	findNeighbour(i )*sigma_t*make_float3(1.f);	
+	return 	GetDensity(i)*sigma_t*make_float3(1.f);
+}
+
 static __device__ __inline__ float3  max( float3 a, float3 b)
 {
 	float3 ret;

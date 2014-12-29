@@ -107,7 +107,8 @@ static __device__ __inline__ float3 sampleEnvmap( float3& vec3, const float u1, 
 	float2 v=sample_env_marginal(u2,&iv);
 	float2 u=sample_env_conditional(u1,iv);
 	float3 dir = spherical2cartesian( v.x*M_PIf, u.x*2.f*M_PIf);
-	vec3 = make_float3(u.x,v.x,u.y);
+	float sintheta=max(sinf(v.x*M_PIf),0.01f)*M_PIf/2.f;
+	vec3 = make_float3(u.x,v.x,u.y*v.y/sintheta);
 	return dir;
 }
 

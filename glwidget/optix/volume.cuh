@@ -3,6 +3,7 @@
 
 #include "ray.cuh"
 
+
 rtBuffer<float> volume_density;
 rtDeclareVariable(float3,        P0, , );
 rtDeclareVariable(float3,        P1, , );

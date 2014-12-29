@@ -32,10 +32,23 @@ RT_PROGRAM void MultiCompution()
 
 	if ( GetDensity( i) == 0.f)
 	{
-		gridFluence[ gridIndex] = gridBuffer[i];
-		return;
+		//gridFluence[ gridIndex] = gridBuffer[i];
+		//return;
+		int countTmp = 0;
+		for ( int i0=max( xyzIndex.x-1, 0); i0<=min(xyzIndex.x+1, index_x-1); ++i0)
+			for (int j0=max( xyzIndex.y-1, 0); j0<=min(xyzIndex.y+1, index_y-1); ++j0)
+				for (int k0=max( xyzIndex.z-1, 0); k0<=min(xyzIndex.z+1, index_z-1);++k0)
+					if (GetDensity(xyz2i(i0, j0, k0))!=0.f && !(i0==xyzIndex.x && j0==xyzIndex.y && k0==xyzIndex.z))
+					{
+						countTmp++;
+						float3 Ds = make_float3(1.f)/3.f/GetSigmaT2(i);//*2.5f;//2.5f
+						update_fluence += 2.f*Ds*gridFluence[xyz2i( i0, j0, k0)]/(dx*make_float3(1.f)+2.f*Ds);
+					}
+		if(countTmp!=0)
+			update_fluence /= float(countTmp);
+		else
+			return;
 	}
-
 	else
 	{
 		float3 Ds10 = (safeGetDp(i, -1, 0, 0)+Dp)/2.f;
@@ -95,29 +108,34 @@ RT_PROGRAM void PreCompution()
 		prd.depth = 0;
 		prd.seed = seed;
 
-		float3 pdf;
-		ray_direction = sampleEnvmap( pdf, rnd(prd.seed), rnd(prd.seed));
-
-		uint2 iuv = uv2iuv(make_float2(pdf));
-		//ray_direction = make_float3(1.f, 0.f, 0.f);
-		//prd.attenuation/=tmpVec.z;//*10.f;
-		atomicAdd(&pixelIsSampled[iuv],1);
-		if(0)//(gridIndex==10001)
+		float3 pdf=make_float3(1.f);
+		if(1)//importance sampling
 		{
-			printf("%lf\n",pdf.z);
-			//pixelIsSampled[make_uint2(u, v)] = 1;
-			//tex2D(envmap,pdf.x,pdf.y);// = make_float3(1.f, 0.f, 0.f);
+			ray_direction = sampleEnvmap( pdf, rnd(prd.seed), rnd(prd.seed));
 		}
-		//ray_direction = uniformSphere( rnd(prd.seed), rnd(prd.seed), make_float3(1.f, 0.f, 0.f));
+		else//uniform sampling
+		{
+			ray_direction = uniformSphere( rnd(prd.seed), rnd(prd.seed), make_float3(1.f, 0.f, 0.f));
+		}
+
+		// [Debug] Record and plot the sampled point in environment map
+		uint2 iuv = uv2iuv(make_float2(pdf));
+		atomicAdd(&pixelIsSampled[iuv],1);
+		// [Debug] Print the pdf value : assert( pdf nearly> 1)
+		//if(gridIndex==10001)
+		//{
+		//	printf("%lf\n",pdf.z);
+		//}
+
 		ray_origin = p;
-		float3 envmapColor = envmapEvalLandPdf(ray_direction);//pdf.z;
+		//float3 envmapColor = envmapEvalLandPdf(ray_direction);//pdf.z;
 		while(1)
 		{
 			ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
 			rtTrace(top_object, ray, prd);
 			if(prd.done ||(prd.depth >= maxDepth))
 			{
-				if(prd.done) prd.result = envmapColor;//prd.radiance * prd.attenuation;
+				if(prd.done) prd.result = prd.radiance * prd.attenuation/pdf.z;
 				break;
 			}
 			prd.depth++;
