@@ -36,6 +36,8 @@ Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
 	ui.comboBox->setEditable(false); 
 	ui.comboBox->addItem(  "Cedar City");  
 	ui.comboBox->addItem(  "Grace LL");  
+	ui.comboBox->addItem(  "rnl"); 
+	ui.comboBox->addItem(  "stpeters"); 
 	ui.comboBox->addItem(  "Octane Studio 4"); 
 	ui.comboBox->addItem(  "DH001 LL"); 
 	ui.comboBox->addItem(  "DH037 LL"); 

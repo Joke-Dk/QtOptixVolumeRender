@@ -31,7 +31,7 @@ public:
 		}
 		intValue=cdf[n];
 
-		assert(intValue>0.f);
+		//assert(intValue>0.f);
 		if(intValue==0.f)
 		{
 			for(int i=1;i<n+1;++i)
