@@ -67,7 +67,7 @@ void PathTracerScene::initScene( InitialCameraData& camera_data )
 
 
 	// Set up camera
-	camera_data = InitialCameraData( make_float3( 0.0f, 0.0f, 30.0f ), // eye
+	camera_data = InitialCameraData( make_float3( 0.0f, 15.0f, 30.0f ), // eye
 		make_float3( 0.f, 0.0f, 0.0f ),    // lookat
 		make_float3( 0.0f, 1.0f,  0.0f ),       // up
 		45.0f );                                // vfov
@@ -375,11 +375,11 @@ void PathTracerScene::createEnvironmentScene()
 
 	//////////////////////////////////////////////////////////////////////////
 	// Light buffer
-	light.corner   = make_float3( 2.0f, 10.499f, -2.0f);
+	light.corner   = make_float3( 12.0f, 20.499f, 4.0f);
 	light.v1       = make_float3( -4.0f, 0.0f, 0.0f);
 	light.v2       = make_float3( 0.0f, 0.0f, 4.0f);
 	light.normal   = normalize( cross(light.v1, light.v2) );
-	m_context["light_em"]->setFloat( 10.f);
+	m_context["light_em"]->setFloat( 100.f);
 
 	light_buffer = m_context->createBuffer( RT_BUFFER_INPUT );
 	light_buffer->setFormat( RT_FORMAT_USER );
@@ -398,25 +398,26 @@ void PathTracerScene::createEnvironmentScene()
 	
 	//////////////////////////////////////////////////////////////////////////
 	// GeometryInstance 2 - Cornell Box
-	float3 p0 = make_float3(-10.5f, -10.5f, -10.5f);
-	float3 p1 = make_float3(10.5f, 10.5f, 10.5f);
+	float3 p0 = make_float3(-10000.5f, -10.5f, -3000.5f);
+	float3 p1 = make_float3(10000.5f, 1000.5f, 10.5f);
 	float3 dp = p1-p0;
 
+	const float3 floor_color = make_float3(239.f, 205.f, 167.f)/255.f;
 	//floor
 	gis2cornell.push_back( createParallelogram( p0, make_float3( 0.0f, 0.0f, dp.z),make_float3( dp.x, 0.0f, 0.0f) ) );
-	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
+	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", floor_color);
 	//ceiling
-	gis2cornell.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( dp.x, 0.0f, 0.0f) ) );
-	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
+	//gis2cornell.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( dp.x, 0.0f, 0.0f) ) );
+	//setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
 	//left
-	gis2cornell.push_back( createParallelogram( p0, make_float3( 0.0f, 0.0f, dp.z),make_float3( 0.f , dp.y, 0.0f) ) );
-	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", green);
+	//gis2cornell.push_back( createParallelogram( p0, make_float3( 0.0f, 0.0f, dp.z),make_float3( 0.f , dp.y, 0.0f) ) );
+	//setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
 	//right
-	gis2cornell.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( 0.f , dp.y, 0.0f) ) );
-	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", red);
+	//gis2cornell.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( 0.f , dp.y, 0.0f) ) );
+	//setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
 	//behind
-	gis2cornell.push_back( createParallelogram( p0, make_float3( dp.x, 0.0f, 0.f),make_float3( 0.f , dp.y, 0.0f) ) );
-	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
+	//gis2cornell.push_back( createParallelogram( p0, make_float3( dp.x, 0.0f, 0.f),make_float3( 0.f , dp.y, 0.0f) ) );
+	//setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
 	//front
 	//gis.push_back( createParallelogram( p1, -make_float3( dp.x, 0.0f, 0.f), -make_float3( 0.f , dp.y, 0.0f) ) );
 	//setMaterial(gis.back(), diffuseMaterial, "diffuse_color", white);
@@ -467,19 +468,19 @@ void PathTracerScene::createEnvironmentScene()
 	//////////////////////////////////////////////////////////////////////////
 	// GeometryInstance 0 - Sphere and Cup.obj
 
-	gis1reference.push_back( createSphere( make_float3(-6.f,0.f,6.f), 1.f));
-	//setMaterial(gis.back(), diffuse, "diffuse_color", white);
-	setMaterial(gis1reference.back(), mirrorMaterial, "glass_color", make_float3(1.f));
+	//gis1reference.push_back( createSphere( make_float3(-6.f,0.f,6.f), 1.f));
+	////setMaterial(gis.back(), diffuse, "diffuse_color", white);
+	//setMaterial(gis1reference.back(), mirrorMaterial, "glass_color", make_float3(1.f));
 
-	const float matrix_1[4*4] = { 0.3,  0,  0,  3, 
-		0,  0.3,  0,  -6, 
-		0,  0,  0.3, 7, 
-		0,  0,  0,  1 };
-	const optix::Matrix4x4 m1( matrix_1 );
-	std::string obj_path1 = ("optix/mesh/cognacglass.obj");
-	GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, glassMaterial);
+	//const float matrix_1[4*4] = { 0.3,  0,  0,  3, 
+	//	0,  0.3,  0,  -6, 
+	//	0,  0,  0.3, 7, 
+	//	0,  0,  0,  1 };
+	//const optix::Matrix4x4 m1( matrix_1 );
+	//std::string obj_path1 = ("optix/mesh/cognacglass.obj");
+	//GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, glassMaterial);
 
-	gis1reference.push_back(objgroup1->getChild(0));
+	//gis1reference.push_back(objgroup1->getChild(0));
 
 	// Create geometry group
 	updateGeometryInstance();

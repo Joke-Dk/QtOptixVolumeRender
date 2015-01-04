@@ -123,7 +123,7 @@
         <item row="1" column="2">
          <widget class="QSlider" name="horizontalSlider_2">
           <property name="value">
-           <number>95</number>
+           <number>30</number>
           </property>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -170,7 +170,7 @@
            <string> Curved</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
           <property name="tristate">
            <bool>false</bool>
@@ -186,7 +186,7 @@
            <double>0.010000000000000</double>
           </property>
           <property name="value">
-           <double>0.950000000000000</double>
+           <double>0.300000000000000</double>
           </property>
          </widget>
         </item>
@@ -388,7 +388,7 @@
           <string>HDR Light</string>
          </property>
          <property name="checked">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -396,6 +396,9 @@
         <widget class="QCheckBox" name="checkBox_5">
          <property name="text">
           <string>Cornel Box</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -408,7 +411,7 @@
           <bool>true</bool>
          </property>
          <property name="checked">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
