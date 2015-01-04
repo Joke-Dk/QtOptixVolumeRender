@@ -379,6 +379,18 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="volume"
+					>
+					<File
+						RelativePath=".\optix\volume.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\volume.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter

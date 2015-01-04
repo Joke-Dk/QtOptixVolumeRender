@@ -5,7 +5,7 @@
 class EnvironmentMap
 {
 public:
-	EnvironmentMap();
+	EnvironmentMap(){}
 
 	void setup(optix::Context&);
 

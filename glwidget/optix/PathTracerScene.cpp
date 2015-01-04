@@ -14,6 +14,7 @@
 //#include "random.h"
 //#include "helpers.h"
 #include <ImageLoader.h>
+#include "volume.h"
 using namespace std;
 
 
@@ -363,12 +364,7 @@ void PathTracerScene::createEnvironmentScene()
 	// global parameter setting
 
 
-	int index_x = 100;
-	int index_y = 100;
-	int index_z = 40;	
-	m_context["index_x" ]->setInt(index_x );
-	m_context["index_y" ]->setInt(index_y );
-	m_context["index_z" ]->setInt(index_z );  
+
 
 
 	const float3 white = make_float3( 0.8f, 0.8f, 0.8f );
@@ -425,11 +421,24 @@ void PathTracerScene::createEnvironmentScene()
 	//gis.push_back( createParallelogram( p1, -make_float3( dp.x, 0.0f, 0.f), -make_float3( 0.f , dp.y, 0.0f) ) );
 	//setMaterial(gis.back(), diffuseMaterial, "diffuse_color", white);
 
+	//load volume data
+	int3 indexXYZ;
+	VolumeData volumeData;
+	if(0)
+	{
+		//////////////////////////////////////////////////////////////////////////
+		// GeometryInstance 0 - Volume Box
+		p0 = make_float3(-10.49f, -10.49f, -4.f);
+		p1 = make_float3(10.49f, 10.49f, 4.f);
+		volumeData.setup(m_context, 0, "optix/volume/density_render.70.pbrt", indexXYZ);
 
-	//////////////////////////////////////////////////////////////////////////
-	// GeometryInstance 0 - Volume Box
-	p0 = make_float3(-10.49f, -10.49f, -4.f);
-	p1 = make_float3(10.49f, 10.49f, 4.f);
+	}
+	else
+	{
+		p0 = make_float3(-6.f, -10.49f, -6.f);
+		p1 = make_float3(6.f, 9.49f, 6.f);
+		volumeData.setup(m_context, 1, "optix/volume/Output_109.dat", indexXYZ);
+	}
 	m_context["P0"]->setFloat(p0.x, p0.y, p0.z );
 	m_context["P1"]->setFloat(p1.x, p1.y, p1.z );
 	dp = p1-p0;
@@ -452,26 +461,8 @@ void PathTracerScene::createEnvironmentScene()
 	gis0volume.push_back( createParallelogram( p1, -make_float3( dp.x, 0.0f, 0.f), -make_float3( 0.f , dp.y, 0.0f) ) );
 	setMaterial(gis0volume.back(), fogMaterial, "diffuse_color", white);
 
-	//load volume data
-	int index_N = index_x*index_y*index_z;
-	optix::Buffer vol_data = m_context->createBuffer(RT_BUFFER_INPUT);
-	vol_data->setFormat(RT_FORMAT_FLOAT);
-	vol_data->setSize(index_N);
-	float* temp_data = (float*)vol_data->map();
-	//read .vol file
-	char* filename = "optix/volume/density_render.70.pbrt";
-	FILE* fin;
-	fopen_s(&fin, filename, "r");
-	if (!fin)
-	{
-		std::cerr << "Could not load Volume file \n";
-		exit(1);
-	}
-	//float* m_data = new float[index_N];
-	for(int i=0; i<index_N; i++)
-		fscanf_s(fin,"%f",&temp_data[i]);
-	vol_data->unmap();
-	m_context["volume_density"]->setBuffer( vol_data );
+		
+
 
 	//////////////////////////////////////////////////////////////////////////
 	// GeometryInstance 0 - Sphere and Cup.obj
@@ -513,7 +504,9 @@ void PathTracerScene::createEnvironmentScene()
 	//updateParameter("isRayMarching", 0.f);
 	//updateParameter( "isPreCompution", 1.f);
 	//updateParameter( "curIterator", 0);
-	ray_gen_program_multi = m_context->createProgramFromPTXFile( ptx_path2, "MultiCompution" );
+
+	//FLD key step: it loaded takes much time
+	//ray_gen_program_multi = m_context->createProgramFromPTXFile( ptx_path2, "MultiCompution" );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Setup programs 3
@@ -527,14 +520,15 @@ void PathTracerScene::createEnvironmentScene()
 	//m_context["gridBuffer"]->set(createOutputBuffer( RT_FORMAT_FLOAT4, 100, 100, 40));
 
 
+	int indexN = indexXYZ.x*indexXYZ.y*indexXYZ.z;
 	optix::Buffer gridData = m_context->createBuffer(RT_BUFFER_INPUT_OUTPUT);
 	gridData->setFormat(RT_FORMAT_FLOAT3);
-	gridData->setSize(index_x*index_y*index_z);
+	gridData->setSize(indexN);
 	m_context["gridBuffer"]->setBuffer( gridData );
 
 	optix::Buffer gridFluence = m_context->createBuffer(RT_BUFFER_INPUT_OUTPUT);
 	gridFluence->setFormat(RT_FORMAT_FLOAT3);
-	gridFluence->setSize(index_x*index_y*index_z);
+	gridFluence->setSize(indexN);
 	m_context["gridFluence"]->setBuffer( gridFluence );
 
 

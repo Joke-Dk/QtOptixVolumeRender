@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 	unsigned int sqrt_num_samples = 1u;
 	unsigned int width = 512u, height = 512u;
 	unsigned int rr_begin_depth = 2u;
-	unsigned int max_depth = 100u;
+	unsigned int max_depth = 20u;
 	float timeout = 10000.0f;
 	PathTracerScene scene;
 	scene.setNumSamples( sqrt_num_samples );

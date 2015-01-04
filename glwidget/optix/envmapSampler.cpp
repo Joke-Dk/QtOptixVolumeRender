@@ -1,8 +1,8 @@
 #include "envmapSampler.h"
 #include "discrete.h"
-EnvironmentMap::EnvironmentMap( )	
-{
-}
+//EnvironmentMap::EnvironmentMap( )	
+//{
+//}
 
 void EnvironmentMap::setup( optix::Context& optixCtx)
 {
