@@ -67,7 +67,7 @@ void PathTracerScene::initScene( InitialCameraData& camera_data )
 
 
 	// Set up camera
-	camera_data = InitialCameraData( make_float3( 0.0f, 15.0f, 30.0f ), // eye
+	camera_data = InitialCameraData( make_float3( 0.0f, 5.0f, 30.0f ), // eye
 		make_float3( 0.f, 0.0f, 0.0f ),    // lookat
 		make_float3( 0.0f, 1.0f,  0.0f ),       // up
 		45.0f );                                // vfov
@@ -398,7 +398,7 @@ void PathTracerScene::createEnvironmentScene()
 	
 	//////////////////////////////////////////////////////////////////////////
 	// GeometryInstance 2 - Cornell Box
-	float3 p0 = make_float3(-10000.5f, -10.5f, -3000.5f);
+	float3 p0 = make_float3(-10000.5f, -10.5f, -30.5f);
 	float3 p1 = make_float3(10000.5f, 1000.5f, 10.5f);
 	float3 dp = p1-p0;
 
@@ -416,8 +416,8 @@ void PathTracerScene::createEnvironmentScene()
 	//gis2cornell.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( 0.f , dp.y, 0.0f) ) );
 	//setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
 	//behind
-	//gis2cornell.push_back( createParallelogram( p0, make_float3( dp.x, 0.0f, 0.f),make_float3( 0.f , dp.y, 0.0f) ) );
-	//setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
+	gis2cornell.push_back( createParallelogram( p0, make_float3( dp.x, 0.0f, 0.f),make_float3( 0.f , dp.y, 0.0f) ) );
+	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", floor_color);
 	//front
 	//gis.push_back( createParallelogram( p1, -make_float3( dp.x, 0.0f, 0.f), -make_float3( 0.f , dp.y, 0.0f) ) );
 	//setMaterial(gis.back(), diffuseMaterial, "diffuse_color", white);
