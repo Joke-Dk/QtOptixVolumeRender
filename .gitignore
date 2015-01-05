@@ -1,6 +1,9 @@
 #*.suo
 #*.ncb
 #*.sln
+# Image Format
+*.png
+*.bmp
 
 hdr
 GeneratedFiles

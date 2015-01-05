@@ -357,7 +357,7 @@ void PathTracerScene::createEnvironmentScene()
 	// Generate material
 	areaMaterial = DefineDiffuseLight( m_context);
 	diffuseMaterial = DefineDiffuseMaterial( m_context);
-	fogMaterial = DefineFogMaterial( m_context);
+	fogMaterial = DefineFogMaterial( m_context, 0);
 	//updateParameter("isRayMarching", 0.f);
 	glassMaterial = DefineGlassMaterial( m_context);
 	mirrorMaterial = DefineMirrorMaterial( m_context);
@@ -477,14 +477,14 @@ void PathTracerScene::createEnvironmentScene()
 	//gis1reference.push_back( createSphere( make_float3(-6.f,0.f,6.f), 1.f));
 	////setMaterial(gis.back(), diffuse, "diffuse_color", white);
 	//setMaterial(gis1reference.back(), mirrorMaterial, "glass_color", make_float3(1.f));
-
-	const float matrix_1[4*4] = { 0.35,  0,  0,  0, 
+	optix::Material fogMirrorMaterial = DefineFogMaterial( m_context, 1);
+	const float matrix_1[4*4] = { 0.4,  0,  0,  0, 
 		0,  0.6,  0,  -10.5, 
-		0,  0,  0.35, 0, 
+		0,  0,  0.4, 0, 
 		0,  0,  0,  1 };
 	const optix::Matrix4x4 m1( matrix_1 );
-	std::string obj_path1 = ("optix/mesh/cylinder2.obj");
-	GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, mirrorMaterial);
+	std::string obj_path1 = ("optix/mesh/cylinder.obj");
+	GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, fogMirrorMaterial);
 
 	gis1reference.push_back(objgroup1->getChild(0));
 
