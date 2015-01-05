@@ -6,11 +6,16 @@
 class VolumeData
 {
 public:
-	VolumeData(){}
+	std::string UpdateFilename( std::string & filename);
+	void UpdateID( int id);
 
-	void setup(optix::Context& optixCtx, int kindVolume, const std::string & filename, optix::int3& indexXYZ);
+	void setup(optix::Context& optixCtx, int kindVolume, optix::int3& indexXYZ);
 private:
 	optix::int3 _indexXYZ;
-	void ReadKind0Pbrt(optix::Context& optixCtx, const std::string & filename);
-	void ReadKind1Dat(optix::Context& optixCtx, const std::string & filename);
+	std::string _filename;
+	std::string _filenameHead;
+	std::string _filenameTail;
+	std::string _filenamePath;
+	void ReadKind0Pbrt(optix::Context& optixCtx);
+	void ReadKind1Dat(optix::Context& optixCtx);
 };

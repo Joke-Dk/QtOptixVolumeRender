@@ -22,6 +22,7 @@ public:
 	void SetDeafaultParamater();
 	void UpdataEnvironmentLight(int idEnv, bool refresh=true);
 	void UpdataHasHDR(bool hasHDR, bool refresh=true);
+	void Refresh();
 	QTGLUTDisplay* _glWidget;
 	public slots:
 	void slotDoubleSpinbox_Slider();
@@ -59,6 +60,7 @@ public:
 	void slotSpinbox1MaxSample();
 	void slotSpinbox2MinID();
 	void slotSpinbox3MaxID();
+	void slotPushButtonRenderingSequence();
 private:
 	Ui::WidgetClass ui;
 };

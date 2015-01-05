@@ -14,7 +14,6 @@
 //#include "random.h"
 //#include "helpers.h"
 #include <ImageLoader.h>
-#include "volume.h"
 #include "saveImage.h"
 using namespace std;
 
@@ -343,6 +342,21 @@ void PathTracerScene::updateGeometryInstance()
 	m_context["top_object"]->set( geometry_group );
 }
 
+std::string PathTracerScene::updateVolumeFilename( std::string filename)
+{
+	int3 indexXYZ;
+	std::string path = volumeData.UpdateFilename( filename);
+	volumeData.setup(m_context, 0, indexXYZ);
+	return path;
+}
+
+void PathTracerScene::UpdateID( int id)
+{
+	int3 indexXYZ;
+	volumeData.UpdateID( id);
+	volumeData.setup(m_context, 0, indexXYZ);
+}
+
 void PathTracerScene::createEnvironmentScene()
 {
 	// init Geometry Instance
@@ -430,21 +444,22 @@ void PathTracerScene::createEnvironmentScene()
 
 	//load volume data
 	int3 indexXYZ;
-	VolumeData volumeData;
 	if(0)
 	{
 		//////////////////////////////////////////////////////////////////////////
 		// GeometryInstance 0 - Volume Box
 		p0 = make_float3(-10.49f, -10.49f, -4.f);
 		p1 = make_float3(10.49f, 10.49f, 4.f);
-		volumeData.setup(m_context, 0, "optix/volume/density_render.70.pbrt", indexXYZ);
+		volumeData.UpdateFilename( std::string("optix/volume/density_render.70.pbrt"));
+		volumeData.setup(m_context, 0, indexXYZ);
 
 	}
 	else
 	{
 		p0 = make_float3(-6.f, -10.49f, -6.f);
 		p1 = make_float3(6.f, 9.49f, 6.f);
-		volumeData.setup(m_context, 1, "optix/volume/Output_109.dat", indexXYZ);
+		volumeData.UpdateFilename( std::string("../../VolumeData/Output_109.dat"));
+		volumeData.setup(m_context, 1, indexXYZ);
 	}
 	m_context["P0"]->setFloat(p0.x, p0.y, p0.z );
 	m_context["P1"]->setFloat(p1.x, p1.y, p1.z );

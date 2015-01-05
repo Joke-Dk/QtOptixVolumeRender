@@ -435,8 +435,8 @@
         <rect>
          <x>0</x>
          <y>10</y>
-         <width>241</width>
-         <height>141</height>
+         <width>239</width>
+         <height>187</height>
         </rect>
        </property>
        <property name="title">
@@ -448,19 +448,19 @@
           <x>10</x>
           <y>19</y>
           <width>221</width>
-          <height>103</height>
+          <height>161</height>
          </rect>
         </property>
-        <layout class="QGridLayout" name="gridLayout_5" rowminimumheight="0,0,0,0" columnminimumwidth="0,0,0,0">
-         <item row="0" column="2">
-          <widget class="QLineEdit" name="lineEdit_4"/>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_7">
+        <layout class="QGridLayout" name="gridLayout_5" rowminimumheight="0,0,0,0,0,0" columnminimumwidth="0,0,0,0">
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_8">
            <property name="text">
-            <string>Max Sample</string>
+            <string>Min ID</string>
            </property>
           </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLineEdit" name="lineEdit_4"/>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_9">
@@ -469,10 +469,10 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_8">
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_7">
            <property name="text">
-            <string>Min ID</string>
+            <string>Max Sample</string>
            </property>
           </widget>
          </item>
@@ -480,6 +480,30 @@
           <widget class="QLabel" name="label_10">
            <property name="text">
             <string>Vol Path</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QSpinBox" name="spinBox">
+           <property name="maximum">
+            <number>9999</number>
+           </property>
+           <property name="value">
+            <number>100</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QSpinBox" name="spinBox_2">
+           <property name="maximum">
+            <number>999</number>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="2">
+          <widget class="QSpinBox" name="spinBox_3">
+           <property name="maximum">
+            <number>999</number>
            </property>
           </widget>
          </item>
@@ -496,21 +520,29 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="2">
-          <widget class="QSpinBox" name="spinBox">
-           <property name="maximum">
-            <number>9999</number>
+         <item row="5" column="2">
+          <widget class="QPushButton" name="pushButton_3Rendering">
+           <property name="enabled">
+            <bool>false</bool>
            </property>
-           <property name="value">
-            <number>100</number>
+           <property name="text">
+            <string>Rendering</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="2">
-          <widget class="QSpinBox" name="spinBox_2"/>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>Image Path</string>
+           </property>
+          </widget>
          </item>
-         <item row="3" column="2">
-          <widget class="QSpinBox" name="spinBox_3"/>
+         <item row="4" column="2">
+          <widget class="QLineEdit" name="lineEdit_5">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>

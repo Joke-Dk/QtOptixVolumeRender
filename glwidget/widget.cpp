@@ -69,6 +69,7 @@ Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
 	connect(ui.spinBox, SIGNAL(valueChanged( int)), this, SLOT(slotSpinbox1MaxSample()));
 	connect(ui.spinBox_2, SIGNAL(valueChanged( int)), this, SLOT(slotSpinbox2MinID()));
 	connect(ui.spinBox_3, SIGNAL(valueChanged( int)), this, SLOT(slotSpinbox3MaxID()));
+	connect(ui.pushButton_3Rendering, SIGNAL(clicked(bool)), this, SLOT(slotPushButtonRenderingSequence()));
 }
 
 void Widget::SetDeafaultParamater()
@@ -278,6 +279,12 @@ void Widget::UpdataParameterAndRefresh(std::string str, float value, bool refres
 	}
 }
 
+void Widget::Refresh()
+{
+	PathTracerScene* scene= dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene);
+	_glWidget->resizeGL(scene->m_width, scene->m_height);
+
+}
 
 void Widget::UpdataEnvironmentLight(int idEnv, bool refresh)
 {
@@ -371,6 +378,10 @@ void Widget::slotPushButton3VolumePath()
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Load Volume Data"),
 		"../../VolumeData", QString("Volume Data(*.dat)"));
 	ui.lineEdit_4->setText( fileName);
+	std::string filePath = dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene)->updateVolumeFilename( fileName.toStdString());
+	ui.lineEdit_5->setText( QString::fromStdString(filePath));
+	ui.pushButton_3Rendering->setEnabled(1);
+	Refresh();
 }
 
 void Widget::slotSpinbox1MaxSample()
@@ -391,4 +402,10 @@ void Widget::slotSpinbox2MinID()
 void Widget::slotSpinbox3MaxID()
 {
 	UpdataParameterAndRefreshInt("SequenceMaxID", ui.spinBox_3->value(), false);
+}
+
+void Widget::slotPushButtonRenderingSequence()
+{
+	dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene)->UpdateID( ui.spinBox_2->value());
+	Refresh();
 }

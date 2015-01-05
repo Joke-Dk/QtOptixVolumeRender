@@ -1,13 +1,32 @@
 #include "volume.h"
 
-void VolumeData::setup(optix::Context& optixCtx, int kindVolume, const std::string & filename, optix::int3& indexXYZ)
+std::string VolumeData::UpdateFilename( std::string & filename)
+{
+	_filename = filename;
+	int tmpIndex = _filename.find_last_of('_');
+	_filenameHead = _filename.substr( 0, tmpIndex+1);
+	tmpIndex = _filename.find_last_of('.');
+	_filenameTail = _filename.substr( tmpIndex, _filename.length()-tmpIndex);
+	tmpIndex = _filename.find_last_of('/');
+	_filenamePath = _filename.substr( 0, tmpIndex+1);
+	return _filenamePath;
+}
+
+void VolumeData::UpdateID( int id)
+{
+	char tmpID [10];
+	itoa(id,tmpID,10);
+	_filename = _filenameHead+ std::string(tmpID)+_filenameTail;
+}
+
+void VolumeData::setup(optix::Context& optixCtx, int kindVolume, optix::int3& indexXYZ)
 {
 	switch(kindVolume)
 	{
 	case 0:
-		ReadKind0Pbrt( optixCtx, filename);
+		ReadKind0Pbrt( optixCtx);
 	case 1:
-		ReadKind1Dat(optixCtx, filename);
+		ReadKind1Dat(optixCtx);
 	}
 	optixCtx["index_x" ]->setInt(_indexXYZ.x );
 	optixCtx["index_y" ]->setInt(_indexXYZ.y );
@@ -16,7 +35,7 @@ void VolumeData::setup(optix::Context& optixCtx, int kindVolume, const std::stri
 }
 
 
-void VolumeData::ReadKind0Pbrt(optix::Context& optixCtx, const std::string & filename)
+void VolumeData::ReadKind0Pbrt(optix::Context& optixCtx)
 {
 	_indexXYZ.x = 100;
 	_indexXYZ.y = 100;
@@ -30,7 +49,7 @@ void VolumeData::ReadKind0Pbrt(optix::Context& optixCtx, const std::string & fil
 	//read .vol file
 	//char* filename = "optix/volume/density_render.70.pbrt";
 	FILE* fin;
-	fopen_s(&fin, const_cast<const char *>(filename.c_str()), "r");
+	fopen_s(&fin, const_cast<const char *>(_filename.c_str()), "r");
 	if (!fin)
 	{
 		std::cout << "Could not load Volume file \n";
@@ -44,13 +63,13 @@ void VolumeData::ReadKind0Pbrt(optix::Context& optixCtx, const std::string & fil
 }
 
 
-void VolumeData::ReadKind1Dat(optix::Context& optixCtx, const std::string & filename)
+void VolumeData::ReadKind1Dat(optix::Context& optixCtx)
 {
 	FILE* fin;
-	fin = fopen( const_cast<const char *>(filename.c_str()), "r");
+	fin = fopen( const_cast<const char *>(_filename.c_str()), "r");
 	if (!fin)	{std::cout<<"Could not open it!"<<std::endl; }
 	
-	HANDLE m_file = CreateFileA(const_cast<const char *>(filename.c_str()), GENERIC_READ, 
+	HANDLE m_file = CreateFileA(const_cast<const char *>(_filename.c_str()), GENERIC_READ, 
 				FILE_SHARE_READ, NULL, OPEN_EXISTING, 
 				FILE_ATTRIBUTE_NORMAL, NULL);
 

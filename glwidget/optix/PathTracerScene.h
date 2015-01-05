@@ -6,7 +6,7 @@
 #include <GLUTDisplay.h>
 #include <ObjLoader.h>
 #include "envmapSampler.h"
-
+#include "volume.h"
 //-----------------------------------------------------------------------------
 //
 // PathTracerScene
@@ -43,11 +43,14 @@ public:
 	void updateHasAreaBox( );
 	void updateGeometryInstance( );
 	void SaveImageButton();
+	std::string updateVolumeFilename( std::string filename);
+	void UpdateID( int id);
 
 	unsigned int   m_width;
 	unsigned int   m_height;
 	EnvironmentMap envMap;
 private:
+	VolumeData volumeData;
 	// create geometry instances
 	std::vector<optix::GeometryInstance> gis0volume;
 	std::vector<optix::GeometryInstance> gis1reference;
