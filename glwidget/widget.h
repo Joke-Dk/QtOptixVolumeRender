@@ -12,6 +12,9 @@ class Widget : public QWidget
 public:
 	Widget( QTGLUTDisplay* glWidget, QWidget *parent = 0, Qt::WFlags flags = 0);
 	~Widget();
+
+	//////////////////////////////////////////////////////////////////////////
+	// Tab: Parameter
 	void UpdataParameterAndRefresh(std::string str, float value, bool refresh=true);
 	void UpdataParameterAndRefreshInt(std::string str, int value, bool refresh=true);
 	void UpdataParameterAndRefreshUInt(std::string str, unsigned int value, bool refresh=true);
@@ -49,6 +52,13 @@ public:
 
 	void slotPushButton();
 	void slotPushButton2SaveImage();
+
+	//////////////////////////////////////////////////////////////////////////
+	// Tab: Rendering
+	void slotPushButton3VolumePath();
+	void slotSpinbox1MaxSample();
+	void slotSpinbox2MinID();
+	void slotSpinbox3MaxID();
 private:
 	Ui::WidgetClass ui;
 };

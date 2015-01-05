@@ -5,6 +5,8 @@
 Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
 : QWidget(parent, flags)
 {
+	//////////////////////////////////////////////////////////////////////////
+	// Tab: Parameter
 	_glWidget = glWidget;
 	ui.setupUi(this);
 	connect(ui.doubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(slotDoubleSpinbox_Slider()));
@@ -60,6 +62,13 @@ Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
 
 	// UI: Save Image button
 	connect(ui.pushButton_2, SIGNAL(clicked(bool)), this, SLOT(slotPushButton2SaveImage()));
+
+	//////////////////////////////////////////////////////////////////////////
+	// Tab: Rendering
+	connect(ui.pushButton_VolumePath, SIGNAL(clicked(bool)), this, SLOT(slotPushButton3VolumePath()));
+	connect(ui.spinBox, SIGNAL(valueChanged( int)), this, SLOT(slotSpinbox1MaxSample()));
+	connect(ui.spinBox_2, SIGNAL(valueChanged( int)), this, SLOT(slotSpinbox2MinID()));
+	connect(ui.spinBox_3, SIGNAL(valueChanged( int)), this, SLOT(slotSpinbox3MaxID()));
 }
 
 void Widget::SetDeafaultParamater()
@@ -85,6 +94,14 @@ void Widget::SetDeafaultParamater()
 	UpdataParameterAndRefresh("isFLDSingle", ui.radioButton_3->isChecked()?1.f:ui.radioButton_5->isChecked()?-1.f:0.f, false);
 	UpdataParameterAndRefreshUInt("max_depth", ui.radioButton_4->isChecked()?unsigned int(3):unsigned int(100), false);
 	UpdataParameterAndRefresh("isSingle", 0.f, false);
+
+	ui.comboBox->setEnabled(ui.checkBox_2->isChecked());
+
+	//////////////////////////////////////////////////////////////////////////
+	// Tab: Rendering
+	slotSpinbox1MaxSample();
+	slotSpinbox2MinID();
+	slotSpinbox3MaxID();
 }
 
 void Widget::slotDoubleSpinbox_Slider()
@@ -275,7 +292,7 @@ void Widget::UpdataEnvironmentLight(int idEnv, bool refresh)
 
 void Widget::slotClicked2HasHDR()
 {
-	ui.groupBox->setEnabled(ui.checkBox_2->isChecked());
+	ui.comboBox->setEnabled(ui.checkBox_2->isChecked());
 	UpdataHasHDR( ui.checkBox_2->isChecked());
 }
 
@@ -345,4 +362,33 @@ void Widget::slotPushButton()
 void Widget::slotPushButton2SaveImage()
 {
 	dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene)->SaveImageButton();
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Tab: Rendering
+void Widget::slotPushButton3VolumePath()
+{
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Load Volume Data"),
+		"../../VolumeData", QString("Volume Data(*.dat)"));
+	ui.lineEdit_4->setText( fileName);
+}
+
+void Widget::slotSpinbox1MaxSample()
+{
+	UpdataParameterAndRefreshInt("SequenceMaxSample", ui.spinBox->value(), false);
+}
+
+void Widget::slotSpinbox2MinID()
+{
+	UpdataParameterAndRefreshInt("SequenceMinID", ui.spinBox_2->value(), false);
+	if (ui.spinBox_3->value()<ui.spinBox_2->value())
+	{
+		ui.spinBox_3->setValue( ui.spinBox_2->value());
+		slotSpinbox3MaxID();
+	}
+}
+
+void Widget::slotSpinbox3MaxID()
+{
+	UpdataParameterAndRefreshInt("SequenceMaxID", ui.spinBox_3->value(), false);
 }
