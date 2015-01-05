@@ -57,6 +57,9 @@ Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
 
 	// UI: FLD Precompution button
 	connect(ui.pushButton, SIGNAL(clicked(bool)), this, SLOT(slotPushButton()));
+
+	// UI: Save Image button
+	connect(ui.pushButton_2, SIGNAL(clicked(bool)), this, SLOT(slotPushButton2SaveImage()));
 }
 
 void Widget::SetDeafaultParamater()
@@ -337,4 +340,9 @@ void Widget::slotPushButton()
 {
 	dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene)->PreCompution();
 	ui.radioButton_2->setChecked( 1);
+}
+
+void Widget::slotPushButton2SaveImage()
+{
+	dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene)->SaveImageButton();
 }

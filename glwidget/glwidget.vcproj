@@ -391,6 +391,18 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="image"
+					>
+					<File
+						RelativePath=".\saveImage.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\saveImage.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter

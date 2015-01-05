@@ -42,6 +42,7 @@ public:
 	void switchHasHDR( bool hasHDR);
 	void updateHasAreaBox( );
 	void updateGeometryInstance( );
+	void SaveImageButton();
 
 	unsigned int   m_width;
 	unsigned int   m_height;

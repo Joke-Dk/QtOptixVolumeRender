@@ -15,6 +15,7 @@
 //#include "helpers.h"
 #include <ImageLoader.h>
 #include "volume.h"
+#include "saveImage.h"
 using namespace std;
 
 
@@ -40,6 +41,11 @@ float PathTracerScene::getParameter( std::string str)
 	return m_context[str.c_str()]->getFloat(); 
 }
 
+void PathTracerScene::SaveImageButton()
+{
+	SaveImage tmpImage;
+	tmpImage.Save( m_context);
+}
 
 void PathTracerScene::initScene( InitialCameraData& camera_data )
 {
