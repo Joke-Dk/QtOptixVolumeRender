@@ -1,5 +1,5 @@
 #include "saveImage.h"
-
+#define INVGAMMA 1.f/2.2f
 void SaveImage::Save( optix::Context& optixCtx, const std::string& filename)
 {
 	optix::Buffer buffer = optixCtx["output_buffer"]->getBuffer();
@@ -19,9 +19,9 @@ void SaveImage::Save( optix::Context& optixCtx, const std::string& filename)
 		for(int x = 0; x < FreeImage_GetWidth(dib); ++x) 
 		{
 			// Set pixel color to green with a transparency of 128
-			bits[FI_RGBA_RED] = 255.f*cpuBuffer->x;
-			bits[FI_RGBA_GREEN] = 255.f*cpuBuffer->y;
-			bits[FI_RGBA_BLUE] = 255.f*cpuBuffer->z;
+			bits[FI_RGBA_RED] = 255.f*pow(cpuBuffer->x, INVGAMMA);
+			bits[FI_RGBA_GREEN] = 255.f*pow(cpuBuffer->y, INVGAMMA);
+			bits[FI_RGBA_BLUE] = 255.f*pow(cpuBuffer->z, INVGAMMA);
 			bits[FI_RGBA_ALPHA] = 255.f*(1.f-cpuBuffer->w);
 			// jump to next pixel
 			bits += bytespp;
