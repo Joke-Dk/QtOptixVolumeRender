@@ -7,16 +7,18 @@
 #include <ObjLoader.h>
 #include "envmapSampler.h"
 #include "volume.h"
+#include "saveImage.h"
 //-----------------------------------------------------------------------------
 //
 // PathTracerScene
 //
 //-----------------------------------------------------------------------------
-
 class PathTracerScene: public SampleScene
 {
+	friend class Widget;
 public:
 	// Set the actual render parameters below in main().
+	Widget * _widget;
 	PathTracerScene()
 		: m_rr_begin_depth(1u)
 		, m_max_depth(100u)
@@ -42,7 +44,7 @@ public:
 	void switchHasHDR( bool hasHDR);
 	void updateHasAreaBox( );
 	void updateGeometryInstance( );
-	void SaveImageButton();
+	void SaveImageButton( int id = 0);
 	std::string updateVolumeFilename( std::string filename);
 	void UpdateID( int id);
 
@@ -50,6 +52,7 @@ public:
 	unsigned int   m_height;
 	EnvironmentMap envMap;
 private:
+	SaveImage saveImage;
 	VolumeData volumeData;
 	// create geometry instances
 	std::vector<optix::GeometryInstance> gis0volume;

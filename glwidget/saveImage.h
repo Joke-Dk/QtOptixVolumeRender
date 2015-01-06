@@ -9,6 +9,7 @@
 class SaveImage
 {
 public:
-	SaveImage(){}
-	void Save( optix::Context& optixCtx, const std::string& filename=std::string("result01.png"));
+	SaveImage();
+	void Save( optix::Context& optixCtx, int id=0);
+	std::string pathHead;
 };

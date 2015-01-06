@@ -10,6 +10,7 @@ public:
 	void UpdateID( int id);
 
 	void setup(optix::Context& optixCtx, int kindVolume, optix::int3& indexXYZ);
+	int _id;
 private:
 	optix::int3 _indexXYZ;
 	std::string _filename;

@@ -12,7 +12,7 @@ class Widget : public QWidget
 public:
 	Widget( QTGLUTDisplay* glWidget, QWidget *parent = 0, Qt::WFlags flags = 0);
 	~Widget();
-
+	void addProgressBar( int value);
 	//////////////////////////////////////////////////////////////////////////
 	// Tab: Parameter
 	void UpdataParameterAndRefresh(std::string str, float value, bool refresh=true);

@@ -14,6 +14,7 @@ std::string VolumeData::UpdateFilename( std::string & filename)
 
 void VolumeData::UpdateID( int id)
 {
+	_id = id;
 	char tmpID [10];
 	itoa(id,tmpID,10);
 	_filename = _filenameHead+ std::string(tmpID)+_filenameTail;

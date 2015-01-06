@@ -1,6 +1,12 @@
 #include "saveImage.h"
 #define INVGAMMA 1.f/2.2f
-void SaveImage::Save( optix::Context& optixCtx, const std::string& filename)
+
+SaveImage::SaveImage()
+{
+	pathHead = "";
+}
+
+void SaveImage::Save( optix::Context& optixCtx, int id)
 {
 	optix::Buffer buffer = optixCtx["output_buffer"]->getBuffer();
 	optix::uint buffer_width, buffer_height;
@@ -31,8 +37,11 @@ void SaveImage::Save( optix::Context& optixCtx, const std::string& filename)
 	buffer->unmap();
 	if( dib)
 	{
-		FreeImage_Save(FIF_PNG, dib, const_cast<const char *>(filename.c_str()), PNG_DEFAULT);
-		std::cout<<"Save Image File Success!"<<std::endl;
+		char str[30];
+		sprintf( str, "%d.png", id);
+		std::string path = pathHead + std::string(str);
+		FreeImage_Save(FIF_PNG, dib, const_cast<const char *>( path.c_str()), PNG_DEFAULT);
+		std::cout<<"Save Image: "<<path<<std::endl;
 	}
 	else
 	{

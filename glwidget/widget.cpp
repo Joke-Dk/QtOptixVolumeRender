@@ -70,6 +70,8 @@ Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
 	connect(ui.spinBox_2, SIGNAL(valueChanged( int)), this, SLOT(slotSpinbox2MinID()));
 	connect(ui.spinBox_3, SIGNAL(valueChanged( int)), this, SLOT(slotSpinbox3MaxID()));
 	connect(ui.pushButton_3Rendering, SIGNAL(clicked(bool)), this, SLOT(slotPushButtonRenderingSequence()));
+
+	dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene)->_widget = this;
 }
 
 void Widget::SetDeafaultParamater()
@@ -392,6 +394,7 @@ void Widget::slotSpinbox1MaxSample()
 void Widget::slotSpinbox2MinID()
 {
 	UpdataParameterAndRefreshInt("SequenceMinID", ui.spinBox_2->value(), false);
+	UpdataParameterAndRefreshInt("SequenceCurID", ui.spinBox_2->value(), false);
 	if (ui.spinBox_3->value()<ui.spinBox_2->value())
 	{
 		ui.spinBox_3->setValue( ui.spinBox_2->value());
@@ -406,6 +409,13 @@ void Widget::slotSpinbox3MaxID()
 
 void Widget::slotPushButtonRenderingSequence()
 {
-	dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene)->UpdateID( ui.spinBox_2->value());
+	//dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene)->UpdateID( ui.spinBox_2->value());
+	//UpdataParameterAndRefreshInt("SequenceCurID", ui.spinBox_2->value(), false);
+	UpdataParameterAndRefreshInt("_init_", 1, false);
 	Refresh();
+}
+
+void Widget::addProgressBar( int value)
+{
+	ui.progressBar->setValue(value);
 }
