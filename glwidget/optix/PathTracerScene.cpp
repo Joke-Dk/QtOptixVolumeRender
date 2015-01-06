@@ -430,11 +430,11 @@ void PathTracerScene::createEnvironmentScene()
 	//gis2cornell.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( dp.x, 0.0f, 0.0f) ) );
 	//setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
 	//left
-	//gis2cornell.push_back( createParallelogram( p0, make_float3( 0.0f, 0.0f, dp.z),make_float3( 0.f , dp.y, 0.0f) ) );
-	//setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
+	gis2cornell.push_back( createParallelogram( p0, make_float3( 0.0f, 0.0f, dp.z),make_float3( 0.f , dp.y, 0.0f) ) );
+	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
 	//right
-	//gis2cornell.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( 0.f , dp.y, 0.0f) ) );
-	//setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
+	gis2cornell.push_back( createParallelogram( p1, -make_float3( 0.0f, 0.0f, dp.z),-make_float3( 0.f , dp.y, 0.0f) ) );
+	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
 	//behind
 	gis2cornell.push_back( createParallelogram( p0, make_float3( dp.x, 0.0f, 0.f),make_float3( 0.f , dp.y, 0.0f) ) );
 	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", floor_color);
@@ -500,8 +500,17 @@ void PathTracerScene::createEnvironmentScene()
 	const optix::Matrix4x4 m1( matrix_1 );
 	std::string obj_path1 = ("optix/mesh/cylinder.obj");
 	GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, fogMirrorMaterial);
-
 	gis1reference.push_back(objgroup1->getChild(0));
+
+	//glass cup
+	//const float matrix_2[4*4] = { 2.,  0,  0,  -6, 
+	//	0,  1.9,  0,  -10.5, 
+	//	0,  0,  2., -7, 
+	//	0,  0,  0,  1 };
+	//const optix::Matrix4x4 m2( matrix_2 );
+	//std::string obj_path2 = ("optix/mesh/cup.obj");
+	//GeometryGroup& objgroup2 = createObjloader( obj_path2, m2, glassMaterial);
+	//gis1reference.push_back(objgroup2->getChild(0));
 
 	// Create geometry group
 	updateGeometryInstance();
