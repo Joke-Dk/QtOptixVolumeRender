@@ -465,7 +465,7 @@ void PathTracerScene::createEnvironmentScene()
 
 	//load volume data
 	optix::int3 indexXYZ;
-	if(0)
+	if(1)
 	{
 		//////////////////////////////////////////////////////////////////////////
 		// GeometryInstance 0 - Volume Box

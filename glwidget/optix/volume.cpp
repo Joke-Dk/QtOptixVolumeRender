@@ -25,9 +25,10 @@ void VolumeData::setup(optix::Context& optixCtx, int kindVolume, optix::int3& in
 	switch(kindVolume)
 	{
 	case 0:
-		ReadKind0Pbrt( optixCtx);
+		ReadKind0Pbrt( optixCtx);break;
+	default:
 	case 1:
-		ReadKind1Dat(optixCtx);
+		ReadKind1Dat(optixCtx);break;
 	}
 	optixCtx["index_x" ]->setInt(_indexXYZ.x );
 	optixCtx["index_y" ]->setInt(_indexXYZ.y );
