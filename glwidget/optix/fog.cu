@@ -186,7 +186,7 @@ RT_PROGRAM void fog__closest_hit_radiance()
 
 				float Ldist = length(light_pos - current_prd.origin);
 				float3 L = normalize(light_pos - current_prd.origin);
-				float nDl = 1.f;//dot( ray.direction, L );
+				float nDl = dot( current_prd.direction, L );
 				//if(isPreCompution>0.5f) nDl = 1.f;
 				float LnDl = dot( light.normal, L );
 				float A = length(cross(light.v1, light.v2));
