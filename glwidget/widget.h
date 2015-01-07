@@ -19,6 +19,7 @@ public:
 	void UpdataParameterAndRefreshInt(std::string str, int value, bool refresh=true);
 	void UpdataParameterAndRefreshUInt(std::string str, unsigned int value, bool refresh=true);
 	float GetParameterValue(std::string str);
+	int GetParameterValueInt(std::string str);
 	void SetDeafaultParamater();
 	void UpdataEnvironmentLight(int idEnv, bool refresh=true);
 	void UpdataHasHDR(bool hasHDR, bool refresh=true);
@@ -61,6 +62,7 @@ public:
 	void slotSpinbox2MinID();
 	void slotSpinbox3MaxID();
 	void slotPushButtonRenderingSequence();
+	void slotPushButtonPause();
 private:
 	Ui::WidgetClass ui;
 };

@@ -118,6 +118,8 @@ bool PathTracerScene::keyPressed( unsigned char key, int x, int y )
 
 void PathTracerScene::trace( const RayGenCameraData& camera_data )
 {
+	if(!m_context["doRendering"]->getInt())
+		return;
 	if(m_context["_init_"]->getInt()==1)
 	{
 		int SequenceCurID = m_context["SequenceCurID"]->getInt();
