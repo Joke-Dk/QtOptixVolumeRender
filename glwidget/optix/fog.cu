@@ -167,11 +167,16 @@ RT_PROGRAM void fog_shadow()
 {
 	switch(boundMaterial)
 	{
-	case 1://mirror
+	case 1://mirror shadow
 		current_prd_shadow.attenuation = make_float3(0.f);
 		rtTerminateRay();
 		return;
-	default://glass
+	//case 2://glass in fog shadow
+	//	current_prd_shadow.attenuation = make_float3(0.3f);
+	//	rtTerminateRay();
+	//	return;
+	default:
+	case 0://fog shadow
 		float maxLength = 30.f;//ray.tmax;
 		if(MCWoodcock)//woodcock-tracking shadow
 		{
@@ -233,6 +238,38 @@ RT_PROGRAM void fog__closest_hit_radiance()
 			case 1://mirror
 				current_prd.direction = reflect(ray.direction, ffnormal);	
 				break;
+			case 2:
+				if (current_prd.inside2) 
+				{
+					// Shoot outgoing ray
+					iof = 1.0f/index_of_refraction;
+				} 
+				else 
+				{
+					iof = index_of_refraction;
+				}
+				float3 t;
+				refract(t, ray.direction, ffnormal, iof);
+				float rand_reflect = rnd(current_prd.seed);
+				// check for external or internal reflection
+				float cos_theta = dot(ray.direction, ffnormal);
+				if (cos_theta < 0.0f)
+					cos_theta = -cos_theta;
+				else
+					cos_theta = dot(t, ffnormal);
+				float reflection = fresnel_schlick(cos_theta, fresnel_exponent, fresnel_minimum, fresnel_maximum);
+				if (rand_reflect<reflection)
+				{
+					//reflect
+					current_prd.direction = reflect(ray.direction, ffnormal);	
+				}
+				else
+				{
+					//refract
+					refract(current_prd.direction, ray.direction, ffnormal, iof);
+					current_prd.inside2 = !current_prd.inside2;
+				}
+				break;
 			default://glass
 				refract(current_prd.direction, ray.direction, ffnormal, iof);
 				current_prd.inside = !current_prd.inside;
@@ -288,7 +325,7 @@ RT_PROGRAM void fog__closest_hit_radiance()
 
 				float Ldist = length(light_pos - current_prd.origin);
 				float3 L = normalize(light_pos - current_prd.origin);
-				float nDl = dot( current_prd.direction, L );
+				float nDl = 1.f;//dot( current_prd.direction, L );
 				//if(isPreCompution>0.5f) nDl = 1.f;
 				float LnDl = dot( light.normal, L );
 				float A = length(cross(light.v1, light.v2));

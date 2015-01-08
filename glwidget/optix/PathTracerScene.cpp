@@ -363,7 +363,7 @@ std::string PathTracerScene::updateVolumeFilename( std::string filename)
 {
 	optix::int3 indexXYZ;
 	std::string path = volumeData.UpdateFilename( filename);
-	volumeData.setup(m_context, 0, indexXYZ);
+	volumeData.setup(m_context, 2, indexXYZ);
 	saveImage.pathHead = path;
 	return path;
 }
@@ -372,7 +372,7 @@ void PathTracerScene::UpdateID( int id)
 {
 	optix::int3 indexXYZ;
 	volumeData.UpdateID( id);
-	volumeData.setup(m_context, 0, indexXYZ);
+	volumeData.setup(m_context, 2, indexXYZ);
 }
 
 
@@ -407,7 +407,7 @@ void PathTracerScene::createEnvironmentScene()
 
 
 
-	const optix::float3 white = optix::make_float3( 0.8f, 0.8f, 0.8f );
+	const optix::float3 white = optix::make_float3( 0.8f, 0.8f, 0.8f )*0.8f;
 	const optix::float3 black = optix::make_float3( 0.2f, 0.2f, 0.2f );
 	const optix::float3 green = optix::make_float3( 0.05f, 0.3f, 0.05f );
 	const optix::float3 red   = optix::make_float3( 0.8f, 0.05f, 0.05f );
@@ -481,8 +481,8 @@ void PathTracerScene::createEnvironmentScene()
 		volumeData.setup(m_context, 1, indexXYZ);
 		break;
 	case 2:
-		p0 = optix::make_float3(-13.49f, -8.49f, -8.f);
-		p1 = optix::make_float3(13.49f, 8.49f, 8.f);
+		p0 = optix::make_float3(-13.49f, -9.f, -9.f);
+		p1 = optix::make_float3(13.49f, 9.f, 9.f);
 		volumeData.UpdateFilename( std::string("../../VolumeData/cloud/dat/Output_200.dat"));
 		volumeData.setup(m_context, 2, indexXYZ);
 		break;
@@ -511,22 +511,46 @@ void PathTracerScene::createEnvironmentScene()
 
 		
 
-
+	//////////////////////////////////////////////////////////////////////////
+	// OBJ and SHAPE
 	//////////////////////////////////////////////////////////////////////////
 	// GeometryInstance 0 - Sphere and Cup.obj
 
 	//gis1reference.push_back( createSphere( make_float3(-6.f,0.f,6.f), 1.f));
 	////setMaterial(gis.back(), diffuse, "diffuse_color", white);
 	//setMaterial(gis1reference.back(), mirrorMaterial, "glass_color", make_float3(1.f));
-	optix::Material fogMirrorMaterial = DefineFogMaterial( m_context, 1);
-	const float matrix_1[4*4] = { 0.4,  0,  0,  0, 
-		0,  0.6,  0,  -10.5, 
-		0,  0,  0.4, 0, 
-		0,  0,  0,  1 };
-	const optix::Matrix4x4 m1( matrix_1 );
-	std::string obj_path1 = ("optix/mesh/cylinder.obj");
-	optix::GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, fogMirrorMaterial);
-	//gis1reference.push_back(objgroup1->getChild(0));
+
+	//////////////////////////////////////////////////////////////////////////
+	// mirror cylinder
+	if(0)
+	{
+		optix::Material fogMirrorMaterial = DefineFogMaterial( m_context, 1);
+		const float matrix_1[4*4] = { 0.4,  0,  0,  0, 
+			0,  0.6,  0,  -10.5, 
+			0,  0,  0.4, 0, 
+			0,  0,  0,  1 };
+		const optix::Matrix4x4 m1( matrix_1 );
+		std::string obj_path1 = ("optix/mesh/cylinder.obj");
+		optix::GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, fogMirrorMaterial);
+		gis1reference.push_back(objgroup1->getChild(0));
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// Water mesh
+	if(1)
+	{
+		optix::Material fogGlassMaterial = DefineFogMaterial( m_context, 2, 1.4f);
+
+		const float matrix_1[4*4] = 
+		{	0.,		26.98/1.62,	0,			-13.49,
+			18/1.22,	0.0,		0,			-9,
+			0,		0,			18.0/1.22,	-9,
+			0,		0,			0,			1 };
+		const optix::Matrix4x4 m1( matrix_1 );
+		std::string obj_path1 = ("../../VolumeData/ObjCloud/output_200.obj");
+		optix::GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, fogGlassMaterial);
+		gis1reference.push_back(objgroup1->getChild(0));
+	}
 
 	//glass cup
 	//const float matrix_2[4*4] = { 2.,  0,  0,  -6, 
@@ -537,6 +561,9 @@ void PathTracerScene::createEnvironmentScene()
 	//std::string obj_path2 = ("optix/mesh/cup.obj");
 	//GeometryGroup& objgroup2 = createObjloader( obj_path2, m2, glassMaterial);
 	//gis1reference.push_back(objgroup2->getChild(0));
+	//////////////////////////////////////////////////////////////////////////
+	// END
+	//////////////////////////////////////////////////////////////////////////
 
 	// Create geometry group
 	updateGeometryInstance();

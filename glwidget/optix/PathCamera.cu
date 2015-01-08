@@ -46,6 +46,7 @@ RT_PROGRAM void pathtrace_camera()
 		prd.countEmitted = true;
 		prd.done = false;
 		prd.inside = false;
+		prd.inside2 = false;
 		prd.seed = seed;
 		prd.depth = 0;
 

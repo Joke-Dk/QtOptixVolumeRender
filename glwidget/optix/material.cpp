@@ -42,12 +42,12 @@ Material DefineMirrorMaterial( Context& m_context)
 }
 
 
-optix::Material DefineFogMaterial( optix::Context& m_context, int kindBound)
+optix::Material DefineFogMaterial( optix::Context& m_context, int kindBound, float indexRefraction)
 {
 	// Set up glass material
 	Material& fogMaterial = makeMaterialPrograms( m_context, "fog.cu", "fog__closest_hit_radiance", "fog_shadow");
 	fogMaterial["glass_color"] ->setFloat(  1.f,1.f,1.f);
-	fogMaterial["index_of_refraction"]->setFloat(1.f);
+	fogMaterial["index_of_refraction"]->setFloat(indexRefraction);
 	fogMaterial["fresnel_exponent"   ]->setFloat( 4.0f );
 	fogMaterial["fresnel_minimum"    ]->setFloat( 0.1f );
 	fogMaterial["fresnel_maximum"    ]->setFloat( 1.0f );

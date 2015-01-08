@@ -23,6 +23,7 @@ struct PerRayData_pathtrace
 	int countEmitted;
 	int done;
 	int inside;
+	int inside2;//for glass in fog
 };
 
 struct PerRayData_pathtrace_shadow

@@ -101,9 +101,11 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				CommandLine="cp $(InputDir)/Debug/ptx/* $(TargetDir)/Debug/ptx"
 			/>
 			<Tool
 				Name="Cudart Build Rule"
+				CompileOut="$(InputDir)/Debug/ptx/$(TargetName)_$(InputFileName).ptx"
 				TargetMachinePlatform="0"
 			/>
 			<Tool
@@ -161,6 +163,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>

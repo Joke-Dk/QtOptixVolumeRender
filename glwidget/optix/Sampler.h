@@ -16,7 +16,7 @@ struct ParallelogramLight
 static __inline__ std::string my_ptxpath( const std::string& base )
 {
 	//cout<<std::string("load  ./Debug/ptx/ray_tracer_optix_" + base + ".ptx")<<endl;
-	return std::string("./Debug/ptx/glwidget_" + base + ".ptx");
+	return std::string("Debug/ptx/glwidget_" + base + ".ptx");
 }
 
 static __device__ __inline__ void mapToDisk( optix::float2& sample )

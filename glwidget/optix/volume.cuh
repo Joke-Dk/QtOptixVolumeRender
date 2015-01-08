@@ -53,8 +53,10 @@ static __device__  __inline__ float CloudExpCurve0(float v)
 
 static __device__  __inline__ float CloudExpCurve(float v)
 {
-	if (v>0.5f)
-		return 1.f;//-pow(0.01f, v)
+	if (v>=0.1f)
+		return 0.f;
+	if (v>=0.5f)
+		return 1.f;
 	else
 		return 1.0f-pow(0.05f, 0.5f*pow(2.f*v, 2));
 }

@@ -9,7 +9,7 @@ optix::Material DefineGlassMaterial( optix::Context& m_context);
 
 optix::Material DefineMirrorMaterial( optix::Context& m_context);
 
-optix::Material DefineFogMaterial( optix::Context& m_context, int);
+optix::Material DefineFogMaterial( optix::Context& m_context, int, float indexRefraction=1.f);
 
 optix::Material makeMaterialPrograms( optix::Context& m_context, const std::string& filename, 
 								   const std::string& ch_program_name,
