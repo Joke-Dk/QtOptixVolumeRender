@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 	QTGLUTDisplay::init( argc, argv );
 	// Process command line options
 	unsigned int sqrt_num_samples = 1u;
-	unsigned int width = 512u, height = 512u;
+	unsigned int width = 800u, height = 600u;
 	unsigned int rr_begin_depth = 2u;
 	unsigned int max_depth = 20u;
 	float timeout = 10000.0f;
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
     QApplication app(argc, argv);
     Window window(argc, argv);
     //window.resize(window.sizeHint());
-	window.resize(810, 534);
+	window.resize(width+300, height+22);
     int desktopArea = QApplication::desktop()->width() *
                      QApplication::desktop()->height();
     int widgetArea = window.width() * window.height();

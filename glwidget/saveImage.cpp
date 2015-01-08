@@ -25,10 +25,10 @@ void SaveImage::Save( optix::Context& optixCtx, int id)
 		for(int x = 0; x < FreeImage_GetWidth(dib); ++x) 
 		{
 			// Set pixel color to green with a transparency of 128
-			bits[FI_RGBA_RED] = 255.f*pow(cpuBuffer->x, INVGAMMA);
-			bits[FI_RGBA_GREEN] = 255.f*pow(cpuBuffer->y, INVGAMMA);
-			bits[FI_RGBA_BLUE] = 255.f*pow(cpuBuffer->z, INVGAMMA);
-			bits[FI_RGBA_ALPHA] = 255.f*(1.f-cpuBuffer->w);
+			bits[FI_RGBA_RED] = 255.f*pow(optix::clamp(cpuBuffer->x, 0.f, 1.f), INVGAMMA);
+			bits[FI_RGBA_GREEN] = 255.f*pow(optix::clamp(cpuBuffer->y, 0.f, 1.f), INVGAMMA);
+			bits[FI_RGBA_BLUE] = 255.f*pow(optix::clamp(cpuBuffer->z, 0.f, 1.f), INVGAMMA);
+			bits[FI_RGBA_ALPHA] = 255.f*(1.f-optix::clamp(cpuBuffer->w, 0.f, 1.f));
 			// jump to next pixel
 			bits += bytespp;
 			cpuBuffer++;

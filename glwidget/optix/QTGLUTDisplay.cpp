@@ -290,7 +290,7 @@ QSize QTGLUTDisplay::minimumSizeHint() const
 
 QSize QTGLUTDisplay::sizeHint() const
 {
-	return QSize(512, 512);
+	return QSize(800, 600);
 }
 
 //////////////////////////////////////////////////////////////////////////

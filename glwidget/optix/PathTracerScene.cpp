@@ -439,8 +439,8 @@ void PathTracerScene::createEnvironmentScene()
 	
 	//////////////////////////////////////////////////////////////////////////
 	// GeometryInstance 2 - Cornell Box
-	optix::float3 p0 = optix::make_float3(-10.5f, -10.5f, -10.5f);
-	optix::float3 p1 = optix::make_float3(10.5f, 10.5f, 10.5f);
+	optix::float3 p0 = optix::make_float3(-13.5f, -10.5f, -10.5f);
+	optix::float3 p1 = optix::make_float3(13.5f, 10.5f, 10.5f);
 	optix::float3 dp = p1-p0;
 
 	//floor
@@ -464,22 +464,23 @@ void PathTracerScene::createEnvironmentScene()
 
 	//load volume data
 	optix::int3 indexXYZ;
-	if(1)
+	int volumeSelect = 0;
+	switch( volumeSelect)
 	{
+	case 0:
 		//////////////////////////////////////////////////////////////////////////
 		// GeometryInstance 0 - Volume Box
 		p0 = optix::make_float3(-10.49f, -10.49f, -4.f);
 		p1 = optix::make_float3(10.49f, 10.49f, 4.f);
 		volumeData.UpdateFilename( std::string("optix/volume/density_render.70.pbrt"));
 		volumeData.setup(m_context, 0, indexXYZ);
-
-	}
-	else
-	{
+		break;
+	case 1:
 		p0 = optix::make_float3(-6.f, -10.49f, -6.f);
 		p1 = optix::make_float3(6.f, 9.49f, 6.f);
 		volumeData.UpdateFilename( std::string("../../VolumeData/Output_109.dat"));
 		volumeData.setup(m_context, 1, indexXYZ);
+		break;
 	}
 	m_context["P0"]->setFloat(p0.x, p0.y, p0.z );
 	m_context["P1"]->setFloat(p1.x, p1.y, p1.z );
