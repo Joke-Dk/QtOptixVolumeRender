@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>270</width>
-    <height>512</height>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,7 @@
          <x>0</x>
          <y>0</y>
          <width>243</width>
-         <height>461</height>
+         <height>521</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -69,7 +69,7 @@
              <item row="1" column="2">
               <widget class="QSlider" name="horizontalSlider_2">
                <property name="value">
-                <number>85</number>
+                <number>90</number>
                </property>
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
@@ -99,11 +99,14 @@
              </item>
              <item row="0" column="2">
               <widget class="QSlider" name="horizontalSlider">
+               <property name="maximum">
+                <number>200</number>
+               </property>
                <property name="singleStep">
                 <number>1</number>
                </property>
                <property name="value">
-                <number>25</number>
+                <number>150</number>
                </property>
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
@@ -132,7 +135,7 @@
                 <double>0.010000000000000</double>
                </property>
                <property name="value">
-                <double>0.850000000000000</double>
+                <double>0.900000000000000</double>
                </property>
               </widget>
              </item>
@@ -168,14 +171,17 @@
              </item>
              <item row="0" column="3">
               <widget class="QDoubleSpinBox" name="doubleSpinBox">
+               <property name="decimals">
+                <number>2</number>
+               </property>
                <property name="maximum">
-                <double>10.000000000000000</double>
+                <double>20.000000000000000</double>
                </property>
                <property name="singleStep">
                 <double>0.100000000000000</double>
                </property>
                <property name="value">
-                <double>2.500000000000000</double>
+                <double>15.000000000000000</double>
                </property>
               </widget>
              </item>
@@ -409,6 +415,42 @@
              <widget class="QPushButton" name="pushButton">
               <property name="text">
                <string>FLD</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_5">
+          <property name="title">
+           <string>Monte Carlo Method</string>
+          </property>
+          <widget class="QWidget" name="gridLayoutWidget_3">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>20</y>
+             <width>221</width>
+             <height>61</height>
+            </rect>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_6">
+            <item row="0" column="0">
+             <widget class="QRadioButton" name="radioButton_woodcock">
+              <property name="text">
+               <string>Woodcock Tracking</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QRadioButton" name="radioButton_raymarching">
+              <property name="text">
+               <string>Ray Marching</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
               </property>
              </widget>
             </item>

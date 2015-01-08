@@ -43,12 +43,20 @@ static __device__ __inline__ int xyz2i(int3 xyz)
 	return xyz.z*index_x*index_y+ xyz.y*index_x+xyz.x;
 }
 
-static __device__  __inline__ float CloudExpCurve(float v)
+static __device__  __inline__ float CloudExpCurve0(float v)
 {
 	float c=v-CloudCover;
 	if (c<0.f){c=0.f;}
 	float cloudDensity = 1.f-pow(CloudSharpness, c);
 	return cloudDensity;
+}
+
+static __device__  __inline__ float CloudExpCurve(float v)
+{
+	if (v>0.5f)
+		return 1.f;//-pow(0.01f, v)
+	else
+		return 1.0f-pow(0.05f, 0.5f*pow(2.f*v, 2));
 }
 
 static __device__ __inline__ float GetDensity(int index)

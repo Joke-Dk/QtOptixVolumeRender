@@ -19,4 +19,7 @@ private:
 	std::string _filenamePath;
 	void ReadKind0Pbrt(optix::Context& optixCtx);
 	void ReadKind1Dat(optix::Context& optixCtx);
+	void ReadKind1Dat2(optix::Context& optixCtx);
+
+	int yxz2xyz(int );
 };

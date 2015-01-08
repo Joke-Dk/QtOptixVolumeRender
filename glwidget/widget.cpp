@@ -60,6 +60,9 @@ Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
 	// UI: FLD Precompution button
 	connect(ui.pushButton, SIGNAL(clicked(bool)), this, SLOT(slotPushButton()));
 
+	// UI: Monte Carlo Method
+	connect(ui.radioButton_woodcock, SIGNAL(toggled(bool)), this, SLOT(slotRadioButtonWoodcockSwith()));
+
 	// UI: Save Image button
 	connect(ui.pushButton_2, SIGNAL(clicked(bool)), this, SLOT(slotPushButton2SaveImage()));
 
@@ -100,7 +103,7 @@ void Widget::SetDeafaultParamater()
 	UpdataParameterAndRefresh("isFLDSingle", ui.radioButton_3->isChecked()?1.f:ui.radioButton_5->isChecked()?-1.f:0.f, false);
 	UpdataParameterAndRefreshUInt("max_depth", ui.radioButton_4->isChecked()?unsigned int(3):unsigned int(100), false);
 	UpdataParameterAndRefresh("isSingle", 0.f, false);
-
+	UpdataParameterAndRefreshInt("MCWoodcock", ui.radioButton_woodcock->isChecked()?1:0, false);
 	ui.comboBox->setEnabled(ui.checkBox_2->isChecked());
 
 	//////////////////////////////////////////////////////////////////////////
@@ -377,6 +380,11 @@ void Widget::slotPushButton()
 {
 	dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene)->PreCompution();
 	ui.radioButton_2->setChecked( 1);
+}
+
+void Widget::slotRadioButtonWoodcockSwith()
+{
+	UpdataParameterAndRefreshInt("MCWoodcock", ui.radioButton_woodcock->isChecked()?1:0);
 }
 
 void Widget::slotPushButton2SaveImage()

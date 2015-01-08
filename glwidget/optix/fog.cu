@@ -16,6 +16,98 @@ rtDeclareVariable(float,        fresnel_maximum, , );
 rtDeclareVariable(float,        isRayMarching, , );
 rtDeclareVariable(float,        isPreCompution, , );
 rtDeclareVariable(int,        boundMaterial, , );
+rtDeclareVariable(int,        MCWoodcock, , );//1-woodcocking 0-raymarching
+
+//static __device__ __inline__ float woodcockTracking2( const Ray& current_ray, float maxLength, float maxExtinction)
+//{
+//	float3 p = current_ray.origin;
+//	float3 dir = current_ray.direction;
+//	if (maxExtinction==0.f)
+//		return 100000000.f;
+//	float r = rnd(current_prd.seed);
+//	float d=-log(1.f-r)/maxExtinction;
+//	//if d>maxLength_o: return maxLength+10.f
+//	v=safeNormalize(dir)
+//	l=0.f
+//	span=0.3f
+//	l+=rand0*span
+//	len = 0.f
+//	while len*span<=d && l<=maxLength
+//		len+=get_density( p+v*l)
+//		l+=span
+//	len2 = 0.f
+//	span2=0.015f
+//	if len*span>d
+//		l-=span
+//		len-=get_density( p+v*l)
+//		tt=0
+//		while len*span+len2*span2<=d && tt<20
+//			tt++
+//			len2+=get_density( p+v*l)
+//			l+=span2
+//	return l
+//}
+
+static __device__ __inline__ float rayMarching( const Ray& current_ray, float maxLength, float maxExtinction)
+{
+	float3 p = current_ray.origin;
+	float3 v = current_ray.direction;
+	if (maxExtinction==0.f)
+		return 100000000.f;
+	float r1 = rnd(current_prd.seed);
+	float d=-log(1.f-r1)/maxExtinction;
+
+	float rand0 = rnd(current_prd.seed);
+	float l=0.f;
+	float span=0.3f;
+	l+=rand0*span;
+	float len = 0.f;
+	len+=get_density( p)*rand0;
+	while (len*span<=d && l<=maxLength)
+	{
+		len+=get_density( p+v*l);
+		l+=span;
+	}
+	float len2 = 0.f;
+	float span2=span/20.f;
+	if (len*span>d)
+	{
+		l-=span;
+		len-=get_density( p+v*l);
+		int tt=0;
+		while (len*span+len2*span2<=d && tt<20)
+		{
+			tt++;
+			len2+=get_density( p+v*l);
+			l+=span2;
+		}
+	}
+	return l;
+}
+
+static __device__ __inline__ float getOpticDepth( const Ray& current_ray, float maxLength, float maxExtinction)
+{
+	//To get optic lenghth
+	float3 p = current_ray.origin;
+	float3 v = current_ray.direction;
+	if (maxExtinction==0.f)
+		return 100000000.f;
+	//float r1 = rnd(current_prd_shadow.seed);
+	//float d=-log(1.f-r1)/maxExtinction;
+
+	float rand0 = rnd(current_prd_shadow.seed);
+	float l=0.f;
+	float span=0.5f;
+	l+=rand0*span;
+	float len = 0.f;
+	len+=get_density( p)*rand0;
+	while (l<maxLength)
+	{
+		len+=get_density( p+v*l);
+		l+=span;
+	}
+	return len*span;
+}
 
 
 static __device__ __inline__ float woodcockTracking( const Ray& current_ray, float maxLength, float maxExtinction)
@@ -80,17 +172,23 @@ RT_PROGRAM void fog_shadow()
 		rtTerminateRay();
 		return;
 	default://glass
-		float maxLength = 20.f;//ray.tmax;
-		float d = woodcockTracking_shadow( ray, maxLength, sigma_t);
-		if(d< maxLength-scene_epsilon)
+		float maxLength = 30.f;//ray.tmax;
+		if(MCWoodcock)//woodcock-tracking shadow
 		{
-			current_prd_shadow.attenuation = make_float3(0.f);
+			float d = woodcockTracking_shadow( ray, maxLength, sigma_t);
+			if(d< maxLength-scene_epsilon)
+			{
+				current_prd_shadow.attenuation = make_float3(0.f);
+			}
+			else
+			{
+				current_prd_shadow.attenuation = make_float3(1.f);
+			}
 		}
-		else
+		else//ray-marching shadow
 		{
-			current_prd_shadow.attenuation = make_float3(1.f);
+			current_prd_shadow.attenuation = make_float3(1.f)*exp(-sigma_t*getOpticDepth( ray, maxLength, sigma_t));
 		}
-		//current_prd_shadow.attenuation = make_float3(0.f, 0.f, 1.f);
 		rtTerminateRay();
 		return;
 	}
@@ -122,7 +220,11 @@ RT_PROGRAM void fog__closest_hit_radiance()
 
 	if (current_prd.inside) 
 	{
-		float d = woodcockTracking( ray, t_hit, sigma_t);//1000.f;//woodcockTracking(0.1f, r1);
+		float d;
+		if(MCWoodcock)
+			d = woodcockTracking( ray, t_hit, sigma_t);//1000.f;//woodcockTracking(0.1f, r1);
+		else
+			d = rayMarching( ray, t_hit, sigma_t);
 		if (d>=t_hit)
 		{
 			current_prd.origin = hitpoint;

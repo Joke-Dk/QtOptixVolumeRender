@@ -53,6 +53,7 @@ public:
 	void slotRadioButton5();
 
 	void slotPushButton();
+	void slotRadioButtonWoodcockSwith();
 	void slotPushButton2SaveImage();
 
 	//////////////////////////////////////////////////////////////////////////

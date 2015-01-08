@@ -29,6 +29,8 @@ void VolumeData::setup(optix::Context& optixCtx, int kindVolume, optix::int3& in
 	default:
 	case 1:
 		ReadKind1Dat(optixCtx);break;
+	case 2:
+		ReadKind1Dat2(optixCtx);break;
 	}
 	optixCtx["index_x" ]->setInt(_indexXYZ.x );
 	optixCtx["index_y" ]->setInt(_indexXYZ.y );
@@ -111,4 +113,62 @@ void VolumeData::ReadKind1Dat(optix::Context& optixCtx)
 	vol_data->unmap();
 	optixCtx["volume_density"]->setBuffer( vol_data );
 
+}
+
+void VolumeData::ReadKind1Dat2(optix::Context& optixCtx)//sort: yxz
+{
+	FILE* fin;
+	fin = fopen( const_cast<const char *>(_filename.c_str()), "r");
+	if (!fin)	{std::cout<<"Could not open it!"<<std::endl; }
+
+	HANDLE m_file = CreateFileA(const_cast<const char *>(_filename.c_str()), GENERIC_READ, 
+		FILE_SHARE_READ, NULL, OPEN_EXISTING, 
+		FILE_ATTRIBUTE_NORMAL, NULL);
+
+	if (m_file == INVALID_HANDLE_VALUE)
+		std::cout<<"Could not open it"<<std::endl;
+	HANDLE m_fileMapping = CreateFileMappingA(m_file, NULL, PAGE_READONLY, 0, 0, NULL);
+	if (m_fileMapping == NULL)
+		std::cout<<"CreateFileMapping(): failed."<<std::endl;
+	int* m_data_int = (int *)MapViewOfFile(m_fileMapping, FILE_MAP_READ, 0, 0, 0);
+	float* m_data_float = (float *)MapViewOfFile(m_fileMapping, FILE_MAP_READ, 0, 0, 0);
+	_indexXYZ.x = m_data_int[1];
+	_indexXYZ.y = m_data_int[0];
+	_indexXYZ.z = m_data_int[2];
+	//load volume data
+	int index_N = _indexXYZ.x*_indexXYZ.y*_indexXYZ.z;
+	optix::Buffer vol_data = optixCtx->createBuffer(RT_BUFFER_INPUT);
+	vol_data->setFormat(RT_FORMAT_FLOAT);
+	vol_data->setSize(index_N);
+	float* temp_data = (float*)vol_data->map();
+	for(int i=0; i<index_N; i++)
+		temp_data[i] = 0.f;
+	int size = m_data_int[3];
+	m_data_int+=4;
+	m_data_float+=4;
+	//set the data array
+	for (int i = 0; i<size; ++i)
+	{
+		int index = m_data_int[i*2];
+		float density = m_data_float[i*2+1];
+		temp_data[yxz2xyz(index)] = density;
+	}
+
+	UnmapViewOfFile(m_data_int);
+	UnmapViewOfFile(m_data_float);
+	CloseHandle(m_fileMapping);
+	CloseHandle(m_file);
+	vol_data->unmap();
+	optixCtx["volume_density"]->setBuffer( vol_data );
+
+}
+
+int VolumeData::yxz2xyz(int i)
+{
+	optix::int3 yxz;
+	yxz.y = i%(_indexXYZ.y);
+	yxz.x = i/(_indexXYZ.y)%(_indexXYZ.x);
+	yxz.z = i/(_indexXYZ.y)/(_indexXYZ.x);
+
+	return yxz.z*(_indexXYZ.x)*(_indexXYZ.y)+ yxz.y*_indexXYZ.x+yxz.x;
 }

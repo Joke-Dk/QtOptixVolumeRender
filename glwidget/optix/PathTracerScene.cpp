@@ -49,8 +49,7 @@ void PathTracerScene::initScene( InitialCameraData& camera_data )
 {
 	//m_context->setPrintEnabled(true);
 	//m_context->setPrintBufferSize(4096);
-
-
+	//m_context["MCWoodcock"]->setInt(0);
 
 	m_context->setRayTypeCount( 3 );
 	m_context->setEntryPointCount( 2 );
@@ -464,7 +463,7 @@ void PathTracerScene::createEnvironmentScene()
 
 	//load volume data
 	optix::int3 indexXYZ;
-	int volumeSelect = 0;
+	int volumeSelect = 2;
 	switch( volumeSelect)
 	{
 	case 0:
@@ -480,6 +479,12 @@ void PathTracerScene::createEnvironmentScene()
 		p1 = optix::make_float3(6.f, 9.49f, 6.f);
 		volumeData.UpdateFilename( std::string("../../VolumeData/Output_109.dat"));
 		volumeData.setup(m_context, 1, indexXYZ);
+		break;
+	case 2:
+		p0 = optix::make_float3(-13.49f, -8.49f, -8.f);
+		p1 = optix::make_float3(13.49f, 8.49f, 8.f);
+		volumeData.UpdateFilename( std::string("../../VolumeData/cloud/dat/Output_200.dat"));
+		volumeData.setup(m_context, 2, indexXYZ);
 		break;
 	}
 	m_context["P0"]->setFloat(p0.x, p0.y, p0.z );
