@@ -64,6 +64,8 @@ public:
 	void slotSpinbox3MaxID();
 	void slotPushButtonRenderingSequence();
 	void slotPushButtonPause();
+	void slotSpinboxAntiAlias();
+	void slotSpinboxMaxDepth();
 private:
 	Ui::WidgetClass ui;
 };

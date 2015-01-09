@@ -76,6 +76,9 @@ Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
 
 	connect(ui.pushButton_Pause, SIGNAL(clicked(bool)), this, SLOT(slotPushButtonPause()));
 	
+	// UI: Rendering Parameter
+	connect(ui.spinBox_AntiAlias, SIGNAL(valueChanged( int)), this, SLOT(slotSpinboxAntiAlias()));
+	connect(ui.spinBox_MaxDepth, SIGNAL(valueChanged( int)), this, SLOT(slotSpinboxMaxDepth()));
 
 	dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene)->_widget = this;
 }
@@ -112,6 +115,9 @@ void Widget::SetDeafaultParamater()
 	slotSpinbox2MinID();
 	slotSpinbox3MaxID();
 	UpdataParameterAndRefreshInt("doRendering", 1, false);
+
+	UpdataParameterAndRefreshUInt( "sqrt_num_samples", ui.spinBox_AntiAlias->value(), false);
+	UpdataParameterAndRefreshUInt( "max_depth", ui.spinBox_MaxDepth->value(), false);
 }
 
 void Widget::slotDoubleSpinbox_Slider()
@@ -398,6 +404,10 @@ void Widget::slotPushButton3VolumePath()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Load Volume Data"),
 		"../../VolumeData", QString("Volume Data(*.dat)"));
+	if (fileName=="")
+	{
+		return;
+	}
 	ui.lineEdit_4->setText( fileName);
 	std::string filePath = dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene)->updateVolumeFilename( fileName.toStdString());
 	ui.lineEdit_5->setText( QString::fromStdString(filePath));
@@ -452,4 +462,14 @@ void Widget::slotPushButtonPause()
 		ui.pushButton_Pause->setText( "Go on");
 	}
 	UpdataParameterAndRefreshInt("doRendering", doRendering, false);
+}
+
+void Widget::slotSpinboxAntiAlias()
+{
+	UpdataParameterAndRefreshUInt( "sqrt_num_samples", ui.spinBox_AntiAlias->value());
+}
+
+void Widget::slotSpinboxMaxDepth()
+{
+	UpdataParameterAndRefreshUInt( "max_depth", ui.spinBox_MaxDepth->value());
 }

@@ -56,7 +56,7 @@ void PathTracerScene::initScene( InitialCameraData& camera_data )
 	m_context->setStackSize( 1800 );
 
 	m_context["scene_epsilon"]->setFloat( 1.e-3f );
-	m_context["max_depth"]->setUint(m_max_depth);
+	//m_context["max_depth"]->setUint(m_max_depth);
 	m_context["pathtrace_ray_type"]->setUint(0u);
 	m_context["pathtrace_shadow_ray_type"]->setUint(1u);
 	m_context["pathtrace_bsdf_shadow_ray_type"]->setUint(2u);
@@ -81,7 +81,7 @@ void PathTracerScene::initScene( InitialCameraData& camera_data )
 	m_context["V"]->setFloat( optix::make_float3( 0.0f, 0.0f, 0.0f ) );
 	m_context["W"]->setFloat( optix::make_float3( 0.0f, 0.0f, 0.0f ) );
 
-	m_context["sqrt_num_samples"]->setUint( m_sqrt_num_samples );
+	//m_context["sqrt_num_samples"]->setUint( m_sqrt_num_samples );
 	m_context["bad_color"]->setFloat( 0.0f, 1.0f, 0.0f );
 	m_context["bg_color"]->setFloat( optix::make_float3(0.0f) );
 

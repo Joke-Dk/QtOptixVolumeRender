@@ -18,8 +18,7 @@ private:
 	std::string _filenameTail;
 	std::string _filenamePath;
 	void ReadKind0Pbrt(optix::Context& optixCtx);
-	void ReadKind1Dat(optix::Context& optixCtx);
-	void ReadKind1Dat2(optix::Context& optixCtx);
+	void ReadKind1Dat(optix::Context& optixCtx, int xyzKind=1);
 
 	int yxz2xyz(int );
 };

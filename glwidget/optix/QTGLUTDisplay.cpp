@@ -290,7 +290,7 @@ QSize QTGLUTDisplay::minimumSizeHint() const
 
 QSize QTGLUTDisplay::sizeHint() const
 {
-	return QSize(800, 600);
+	return QSize(dynamic_cast<PathTracerScene *>(_scene)->m_width, dynamic_cast<PathTracerScene *>(_scene)->m_height);
 }
 
 //////////////////////////////////////////////////////////////////////////

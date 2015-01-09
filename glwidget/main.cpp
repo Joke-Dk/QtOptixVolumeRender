@@ -56,15 +56,11 @@ int main(int argc, char **argv)
 	//Optix Init
 	QTGLUTDisplay::init( argc, argv );
 	// Process command line options
-	unsigned int sqrt_num_samples = 1u;
 	unsigned int width = 800u, height = 600u;
 	unsigned int rr_begin_depth = 2u;
-	unsigned int max_depth = 20u;
 	float timeout = 10000000.0f;
 	PathTracerScene scene;
-	scene.setNumSamples( sqrt_num_samples );
 	scene.setDimensions( width, height );
-	scene.setMaxDepth( max_depth);
 	QTGLUTDisplay::setProgressiveDrawingTimeout(timeout);
 	QTGLUTDisplay::setUseSRGB(true);
 	QTGLUTDisplay::run( "Cornell Box Scene", &scene, QTGLUTDisplay::CDProgressive );
