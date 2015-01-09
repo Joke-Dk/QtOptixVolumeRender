@@ -17,6 +17,8 @@ rtDeclareVariable(float,        isCurve, , );
 
 rtDeclareVariable(float,        CloudCover, , );
 rtDeclareVariable(float,        CloudSharpness, , );
+rtDeclareVariable(int,        SequenceCurID, , );
+
 
 //Precomputation Intensity
 rtBuffer<float3, 1>    gridBuffer;
@@ -53,7 +55,7 @@ static __device__  __inline__ float CloudExpCurve0(float v)
 
 static __device__  __inline__ float CloudExpCurve(float v)
 {
-	if (v>=0.1f)
+	if (v>=0.1f&&SequenceCurID>140)
 		return 0.f;
 	if (v>=0.5f)
 		return 1.f;

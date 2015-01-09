@@ -363,8 +363,9 @@ std::string PathTracerScene::updateVolumeFilename( std::string filename)
 {
 	optix::int3 indexXYZ;
 	std::string path = volumeData.UpdateFilename( filename);
-	volumeData.setup(m_context, 2, indexXYZ);
+	//volumeData.setup(m_context, 2, indexXYZ);
 	saveImage.pathHead = path;
+	UpdateID( volumeData._id);
 	return path;
 }
 
@@ -373,8 +374,32 @@ void PathTracerScene::UpdateID( int id)
 	optix::int3 indexXYZ;
 	volumeData.UpdateID( id);
 	volumeData.setup(m_context, 2, indexXYZ);
+	UpdateObjID(id);
 }
 
+void PathTracerScene::UpdateObjID( int id)
+{
+	m_context["SequenceCurID"]->setInt( id);
+	if (id<141)
+	{
+		gis1reference.clear();
+		updateGeometryInstance();
+		return;
+	}
+	const float matrix_1[4*4] = 
+	{	0.,		26.98/1.62,	0,			-13.49,
+	18/1.22,	0.0,		0,			-9,
+	0,		0,			18.0/1.22,	-9,
+	0,		0,			0,			1 };
+	const optix::Matrix4x4 m1( matrix_1 );
+	char objName[20];
+	sprintf( objName, "output_%d.obj", id);
+ 	std::string obj_path1 = saveImage.pathHead+string(objName);
+	optix::GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, fogGlassMaterial);
+	gis1reference.clear();
+	gis1reference.push_back(objgroup1->getChild(0));
+	updateGeometryInstance();
+}
 
 void PathTracerScene::createEnvironmentScene()
 {
@@ -395,6 +420,7 @@ void PathTracerScene::createEnvironmentScene()
 	//updateParameter("isRayMarching", 0.f);
 	glassMaterial = DefineGlassMaterial( m_context);
 	mirrorMaterial = DefineMirrorMaterial( m_context);
+	fogGlassMaterial = DefineFogMaterial( m_context, 2, 1.3f);
 	m_pgram_bounding_box = m_context->createProgramFromPTXFile( my_ptxpath( "parallelogram.cu" ), "bounds" );
 	m_pgram_intersection = m_context->createProgramFromPTXFile( my_ptxpath( "parallelogram.cu" ), "intersect" );
 
@@ -419,7 +445,7 @@ void PathTracerScene::createEnvironmentScene()
 	light.v1       = optix::make_float3( -5.0f, 0.0f, 0.0f);
 	light.v2       = optix::make_float3( 0.0f, 0.0f, 4.0f);
 	light.normal   = normalize( cross(light.v1, light.v2) );
-	m_context["light_em"]->setFloat( 30.f);
+	m_context["light_em"]->setFloat( 20.f);
 
 	light_buffer = m_context->createBuffer( RT_BUFFER_INPUT );
 	light_buffer->setFormat( RT_FORMAT_USER );
@@ -483,7 +509,7 @@ void PathTracerScene::createEnvironmentScene()
 	case 2:
 		p0 = optix::make_float3(-13.49f, -9.f, -9.f);
 		p1 = optix::make_float3(13.49f, 9.f, 9.f);
-		volumeData.UpdateFilename( std::string("../../VolumeData/cloud/dat/Output_200.dat"));
+		volumeData.UpdateFilename( std::string("../../VolumeData/Output_60.dat"));
 		volumeData.setup(m_context, 2, indexXYZ);
 		break;
 	}
@@ -537,10 +563,8 @@ void PathTracerScene::createEnvironmentScene()
 
 	//////////////////////////////////////////////////////////////////////////
 	// Water mesh
-	if(1)
+	if(0)
 	{
-		optix::Material fogGlassMaterial = DefineFogMaterial( m_context, 2, 1.4f);
-
 		const float matrix_1[4*4] = 
 		{	0.,		26.98/1.62,	0,			-13.49,
 			18/1.22,	0.0,		0,			-9,

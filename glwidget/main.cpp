@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 	unsigned int width = 800u, height = 600u;
 	unsigned int rr_begin_depth = 2u;
 	unsigned int max_depth = 20u;
-	float timeout = 10000.0f;
+	float timeout = 10000000.0f;
 	PathTracerScene scene;
 	scene.setNumSamples( sqrt_num_samples );
 	scene.setDimensions( width, height );

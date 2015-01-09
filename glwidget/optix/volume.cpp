@@ -5,10 +5,12 @@ std::string VolumeData::UpdateFilename( std::string & filename)
 	_filename = filename;
 	int tmpIndex = _filename.find_last_of('_');
 	_filenameHead = _filename.substr( 0, tmpIndex+1);
-	tmpIndex = _filename.find_last_of('.');
-	_filenameTail = _filename.substr( tmpIndex, _filename.length()-tmpIndex);
-	tmpIndex = _filename.find_last_of('/');
-	_filenamePath = _filename.substr( 0, tmpIndex+1);
+	int tmpIndex2 = _filename.find_last_of('.');
+	_filenameTail = _filename.substr( tmpIndex2, _filename.length()-tmpIndex2);
+	int tmpIndex3 = _filename.find_last_of('/');
+	_filenamePath = _filename.substr( 0, tmpIndex3+1);
+	std::string strDigit = _filename.substr( tmpIndex+1, tmpIndex2-tmpIndex-1);
+	_id = atoi( const_cast< const char *>(strDigit.c_str()));
 	return _filenamePath;
 }
 

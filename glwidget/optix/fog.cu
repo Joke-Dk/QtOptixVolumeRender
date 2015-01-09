@@ -171,10 +171,10 @@ RT_PROGRAM void fog_shadow()
 		current_prd_shadow.attenuation = make_float3(0.f);
 		rtTerminateRay();
 		return;
-	//case 2://glass in fog shadow
-	//	current_prd_shadow.attenuation = make_float3(0.3f);
-	//	rtTerminateRay();
-	//	return;
+	case 2://glass in fog shadow
+		current_prd_shadow.attenuation = make_float3(0.3f);
+		rtTerminateRay();
+		return;
 	default:
 	case 0://fog shadow
 		float maxLength = 30.f;//ray.tmax;

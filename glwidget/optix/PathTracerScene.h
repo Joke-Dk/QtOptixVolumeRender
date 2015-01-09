@@ -47,6 +47,7 @@ public:
 	void SaveImageButton( int id = 0);
 	std::string updateVolumeFilename( std::string filename);
 	void UpdateID( int id);
+	void UpdateObjID( int id);
 
 	unsigned int   m_width;
 	unsigned int   m_height;
@@ -66,6 +67,7 @@ private:
 	optix::Material fogMaterial;
 	optix::Material glassMaterial;
 	optix::Material mirrorMaterial;
+	optix::Material fogGlassMaterial;
 
 	optix::Program miss_program_noHDR;
 	optix::Program miss_program_hasHDR;
