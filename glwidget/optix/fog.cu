@@ -167,36 +167,35 @@ RT_PROGRAM void fog_shadow()
 {
 	switch(boundMaterial)
 	{
-	case 1://mirror shadow
-		current_prd_shadow.attenuation = make_float3(0.f);
-		rtTerminateRay();
-		return;
-	case 2://glass in fog shadow
-		current_prd_shadow.attenuation = make_float3(0.3f);
-		rtTerminateRay();
-		return;
+	case 1://mirror shadow: solid
+		current_prd_shadow.attenuation *= 0.f;
+		//rtTerminateRay();
+		break;
+	case 2://glass in fog shadow: half solid
+		current_prd_shadow.attenuation *= 0.6f;
+		break;
 	default:
 	case 0://fog shadow
-		float maxLength = 30.f;//ray.tmax;
+		float maxLength = ray.tmax;
 		if(MCWoodcock)//woodcock-tracking shadow
 		{
 			float d = woodcockTracking_shadow( ray, maxLength, sigma_t);
 			if(d< maxLength-scene_epsilon)
 			{
-				current_prd_shadow.attenuation = make_float3(0.f);
+				current_prd_shadow.attenuation *= 0.f;rtTerminateRay();
 			}
 			else
 			{
-				current_prd_shadow.attenuation = make_float3(1.f);
+				rtTerminateRay();
 			}
 		}
 		else//ray-marching shadow
 		{
-			current_prd_shadow.attenuation = make_float3(1.f)*exp(-sigma_t*getOpticDepth( ray, maxLength, sigma_t));
+			current_prd_shadow.attenuation *= exp(-sigma_t*getOpticDepth( ray, maxLength, sigma_t));
 		}
-		rtTerminateRay();
-		return;
+		break;
 	}
+	rtIgnoreIntersection();
 }
 
 

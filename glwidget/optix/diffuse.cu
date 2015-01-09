@@ -20,13 +20,14 @@ RT_PROGRAM void diffuse()
 	float3 v1, v2;
 	createONB(ffnormal, v1, v2);
 	current_prd.direction = v1 * p.x + v2 * p.y + ffnormal * p.z;
-	float3 normal_color = (normalize(world_shading_normal)*0.5f + 0.5f)*0.9;
+	//float3 normal_color = (normalize(world_shading_normal)*0.5f + 0.5f)*0.9;
 	current_prd.attenuation = current_prd.attenuation * diffuse_color*0.8f; // use the diffuse_color as the diffuse response
 
 	//////////////////////////////////////////////////////////////////////////
 	// Fast preview moduel
 	//current_prd.attenuation *= dot(current_prd.direction, ffnormal);
-	//current_prd.done = 1;
+	//if (current_prd.depth >5)
+	//	current_prd.done = 1;
 	
 	current_prd.countEmitted = false;
 
