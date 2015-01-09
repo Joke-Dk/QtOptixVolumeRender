@@ -101,7 +101,7 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="cp $(InputDir)/Debug/ptx/* $(TargetDir)/Debug/ptx&#x0D;&#x0A;"
+				CommandLine=""
 			/>
 			<Tool
 				Name="Cudart Build Rule"
@@ -163,7 +163,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine="copy &quot;$(ProjectDir)/Debug/ptx/&quot; &quot;$(TargetDir)/Debug/ptx/&quot;"
 			/>
 		</Configuration>
 	</Configurations>

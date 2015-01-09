@@ -45,7 +45,7 @@
 
 int main(int argc, char **argv)
 {
-	
+
 	//////////////////////////////////////////////////////////////////////////
 	//  Display debug information in console window.
 	AllocConsole();
