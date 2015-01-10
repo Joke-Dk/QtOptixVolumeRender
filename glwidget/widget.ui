@@ -484,7 +484,7 @@
          <x>0</x>
          <y>10</y>
          <width>241</width>
-         <height>361</height>
+         <height>371</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -633,7 +633,7 @@
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>90</height>
+            <height>100</height>
            </size>
           </property>
           <property name="title">
@@ -645,21 +645,14 @@
              <x>10</x>
              <y>20</y>
              <width>221</width>
-             <height>61</height>
+             <height>74</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_7">
-            <item row="0" column="1">
-             <widget class="QLabel" name="label_12">
-              <property name="text">
-               <string>Anti Aliasing</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLabel" name="label_13">
-              <property name="text">
-               <string>Max Depth</string>
+            <item row="1" column="2">
+             <widget class="QSpinBox" name="spinBox_MaxDepth">
+              <property name="value">
+               <number>20</number>
               </property>
              </widget>
             </item>
@@ -676,12 +669,29 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="2">
-             <widget class="QSpinBox" name="spinBox_MaxDepth">
-              <property name="value">
-               <number>20</number>
+            <item row="0" column="1">
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>Anti Aliasing</string>
               </property>
              </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="label_13">
+              <property name="text">
+               <string>Max Depth</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="label_14">
+              <property name="text">
+               <string>Sample Launch ID</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QSpinBox" name="spinBox_SampleLaunchId"/>
             </item>
            </layout>
           </widget>

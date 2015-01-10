@@ -3,7 +3,6 @@ using namespace optix;
 Material DefineDiffuseMaterial( Context& m_context)
 {
 	Material& diffuseMaterial = makeMaterialPrograms( m_context, "diffuse.cu", "diffuse", "shadow");
-	diffuseMaterial["meshKind"]->setInt(0);
 	diffuseMaterial["diffuse_color"] ->setFloat(1.f,1.f,1.f);
 	return diffuseMaterial;
 }

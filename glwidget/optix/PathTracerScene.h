@@ -8,6 +8,7 @@
 #include "envmapSampler.h"
 #include "volume.h"
 #include "saveImage.h"
+#include "time.h"
 //-----------------------------------------------------------------------------
 //
 // PathTracerScene
@@ -53,6 +54,7 @@ public:
 	unsigned int   m_height;
 	EnvironmentMap envMap;
 private:
+	clock_t timeStart;
 	SaveImage saveImage;
 	VolumeData volumeData;
 	// create geometry instances

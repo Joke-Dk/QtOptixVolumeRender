@@ -168,6 +168,7 @@ RT_PROGRAM void fog_shadow()
 	switch(boundMaterial)
 	{
 	case 1://mirror shadow: solid
+	case 3://diffuse shadow: solid
 		current_prd_shadow.attenuation *= 0.f;
 		//rtTerminateRay();
 		break;
@@ -236,10 +237,15 @@ RT_PROGRAM void fog__closest_hit_radiance()
 			current_prd.origin = hitpoint;
 			switch(boundMaterial)
 			{
+			case 0:
+			default://fog
+				refract(current_prd.direction, ray.direction, ffnormal, iof);
+				current_prd.inside = !current_prd.inside;
+				break;
 			case 1://mirror
 				current_prd.direction = reflect(ray.direction, ffnormal);	
 				break;
-			case 2:
+			case 2://glass
 				if (current_prd.inside2) 
 				{
 					// Shoot outgoing ray
@@ -271,9 +277,50 @@ RT_PROGRAM void fog__closest_hit_radiance()
 					current_prd.inside2 = !current_prd.inside2;
 				}
 				break;
-			default://glass
-				refract(current_prd.direction, ray.direction, ffnormal, iof);
-				current_prd.inside = !current_prd.inside;
+			case 3://diffuse //To do!
+				current_prd.insertedDiffuse = true;
+				float u1 = rnd(current_prd.seed);
+				float u2 = rnd(current_prd.seed);
+				current_prd.direction = cosineHemisphere( u1, u2, ffnormal);
+				current_prd.attenuation = current_prd.attenuation *0.95f; // use the diffuse_color as the diffuse response
+				if (current_prd.depth >5)
+					current_prd.done = 1;
+				// Compute direct light...
+				// Or shoot one...
+				unsigned int num_lights = lights.size();
+
+				for(int i = 0; i < num_lights; ++i) 
+				{
+					ParallelogramLight light = lights[i];
+					float z1 = rnd(current_prd.seed);
+					float z2 = rnd(current_prd.seed);
+					float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2;
+
+					float Ldist = length(light_pos - hitpoint);
+					float3 L = normalize(light_pos - hitpoint);
+					float nDl = dot( ffnormal, L );
+					float LnDl = dot( light.normal, L );
+					float A = length(cross(light.v1, light.v2));
+
+					// cast shadow ray
+					if ( nDl > 0.0f && LnDl > 0.0f ) 
+					{
+						PerRayData_pathtrace_shadow shadow_prd;
+						shadow_prd.attenuation = make_float3(1.f);
+						Ray shadow_ray = make_Ray( current_prd.origin, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+						shadow_prd.origin = current_prd.origin;
+						shadow_prd.direction = L;
+						shadow_prd.seed = current_prd.seed;
+						rtTrace(top_object, shadow_ray, shadow_prd);
+
+						float3 light_attenuation = shadow_prd.attenuation;
+						if(fmaxf(light_attenuation) > 0.0f)
+						{
+							float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
+							result += light.emission * weight*light_attenuation;
+						}
+					}
+				}
 				break;
 			}
 

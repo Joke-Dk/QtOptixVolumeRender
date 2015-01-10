@@ -13,6 +13,8 @@ rtDeclareVariable(float,  hasBackground, , );
 rtDeclareVariable(float,  radianceMultipler, , );
 //rtDeclareVariable(float,  hasHDR, , );
 rtDeclareVariable(float,        isPreCompution, , );
+rtDeclareVariable(int,        sampleLaunchId, , );
+rtDeclareVariable(int,        SequenceMaxSample, , );
 
 //-----------------------------------------------------------------------------
 //
@@ -31,7 +33,7 @@ RT_PROGRAM void pathtrace_camera()
 	unsigned int samples_per_pixel = sqrt_num_samples*sqrt_num_samples;
 	float3 result = make_float3(0.0f);
 
-	unsigned int seed = tea<16>(screen.x*launch_index.y+launch_index.x, frame_number);
+	unsigned int seed = tea<16>(screen.x*launch_index.y+launch_index.x, frame_number+sampleLaunchId*SequenceMaxSample*2);
 	do {
 		unsigned int x = samples_per_pixel%sqrt_num_samples;
 		unsigned int y = samples_per_pixel/sqrt_num_samples;

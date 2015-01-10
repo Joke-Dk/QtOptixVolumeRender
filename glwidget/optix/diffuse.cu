@@ -2,7 +2,6 @@
 #include "ray.cuh"
 
 rtDeclareVariable(float3,        diffuse_color, , );
-rtDeclareVariable(int,        meshKind, , );//0-self-optix-create  //1-.obj
 
 RT_PROGRAM void diffuse()
 {
@@ -11,15 +10,7 @@ RT_PROGRAM void diffuse()
 	float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
 	float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
 
-	float3 ffnormal;
-	switch(meshKind)
-	{
-	default:
-	case 0:
-		ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );break;
-	case 1:
-		ffnormal = world_shading_normal;break;
-	}
+	float3 ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );
 
 	float3 hitpoint = ray.origin + t_hit * ray.direction;
 	current_prd.origin = hitpoint;

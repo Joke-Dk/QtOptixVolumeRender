@@ -79,6 +79,7 @@ Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
 	// UI: Rendering Parameter
 	connect(ui.spinBox_AntiAlias, SIGNAL(valueChanged( int)), this, SLOT(slotSpinboxAntiAlias()));
 	connect(ui.spinBox_MaxDepth, SIGNAL(valueChanged( int)), this, SLOT(slotSpinboxMaxDepth()));
+	connect(ui.spinBox_SampleLaunchId, SIGNAL(valueChanged( int)), this, SLOT(slotSpinboxSampleLaunchId()));
 
 	dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene)->_widget = this;
 }
@@ -118,6 +119,7 @@ void Widget::SetDeafaultParamater()
 
 	UpdataParameterAndRefreshUInt( "sqrt_num_samples", ui.spinBox_AntiAlias->value(), false);
 	UpdataParameterAndRefreshUInt( "max_depth", ui.spinBox_MaxDepth->value(), false);
+	UpdataParameterAndRefreshInt("sampleLaunchId", ui.spinBox_SampleLaunchId->value(), false);
 }
 
 void Widget::slotDoubleSpinbox_Slider()
@@ -436,12 +438,15 @@ void Widget::slotSpinbox3MaxID()
 	UpdataParameterAndRefreshInt("SequenceMaxID", ui.spinBox_3->value(), false);
 }
 
+
+
 void Widget::slotPushButtonRenderingSequence()
 {
 	//dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene)->UpdateID( ui.spinBox_2->value());
 	UpdataParameterAndRefreshInt("SequenceCurID", ui.spinBox_2->value(), false);
 	UpdataParameterAndRefreshInt("_init_", 1, false);
-	slotPushButtonPause();
+	ui.pushButton_Pause->setText( "Pause");
+	UpdataParameterAndRefreshInt("doRendering", 1, false);
 	Refresh();
 }
 
@@ -472,4 +477,9 @@ void Widget::slotSpinboxAntiAlias()
 void Widget::slotSpinboxMaxDepth()
 {
 	UpdataParameterAndRefreshUInt( "max_depth", ui.spinBox_MaxDepth->value());
+}
+
+void Widget::slotSpinboxSampleLaunchId()
+{
+	UpdataParameterAndRefreshInt("sampleLaunchId", ui.spinBox_SampleLaunchId->value());
 }

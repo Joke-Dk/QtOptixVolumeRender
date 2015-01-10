@@ -121,6 +121,7 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 		return;
 	if(m_context["_init_"]->getInt()==1)
 	{
+		timeStart = clock();
 		int SequenceCurID = m_context["SequenceCurID"]->getInt();
 		UpdateID( SequenceCurID);
 		float progresValue = float(SequenceCurID-m_context["SequenceMinID"]->getInt())/float(m_context["SequenceMaxID"]->getInt()-m_context["SequenceMinID"]->getInt())*100.f;
@@ -159,6 +160,7 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 		m_context["_init_"]->setInt(1);
 		m_camera_changed = true;
 		SaveImageButton( volumeData._id);
+		std::cout<<"Rendering time is "<<float(clock()-timeStart)/1000.f<<" s"<<std::endl;
 	}
 }
 
@@ -439,9 +441,11 @@ void PathTracerScene::createEnvironmentScene()
 	const optix::float3 white = optix::make_float3( 0.8f, 0.8f, 0.8f )*0.8f;
 	const optix::float3 black = optix::make_float3( 0.2f, 0.2f, 0.2f );
 	const optix::float3 green = optix::make_float3( 0.05f, 0.3f, 0.05f );
-	const optix::float3 blue = optix::make_float3( 0.05f, 0.05f, 0.8f );
-	const optix::float3 red   = optix::make_float3( 0.8f, 0.05f, 0.05f );
-	
+	//const optix::float3 blue = optix::make_float3( 0.05f, 0.05f, 0.8f );
+	//const optix::float3 red   = optix::make_float3( 0.8f, 0.05f, 0.05f );
+	const optix::float3 blue = optix::make_float3( 0.25f, 0.25f, 0.8f );
+	//const optix::float3 red = optix::make_float3( 0.8f, 0.25f, 0.25f );
+	const optix::float3 red   = optix::make_float3( 200.f, 100.f, 74.f )/255.f;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Light buffer
@@ -468,7 +472,7 @@ void PathTracerScene::createEnvironmentScene()
 	
 	//////////////////////////////////////////////////////////////////////////
 	// GeometryInstance 2 - Cornell Box
-	optix::float3 p0 = optix::make_float3(-14.5f, -10.5f, -10.5f);
+	optix::float3 p0 = optix::make_float3(-13.5f, -10.5f, -10.5f);
 	optix::float3 p1 = optix::make_float3(13.5f, 10.5f, 10.5f);
 	optix::float3 dp = p1-p0;
 
@@ -569,19 +573,19 @@ void PathTracerScene::createEnvironmentScene()
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	// mirror cylinder 0
+	// diffuse cylinder 0
 	if(1)
 	{
-		//optix::Material fogMirrorMaterial = DefineFogMaterial( m_context, 1);
-		const float matrix_1[4*4] = { 0.0,  0.3,  0,  -14., 
-			0.6,  0.,  0,  0.0, 
-			0,  0,  0.6, 0, 
+		optix::Material fogDiffuseMaterial = DefineFogMaterial( m_context, 3);
+		const float matrix_1[4*4] = { 0.0,  0.5,  0,  -13.5f,//-14.25, 
+			0.5,  0.,  0,  0.0, 
+			0,  0,  0.5, 0, 
 			0,  0,  0,  1 };
 		const optix::Matrix4x4 m1( matrix_1 );
-		std::string obj_path1 = ("optix/mesh/cylinder.obj");
-		optix::GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, diffuseMaterial);
+		std::string obj_path1 = ("optix/mesh/cylinder2.obj");
+		optix::GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, fogDiffuseMaterial);
 		gis1reference0.push_back(objgroup1->getChild(0));
-		setMaterial(gis1reference0.back(), diffuseMaterial, "diffuse_color", white);
+		//setMaterial(gis1reference0.back(), diffuseMaterial, "diffuse_color", white);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
