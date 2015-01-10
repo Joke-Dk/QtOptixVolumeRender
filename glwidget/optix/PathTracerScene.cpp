@@ -348,7 +348,10 @@ void PathTracerScene::updateGeometryInstance()
 
 	// 2 add cornell box
 	if( getParameter("hasCornell")>0.5f)
+	{
+		gis.insert(gis.end(), gis1reference0.begin(), gis1reference0.end());
 		gis.insert(gis.end(), gis2cornell.begin(), gis2cornell.end());
+	}
 
 	// 3 add area box
 	if( getParameter("hasArea")>0.5f)
@@ -465,7 +468,7 @@ void PathTracerScene::createEnvironmentScene()
 	
 	//////////////////////////////////////////////////////////////////////////
 	// GeometryInstance 2 - Cornell Box
-	optix::float3 p0 = optix::make_float3(-13.5f, -10.5f, -10.5f);
+	optix::float3 p0 = optix::make_float3(-14.5f, -10.5f, -10.5f);
 	optix::float3 p1 = optix::make_float3(13.5f, 10.5f, 10.5f);
 	optix::float3 dp = p1-p0;
 
@@ -540,15 +543,18 @@ void PathTracerScene::createEnvironmentScene()
 
 	//////////////////////////////////////////////////////////////////////////
 	// OBJ and SHAPE
-	//////////////////////////////////////////////////////////////////////////
-	// GeometryInstance 0 - Sphere and Cup.obj
 
-	//gis1reference.push_back( createSphere( make_float3(-6.f,0.f,6.f), 1.f));
-	////setMaterial(gis.back(), diffuse, "diffuse_color", white);
-	//setMaterial(gis1reference.back(), mirrorMaterial, "glass_color", make_float3(1.f));
+	if (0)
+	{
+		//////////////////////////////////////////////////////////////////////////
+		// GeometryInstance 0 - Sphere and Cup.obj
+		gis1reference.push_back( createSphere( optix::make_float3(-12.f,0.f,6.f), 1.f));
+		setMaterial(gis1reference.back(), diffuseMaterial, "diffuse_color", white);
+		//setMaterial(gis1reference.back(), mirrorMaterial, "glass_color", make_float3(1.f));
+	}
 
 	//////////////////////////////////////////////////////////////////////////
-	// mirror cylinder
+	// mirror cylinder 0
 	if(0)
 	{
 		optix::Material fogMirrorMaterial = DefineFogMaterial( m_context, 1);
@@ -560,6 +566,22 @@ void PathTracerScene::createEnvironmentScene()
 		std::string obj_path1 = ("optix/mesh/cylinder.obj");
 		optix::GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, fogMirrorMaterial);
 		gis1reference.push_back(objgroup1->getChild(0));
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// mirror cylinder 0
+	if(1)
+	{
+		//optix::Material fogMirrorMaterial = DefineFogMaterial( m_context, 1);
+		const float matrix_1[4*4] = { 0.0,  0.3,  0,  -14., 
+			0.6,  0.,  0,  0.0, 
+			0,  0,  0.6, 0, 
+			0,  0,  0,  1 };
+		const optix::Matrix4x4 m1( matrix_1 );
+		std::string obj_path1 = ("optix/mesh/cylinder.obj");
+		optix::GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, diffuseMaterial);
+		gis1reference0.push_back(objgroup1->getChild(0));
+		setMaterial(gis1reference0.back(), diffuseMaterial, "diffuse_color", white);
 	}
 
 	//////////////////////////////////////////////////////////////////////////

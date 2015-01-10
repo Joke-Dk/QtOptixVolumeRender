@@ -57,6 +57,7 @@ private:
 	VolumeData volumeData;
 	// create geometry instances
 	std::vector<optix::GeometryInstance> gis0volume;
+	std::vector<optix::GeometryInstance> gis1reference0;
 	std::vector<optix::GeometryInstance> gis1reference;
 	std::vector<optix::GeometryInstance> gis2cornell;
 	std::vector<optix::GeometryInstance> gis3arealight;

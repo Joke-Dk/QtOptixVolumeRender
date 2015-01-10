@@ -53,7 +53,7 @@ RT_PROGRAM void mesh_intersect( int primIdx )
         float3 n2 = normal_buffer[ n_idx.z ];
         shading_normal = normalize( n1*beta + n2*gamma + n0*(1.0f-beta-gamma) );
       }
-      geometric_normal = geo_n;
+      geometric_normal = shading_normal;//geo_n;
 
       int3 t_idx = tindex_buffer[ primIdx ];
       if ( texcoord_buffer.size() == 0 || t_idx.x < 0 || t_idx.y < 0 || t_idx.z < 0 ) {
