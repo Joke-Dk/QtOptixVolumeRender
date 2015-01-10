@@ -439,7 +439,7 @@ void Widget::slotSpinbox3MaxID()
 void Widget::slotPushButtonRenderingSequence()
 {
 	//dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene)->UpdateID( ui.spinBox_2->value());
-	//UpdataParameterAndRefreshInt("SequenceCurID", ui.spinBox_2->value(), false);
+	UpdataParameterAndRefreshInt("SequenceCurID", ui.spinBox_2->value(), false);
 	UpdataParameterAndRefreshInt("_init_", 1, false);
 	slotPushButtonPause();
 	Refresh();

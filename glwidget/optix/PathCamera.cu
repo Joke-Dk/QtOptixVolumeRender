@@ -47,9 +47,10 @@ RT_PROGRAM void pathtrace_camera()
 		prd.done = false;
 		prd.inside = false;
 		prd.inside2 = false;
+		prd.insertedDiffuse = false;
 		prd.seed = seed;
 		prd.depth = 0;
-
+		
 		for(;;) {
 			Ray ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
 			rtTrace(top_object, ray, prd);

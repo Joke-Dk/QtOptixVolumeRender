@@ -436,6 +436,7 @@ void PathTracerScene::createEnvironmentScene()
 	const optix::float3 white = optix::make_float3( 0.8f, 0.8f, 0.8f )*0.8f;
 	const optix::float3 black = optix::make_float3( 0.2f, 0.2f, 0.2f );
 	const optix::float3 green = optix::make_float3( 0.05f, 0.3f, 0.05f );
+	const optix::float3 blue = optix::make_float3( 0.05f, 0.05f, 0.8f );
 	const optix::float3 red   = optix::make_float3( 0.8f, 0.05f, 0.05f );
 	
 
@@ -476,10 +477,10 @@ void PathTracerScene::createEnvironmentScene()
 	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
 	//left
 	gis2cornell.push_back( createParallelogram( p0, optix::make_float3( 0.0f, 0.0f, dp.z),optix::make_float3( 0.f , dp.y, 0.0f) ) );
-	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", green);
+	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", red);
 	//right
 	gis2cornell.push_back( createParallelogram( p1, -optix::make_float3( 0.0f, 0.0f, dp.z),-optix::make_float3( 0.f , dp.y, 0.0f) ) );
-	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", red);
+	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", blue);
 	//behind
 	gis2cornell.push_back( createParallelogram( p0, optix::make_float3( dp.x, 0.0f, 0.f),optix::make_float3( 0.f , dp.y, 0.0f) ) );
 	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);

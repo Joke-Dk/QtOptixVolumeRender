@@ -5,6 +5,8 @@ rtDeclareVariable(float3,        diffuse_color, , );
 
 RT_PROGRAM void diffuse()
 {
+	current_prd.insertedDiffuse = true;
+
 	float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
 	float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
 
@@ -26,8 +28,8 @@ RT_PROGRAM void diffuse()
 	//////////////////////////////////////////////////////////////////////////
 	// Fast preview moduel
 	//current_prd.attenuation *= dot(current_prd.direction, ffnormal);
-	//if (current_prd.depth >5)
-	//	current_prd.done = 1;
+	if (current_prd.depth >5)
+		current_prd.done = 1;
 	
 	current_prd.countEmitted = false;
 

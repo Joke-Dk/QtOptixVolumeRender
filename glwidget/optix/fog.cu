@@ -225,7 +225,9 @@ RT_PROGRAM void fog__closest_hit_radiance()
 	if (current_prd.inside) 
 	{
 		float d;
-		if(MCWoodcock)
+		if(current_prd.insertedDiffuse)
+			d = RT_DEFAULT_MAX;
+		else if(MCWoodcock)
 			d = woodcockTracking( ray, t_hit, sigma_t);//1000.f;//woodcockTracking(0.1f, r1);
 		else
 			d = rayMarching( ray, t_hit, sigma_t);
