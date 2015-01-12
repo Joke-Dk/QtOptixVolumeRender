@@ -9,10 +9,10 @@ public:
 	std::string UpdateFilename( std::string & filename);
 	void UpdateID( int id);
 
-	void setup(optix::Context& optixCtx, int kindVolume, optix::int3& indexXYZ);
+	void setup(optix::Context& optixCtx, int kindVolume);
 	int _id;
-private:
 	optix::int3 _indexXYZ;
+private:
 	std::string _filename;
 	std::string _filenameHead;
 	std::string _filenameTail;

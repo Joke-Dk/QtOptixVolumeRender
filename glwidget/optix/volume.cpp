@@ -22,7 +22,7 @@ void VolumeData::UpdateID( int id)
 	_filename = _filenameHead+ std::string(tmpID)+_filenameTail;
 }
 
-void VolumeData::setup(optix::Context& optixCtx, int kindVolume, optix::int3& indexXYZ)
+void VolumeData::setup(optix::Context& optixCtx, int kindVolume)
 {
 	switch(kindVolume)
 	{
@@ -36,7 +36,6 @@ void VolumeData::setup(optix::Context& optixCtx, int kindVolume, optix::int3& in
 	optixCtx["index_x" ]->setInt(_indexXYZ.x );
 	optixCtx["index_y" ]->setInt(_indexXYZ.y );
 	optixCtx["index_z" ]->setInt(_indexXYZ.z );  
-	indexXYZ = _indexXYZ;
 }
 
 

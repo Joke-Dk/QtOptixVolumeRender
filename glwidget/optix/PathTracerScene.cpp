@@ -366,9 +366,7 @@ void PathTracerScene::updateGeometryInstance()
 
 std::string PathTracerScene::updateVolumeFilename( std::string filename)
 {
-	optix::int3 indexXYZ;
 	std::string path = volumeData.UpdateFilename( filename);
-	//volumeData.setup(m_context, 2, indexXYZ);
 	saveImage.pathHead = path;
 	UpdateID( volumeData._id);
 	return path;
@@ -378,7 +376,7 @@ void PathTracerScene::UpdateID( int id)
 {
 	optix::int3 indexXYZ;
 	volumeData.UpdateID( id);
-	volumeData.setup(m_context, 2, indexXYZ);
+	volumeData.setup(m_context, 2);
 	UpdateObjID(id);
 }
 
@@ -441,11 +439,11 @@ void PathTracerScene::createEnvironmentScene()
 	const optix::float3 white = optix::make_float3( 0.8f, 0.8f, 0.8f )*0.8f;
 	const optix::float3 black = optix::make_float3( 0.2f, 0.2f, 0.2f );
 	const optix::float3 green = optix::make_float3( 0.05f, 0.3f, 0.05f );
-	//const optix::float3 blue = optix::make_float3( 0.05f, 0.05f, 0.8f );
-	//const optix::float3 red   = optix::make_float3( 0.8f, 0.05f, 0.05f );
-	const optix::float3 blue = optix::make_float3( 0.25f, 0.25f, 0.8f );
+	const optix::float3 blue = optix::make_float3( 0.05f, 0.05f, 0.8f );
+	const optix::float3 red   = optix::make_float3( 0.8f, 0.05f, 0.05f );
+	//const optix::float3 blue = optix::make_float3( 0.25f, 0.25f, 0.8f );
 	//const optix::float3 red = optix::make_float3( 0.8f, 0.25f, 0.25f );
-	const optix::float3 red   = optix::make_float3( 200.f, 100.f, 74.f )/255.f;
+	//const optix::float3 red   = optix::make_float3( 200.f, 100.f, 74.f )/255.f;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Light buffer
@@ -496,7 +494,7 @@ void PathTracerScene::createEnvironmentScene()
 	//setMaterial(gis.back(), diffuseMaterial, "diffuse_color", white);
 
 	//load volume data
-	optix::int3 indexXYZ;
+	//optix::int3 indexXYZ;
 	int volumeSelect = 2;
 	switch( volumeSelect)
 	{
@@ -505,20 +503,17 @@ void PathTracerScene::createEnvironmentScene()
 		// GeometryInstance 0 - Volume Box
 		p0 = optix::make_float3(-10.49f, -10.49f, -4.f);
 		p1 = optix::make_float3(10.49f, 10.49f, 4.f);
-		volumeData.UpdateFilename( std::string("optix/volume/density_render.70.pbrt"));
-		volumeData.setup(m_context, 0, indexXYZ);
+		updateVolumeFilename( std::string("optix/volume/density_render.70.pbrt"));
 		break;
 	case 1:
 		p0 = optix::make_float3(-6.f, -10.49f, -6.f);
 		p1 = optix::make_float3(6.f, 9.49f, 6.f);
-		volumeData.UpdateFilename( std::string("../../VolumeData/Output_109.dat"));
-		volumeData.setup(m_context, 1, indexXYZ);
+		updateVolumeFilename( std::string("../../VolumeData/Output_109.dat"));
 		break;
 	case 2:
 		p0 = optix::make_float3(-13.49f, -9.f, -9.f);
 		p1 = optix::make_float3(13.49f, 9.f, 9.f);
-		volumeData.UpdateFilename( std::string("../../VolumeData/Output_60.dat"));
-		volumeData.setup(m_context, 2, indexXYZ);
+		updateVolumeFilename( std::string("../../VolumeData/Output_170.dat"));
 		break;
 	}
 	m_context["P0"]->setFloat(p0.x, p0.y, p0.z );
@@ -598,7 +593,7 @@ void PathTracerScene::createEnvironmentScene()
 			0,		0,			18.0/1.22,	-9,
 			0,		0,			0,			1 };
 		const optix::Matrix4x4 m1( matrix_1 );
-		std::string obj_path1 = ("../../VolumeData/ObjCloud/output_200.obj");
+		std::string obj_path1 = ("../../VolumeData/output_170.obj");
 		optix::GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, fogGlassMaterial);
 		gis1reference.push_back(objgroup1->getChild(0));
 	}
@@ -654,17 +649,19 @@ void PathTracerScene::createEnvironmentScene()
 	// Setup output buffer 2, 3
 	//m_context["gridBuffer"]->set(createOutputBuffer( RT_FORMAT_FLOAT4, 100, 100, 40));
 
+	if(1)//FLD
+	{
+		optix::int3 indexXYZ = volumeData._indexXYZ;
+		int indexN = indexXYZ.x*indexXYZ.y*indexXYZ.z;
+		optix::Buffer gridData = m_context->createBuffer(RT_BUFFER_INPUT_OUTPUT);
+		gridData->setFormat(RT_FORMAT_FLOAT3);
+		gridData->setSize(indexN);
+		m_context["gridBuffer"]->setBuffer( gridData );
 
-	int indexN = indexXYZ.x*indexXYZ.y*indexXYZ.z;
-	optix::Buffer gridData = m_context->createBuffer(RT_BUFFER_INPUT_OUTPUT);
-	gridData->setFormat(RT_FORMAT_FLOAT3);
-	gridData->setSize(indexN);
-	m_context["gridBuffer"]->setBuffer( gridData );
-
-	optix::Buffer gridFluence = m_context->createBuffer(RT_BUFFER_INPUT_OUTPUT);
-	gridFluence->setFormat(RT_FORMAT_FLOAT3);
-	gridFluence->setSize(indexN);
-	m_context["gridFluence"]->setBuffer( gridFluence );
-
+		optix::Buffer gridFluence = m_context->createBuffer(RT_BUFFER_INPUT_OUTPUT);
+		gridFluence->setFormat(RT_FORMAT_FLOAT3);
+		gridFluence->setSize(indexN);
+		m_context["gridFluence"]->setBuffer( gridFluence );
+	}
 
 }
