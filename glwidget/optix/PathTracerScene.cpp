@@ -15,6 +15,7 @@
 //#include "helpers.h"
 #include <ImageLoader.h>
 #include "../widget.h"
+#include "parallelogram.h"
 using namespace std;
 
 
@@ -213,6 +214,9 @@ optix::GeometryInstance PathTracerScene::createParallelogram( const optix::float
 													  const optix::float3& offset1,
 													  const optix::float3& offset2)
 {
+	return Parallelogram( m_context, anchor, offset1, offset2).getGeometryInstance();
+
+#if 0
 	optix::Geometry parallelogram = m_context->createGeometry();
 	parallelogram->setPrimitiveCount( 1u );
 	parallelogram->setIntersectionProgram( m_pgram_intersection );
@@ -233,6 +237,7 @@ optix::GeometryInstance PathTracerScene::createParallelogram( const optix::float
 	optix::GeometryInstance gi = m_context->createGeometryInstance();
 	gi->setGeometry(parallelogram);
 	return gi;
+#endif
 }
 
 optix::GeometryInstance PathTracerScene::createSphere( const optix::float3& p, float r)
@@ -424,8 +429,8 @@ void PathTracerScene::createEnvironmentScene()
 	glassMaterial = DefineGlassMaterial( m_context);
 	mirrorMaterial = DefineMirrorMaterial( m_context);
 	fogGlassMaterial = DefineFogMaterial( m_context, 2, 1.3f);
-	m_pgram_bounding_box = m_context->createProgramFromPTXFile( my_ptxpath( "parallelogram.cu" ), "bounds" );
-	m_pgram_intersection = m_context->createProgramFromPTXFile( my_ptxpath( "parallelogram.cu" ), "intersect" );
+	//m_pgram_bounding_box = m_context->createProgramFromPTXFile( my_ptxpath( "parallelogram.cu" ), "bounds" );
+	//m_pgram_intersection = m_context->createProgramFromPTXFile( my_ptxpath( "parallelogram.cu" ), "intersect" );
 
 
 
@@ -461,11 +466,10 @@ void PathTracerScene::createEnvironmentScene()
 
 	//////////////////////////////////////////////////////////////////////////
 	// GeometryInstance 3 - light  
-	gis3arealight.push_back( createParallelogram( light.corner,
-		light.v1,
-		light.v2 ) );
-	setMaterial(gis3arealight.back(), areaMaterial, "emission_color", optix::make_float3(1.f));
-
+	//gis3arealight.push_back( createParallelogram( light.corner,
+	//	light.v1,
+	//	light.v2 ) );
+	//setMaterial(gis3arealight.back(), areaMaterial, "emission_color", optix::make_float3(1.f));
 	
 	
 	//////////////////////////////////////////////////////////////////////////
@@ -475,7 +479,7 @@ void PathTracerScene::createEnvironmentScene()
 	optix::float3 dp = p1-p0;
 
 	//floor
-	gis2cornell.push_back( createParallelogram( p0, optix::make_float3( 0.0f, 0.0f, dp.z),optix::make_float3( dp.x, 0.0f, 0.0f) ) );
+	gis2cornell.push_back( createParallelogram( p0, optix::make_float3( 0.0f, 0.0f, dp.z),optix::make_float3( dp.x, 0.0f, 0.0f)));
 	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
 	//ceiling
 	gis2cornell.push_back( createParallelogram( p1, -optix::make_float3( 0.0f, 0.0f, dp.z),-optix::make_float3( dp.x, 0.0f, 0.0f) ) );
@@ -489,6 +493,7 @@ void PathTracerScene::createEnvironmentScene()
 	//behind
 	gis2cornell.push_back( createParallelogram( p0, optix::make_float3( dp.x, 0.0f, 0.f),optix::make_float3( 0.f , dp.y, 0.0f) ) );
 	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
+
 	//front
 	//gis.push_back( createParallelogram( p1, -make_float3( dp.x, 0.0f, 0.f), -make_float3( 0.f , dp.y, 0.0f) ) );
 	//setMaterial(gis.back(), diffuseMaterial, "diffuse_color", white);
@@ -538,7 +543,7 @@ void PathTracerScene::createEnvironmentScene()
 	gis0volume.push_back( createParallelogram( p1, -optix::make_float3( dp.x, 0.0f, 0.f), -optix::make_float3( 0.f , dp.y, 0.0f) ) );
 	setMaterial(gis0volume.back(), fogMaterial, "diffuse_color", white);
 
-		
+
 
 	//////////////////////////////////////////////////////////////////////////
 	// OBJ and SHAPE

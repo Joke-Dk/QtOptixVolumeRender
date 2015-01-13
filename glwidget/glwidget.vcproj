@@ -326,10 +326,6 @@
 						>
 					</File>
 					<File
-						RelativePath=".\optix\PathTracerScene.h"
-						>
-					</File>
-					<File
 						RelativePath=".\optix\random.h"
 						>
 					</File>
@@ -347,10 +343,6 @@
 					</File>
 					<File
 						RelativePath=".\optix\material.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\optix\PathTracerScene.cpp"
 						>
 					</File>
 				</Filter>
@@ -403,6 +395,38 @@
 					</File>
 					<File
 						RelativePath=".\saveImage.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="shape"
+					>
+					<File
+						RelativePath=".\optix\parallelogram.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\parallelogram.h"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\shape.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\shape.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="scene"
+					>
+					<File
+						RelativePath=".\optix\PathTracerScene.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\PathTracerScene.h"
 						>
 					</File>
 				</Filter>
