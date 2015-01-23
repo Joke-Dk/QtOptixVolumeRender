@@ -278,10 +278,6 @@
 						>
 					</File>
 					<File
-						RelativePath=".\optix\parallelogram.cu"
-						>
-					</File>
-					<File
 						RelativePath=".\optix\PathCamera.cu"
 						>
 					</File>
@@ -291,10 +287,6 @@
 					</File>
 					<File
 						RelativePath=".\optix\ray.cuh"
-						>
-					</File>
-					<File
-						RelativePath=".\optix\sphere.cu"
 						>
 					</File>
 					<File
@@ -406,6 +398,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\optix\parallelogram.cu"
+						>
+					</File>
+					<File
 						RelativePath=".\optix\parallelogram.h"
 						>
 					</File>
@@ -415,6 +411,10 @@
 					</File>
 					<File
 						RelativePath=".\optix\shape.h"
+						>
+					</File>
+					<File
+						RelativePath=".\optix\sphere.cu"
 						>
 					</File>
 				</Filter>
