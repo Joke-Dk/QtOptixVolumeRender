@@ -3,10 +3,16 @@
 #include <ObjLoader.h>
 class Shape
 {
-private:
-	optix::GeometryInstance _gi;
 public:
 	Shape(){}
-	void setGeometryInstance( optix::GeometryInstance gi);
 	optix::GeometryInstance getGeometryInstance();
+	optix::GeometryGroup getGeometryGroup();
+protected:
+	optix::GeometryInstance _gi;
+	optix::Geometry _geometry;
+	optix::GeometryGroup _gg;
+	virtual bool isGroups()=0;
+	void init( optix::Context& optixCtx);
+	void setGeometryInstance( );
+	virtual void setup( optix::Context& optixCtx)=0;
 };

@@ -1,12 +1,31 @@
 #include "shape.h"
 
-void Shape::setGeometryInstance( optix::GeometryInstance gi)
+void Shape::init( optix::Context& optixCtx)
 {
-	_gi = gi;
+
+	setup(optixCtx);
+	_geometry = optixCtx->createGeometry();
+	_geometry->setPrimitiveCount( 1u );
+	if ( isGroups())
+	{
+		_gg = optixCtx->createGeometryGroup();
+	}
+	_gi = optixCtx->createGeometryInstance();
+
+}
+
+void Shape::setGeometryInstance( )
+{
+	_gi->setGeometry(_geometry);
 }
 
 optix::GeometryInstance Shape::getGeometryInstance()
 {
 	return _gi;
+}
+
+optix::GeometryGroup Shape::getGeometryGroup()
+{
+	return _gg;
 }
 

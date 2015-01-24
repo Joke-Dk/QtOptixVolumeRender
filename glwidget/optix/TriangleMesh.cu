@@ -76,7 +76,7 @@ RT_PROGRAM void mesh_intersect( int primIdx )
 }
 
 
-RT_PROGRAM void mesh_bounds (int primIdx, float result[6])
+RT_PROGRAM void mesh_bounds(int primIdx, float result[6])
 {
   const int3 v_idx = vindex_buffer[primIdx];
 

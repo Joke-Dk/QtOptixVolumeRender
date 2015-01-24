@@ -16,6 +16,8 @@
 #include <ImageLoader.h>
 #include "../widget.h"
 #include "parallelogram.h"
+#include "sphere.h"
+#include "trianglemesh.h"
 using namespace std;
 
 
@@ -199,86 +201,18 @@ optix::Buffer PathTracerScene::getOutputBuffer()
 	return m_context["output_buffer"]->getBuffer();
 }
 
-optix::GeometryGroup PathTracerScene::createObjloader( const std::string& path, const optix::Matrix4x4 m0, const optix::Material& material0)
-{
-	optix::GeometryGroup geomgroup = m_context->createGeometryGroup();
-	//std::string prog_path = std::string(sutilSamplesPtxDir()) + "/glass_generated_triangle_mesh_iterative.cu.ptx";
-	optix::Program mesh_intersect = m_context->createProgramFromPTXFile( my_ptxpath( "TriangleMesh.cu" ), "mesh_intersect"  );
-	ObjLoader objloader0( (path).c_str(), m_context, geomgroup, material0 );
-	objloader0.setIntersectProgram( mesh_intersect );
-	objloader0.load( m0 );
-	return geomgroup;
-}
-
-optix::GeometryInstance PathTracerScene::createParallelogram( const optix::float3& anchor,
-													  const optix::float3& offset1,
-													  const optix::float3& offset2)
-{
-	return Parallelogram( m_context, anchor, offset1, offset2).getGeometryInstance();
-
-#if 0
-	optix::Geometry parallelogram = m_context->createGeometry();
-	parallelogram->setPrimitiveCount( 1u );
-	parallelogram->setIntersectionProgram( m_pgram_intersection );
-	parallelogram->setBoundingBoxProgram( m_pgram_bounding_box );
-
-	optix::float3 normal = normalize( cross( offset1, offset2 ) );
-	float d = dot( normal, anchor );
-	optix::float4 plane = make_float4( normal, d );
-
-	optix::float3 v1 = offset1 / dot( offset1, offset1 );
-	optix::float3 v2 = offset2 / dot( offset2, offset2 );
-
-	parallelogram["plane"]->setFloat( plane );
-	parallelogram["anchor"]->setFloat( anchor );
-	parallelogram["v1"]->setFloat( v1 );
-	parallelogram["v2"]->setFloat( v2 );
-
-	optix::GeometryInstance gi = m_context->createGeometryInstance();
-	gi->setGeometry(parallelogram);
-	return gi;
-#endif
-}
-
-optix::GeometryInstance PathTracerScene::createSphere( const optix::float3& p, float r)
-{
-	optix::Geometry sphere = m_context->createGeometry();
-	sphere->setPrimitiveCount( 1u );
-	sphere->setBoundingBoxProgram( m_context->createProgramFromPTXFile( my_ptxpath("sphere.cu" ), "bounds" ) );
-	sphere->setIntersectionProgram( m_context->createProgramFromPTXFile( my_ptxpath( "sphere.cu" ), "robust_intersect" ) );
-	sphere["sphere"]->setFloat( p.x, p.y, p.z, r );
-	optix::GeometryInstance gi = m_context->createGeometryInstance();
-	gi->setGeometry(sphere);
-	return gi;
-}
-
-//GeometryInstance PathTracerScene::createLightParallelogram( const float3& anchor,
-//                                                            const float3& offset1,
-//                                                            const float3& offset2,
-//                                                            int lgt_instance)
+//optix::GeometryGroup PathTracerScene::createObjloader( const std::string& path, const optix::Matrix4x4 m0, const optix::Material& material0)
 //{
-//  Geometry parallelogram = m_context->createGeometry();
-//  parallelogram->setPrimitiveCount( 1u );
-//  parallelogram->setIntersectionProgram( m_pgram_intersection );
-//  parallelogram->setBoundingBoxProgram( m_pgram_bounding_box );
-//
-//  float3 normal = normalize( cross( offset1, offset2 ) );
-//  float d = dot( normal, anchor );
-//  float4 plane = make_float4( normal, d );
-//
-//  float3 v1 = offset1 / dot( offset1, offset1 );
-//  float3 v2 = offset2 / dot( offset2, offset2 );
-//
-//  parallelogram["plane"]->setFloat( plane );
-//  parallelogram["anchor"]->setFloat( anchor );
-//  parallelogram["v1"]->setFloat( v1 );
-//  parallelogram["v2"]->setFloat( v2 );
-//  parallelogram["lgt_instance"]->setInt( lgt_instance );
-//
-//  GeometryInstance gi = m_context->createGeometryInstance();
-//  gi->setGeometry(parallelogram);
-//  return gi;
+//	optix::GeometryGroup geomgroup = m_context->createGeometryGroup();
+//	//std::string prog_path = std::string(sutilSamplesPtxDir()) + "/glass_generated_triangle_mesh_iterative.cu.ptx";
+//	optix::Program mesh_intersect = m_context->createProgramFromPTXFile( my_ptxpath( "TriangleMesh.cu" ), "mesh_intersect"  );
+//	ObjLoader objloader0( (path).c_str(), m_context, geomgroup, material0 );
+//	objloader0.setIntersectProgram( mesh_intersect );
+//	objloader0.load( m0 );
+//	return geomgroup;
 //}
+
+
 
 void PathTracerScene::setMaterial( optix::GeometryInstance& gi,
 								  optix::Material material,
@@ -403,9 +337,8 @@ void PathTracerScene::UpdateObjID( int id)
 	char objName[20];
 	sprintf( objName, "output_%d.obj", id);
  	std::string obj_path1 = saveImage.pathHead+string(objName);
-	optix::GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, fogGlassMaterial);
 	gis1reference.clear();
-	gis1reference.push_back(objgroup1->getChild(0));
+	gis1reference.push_back(createObjloader( m_context, obj_path1, m1, fogGlassMaterial));
 	updateGeometryInstance();
 }
 
@@ -479,19 +412,19 @@ void PathTracerScene::createEnvironmentScene()
 	optix::float3 dp = p1-p0;
 
 	//floor
-	gis2cornell.push_back( createParallelogram( p0, optix::make_float3( 0.0f, 0.0f, dp.z),optix::make_float3( dp.x, 0.0f, 0.0f)));
+	gis2cornell.push_back( createParallelogram( m_context, p0, optix::make_float3( 0.0f, 0.0f, dp.z),optix::make_float3( dp.x, 0.0f, 0.0f)));
 	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
 	//ceiling
-	gis2cornell.push_back( createParallelogram( p1, -optix::make_float3( 0.0f, 0.0f, dp.z),-optix::make_float3( dp.x, 0.0f, 0.0f) ) );
+	gis2cornell.push_back( createParallelogram( m_context, p1, -optix::make_float3( 0.0f, 0.0f, dp.z),-optix::make_float3( dp.x, 0.0f, 0.0f) ) );
 	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
 	//left
-	gis2cornell.push_back( createParallelogram( p0, optix::make_float3( 0.0f, 0.0f, dp.z),optix::make_float3( 0.f , dp.y, 0.0f) ) );
+	gis2cornell.push_back( createParallelogram( m_context, p0, optix::make_float3( 0.0f, 0.0f, dp.z),optix::make_float3( 0.f , dp.y, 0.0f) ) );
 	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", red);
 	//right
-	gis2cornell.push_back( createParallelogram( p1, -optix::make_float3( 0.0f, 0.0f, dp.z),-optix::make_float3( 0.f , dp.y, 0.0f) ) );
+	gis2cornell.push_back( createParallelogram( m_context, p1, -optix::make_float3( 0.0f, 0.0f, dp.z),-optix::make_float3( 0.f , dp.y, 0.0f) ) );
 	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", blue);
 	//behind
-	gis2cornell.push_back( createParallelogram( p0, optix::make_float3( dp.x, 0.0f, 0.f),optix::make_float3( 0.f , dp.y, 0.0f) ) );
+	gis2cornell.push_back( createParallelogram( m_context, p0, optix::make_float3( dp.x, 0.0f, 0.f),optix::make_float3( 0.f , dp.y, 0.0f) ) );
 	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
 
 	//front
@@ -518,29 +451,29 @@ void PathTracerScene::createEnvironmentScene()
 	case 2:
 		p0 = optix::make_float3(-13.49f, -9.f, -9.f);
 		p1 = optix::make_float3(13.49f, 9.f, 9.f);
-		updateVolumeFilename( std::string("../../VolumeData/Output_170.dat"));
+		updateVolumeFilename( std::string("../../VolumeData/Output_70.dat"));
 		break;
 	}
 	m_context["P0"]->setFloat(p0.x, p0.y, p0.z );
 	m_context["P1"]->setFloat(p1.x, p1.y, p1.z );
 	dp = p1-p0;
 	//floor
-	gis0volume.push_back( createParallelogram( p0, optix::make_float3( 0.0f, 0.0f, dp.z),optix::make_float3( dp.x, 0.0f, 0.0f) ) );
+	gis0volume.push_back( createParallelogram( m_context, p0, optix::make_float3( 0.0f, 0.0f, dp.z),optix::make_float3( dp.x, 0.0f, 0.0f) ) );
 	setMaterial(gis0volume.back(), fogMaterial, "diffuse_color", white);
 	//ceiling
-	gis0volume.push_back( createParallelogram( p1, -optix::make_float3( 0.0f, 0.0f, dp.z),-optix::make_float3( dp.x, 0.0f, 0.0f) ) );
+	gis0volume.push_back( createParallelogram( m_context, p1, -optix::make_float3( 0.0f, 0.0f, dp.z),-optix::make_float3( dp.x, 0.0f, 0.0f) ) );
 	setMaterial(gis0volume.back(), fogMaterial, "diffuse_color", white);
 	//left
-	gis0volume.push_back( createParallelogram( p0, optix::make_float3( 0.0f, 0.0f, dp.z),optix::make_float3( 0.f , dp.y, 0.0f) ) );
+	gis0volume.push_back( createParallelogram( m_context, p0, optix::make_float3( 0.0f, 0.0f, dp.z),optix::make_float3( 0.f , dp.y, 0.0f) ) );
 	setMaterial(gis0volume.back(), fogMaterial, "diffuse_color", white);
 	//right
-	gis0volume.push_back( createParallelogram( p1, -optix::make_float3( 0.0f, 0.0f, dp.z),-optix::make_float3( 0.f , dp.y, 0.0f) ) );
+	gis0volume.push_back( createParallelogram( m_context, p1, -optix::make_float3( 0.0f, 0.0f, dp.z),-optix::make_float3( 0.f , dp.y, 0.0f) ) );
 	setMaterial(gis0volume.back(), fogMaterial, "diffuse_color", white);
 	//behind
-	gis0volume.push_back( createParallelogram( p0, optix::make_float3( dp.x, 0.0f, 0.f),optix::make_float3( 0.f , dp.y, 0.0f) ) );
+	gis0volume.push_back( createParallelogram( m_context, p0, optix::make_float3( dp.x, 0.0f, 0.f),optix::make_float3( 0.f , dp.y, 0.0f) ) );
 	setMaterial(gis0volume.back(), fogMaterial, "diffuse_color", white);
 	//front
-	gis0volume.push_back( createParallelogram( p1, -optix::make_float3( dp.x, 0.0f, 0.f), -optix::make_float3( 0.f , dp.y, 0.0f) ) );
+	gis0volume.push_back( createParallelogram( m_context, p1, -optix::make_float3( dp.x, 0.0f, 0.f), -optix::make_float3( 0.f , dp.y, 0.0f) ) );
 	setMaterial(gis0volume.back(), fogMaterial, "diffuse_color", white);
 
 
@@ -548,29 +481,29 @@ void PathTracerScene::createEnvironmentScene()
 	//////////////////////////////////////////////////////////////////////////
 	// OBJ and SHAPE
 
-	if (0)
+	if (1)
 	{
 		//////////////////////////////////////////////////////////////////////////
 		// GeometryInstance 0 - Sphere and Cup.obj
-		gis1reference.push_back( createSphere( optix::make_float3(-12.f,0.f,6.f), 1.f));
-		setMaterial(gis1reference.back(), diffuseMaterial, "diffuse_color", white);
+		gis2cornell.push_back( createSphere( m_context, optix::make_float3(5.f,0.f,6.f), 1.f));
+		setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
 		//setMaterial(gis1reference.back(), mirrorMaterial, "glass_color", make_float3(1.f));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	// mirror cylinder 0
-	if(0)
-	{
-		optix::Material fogMirrorMaterial = DefineFogMaterial( m_context, 1);
-		const float matrix_1[4*4] = { 0.4,  0,  0,  0, 
-			0,  0.6,  0,  -10.5, 
-			0,  0,  0.4, 0, 
-			0,  0,  0,  1 };
-		const optix::Matrix4x4 m1( matrix_1 );
-		std::string obj_path1 = ("optix/mesh/cylinder.obj");
-		optix::GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, fogMirrorMaterial);
-		gis1reference.push_back(objgroup1->getChild(0));
-	}
+	//if(0)
+	//{
+	//	optix::Material fogMirrorMaterial = DefineFogMaterial( m_context, 1);
+	//	const float matrix_1[4*4] = { 0.4,  0,  0,  0, 
+	//		0,  0.6,  0,  -10.5, 
+	//		0,  0,  0.4, 0, 
+	//		0,  0,  0,  1 };
+	//	const optix::Matrix4x4 m1( matrix_1 );
+	//	std::string obj_path1 = ("optix/mesh/cylinder.obj");
+	//	optix::GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, fogMirrorMaterial);
+	//	gis1reference.push_back(objgroup1->getChild(0));
+	//}
 
 	//////////////////////////////////////////////////////////////////////////
 	// diffuse cylinder 0
@@ -583,25 +516,9 @@ void PathTracerScene::createEnvironmentScene()
 			0,  0,  0,  1 };
 		const optix::Matrix4x4 m1( matrix_1 );
 		std::string obj_path1 = ("optix/mesh/cylinder2.obj");
-		optix::GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, fogDiffuseMaterial);
-		gis1reference0.push_back(objgroup1->getChild(0));
-		//setMaterial(gis1reference0.back(), diffuseMaterial, "diffuse_color", white);
+		gis1reference.push_back(createObjloader( m_context, obj_path1, m1, fogDiffuseMaterial));
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	// Water mesh
-	if(0)
-	{
-		const float matrix_1[4*4] = 
-		{	0.,		26.98/1.62,	0,			-13.49,
-			18/1.22,	0.0,		0,			-9,
-			0,		0,			18.0/1.22,	-9,
-			0,		0,			0,			1 };
-		const optix::Matrix4x4 m1( matrix_1 );
-		std::string obj_path1 = ("../../VolumeData/output_170.obj");
-		optix::GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, fogGlassMaterial);
-		gis1reference.push_back(objgroup1->getChild(0));
-	}
 
 	//glass cup
 	//const float matrix_2[4*4] = { 2.,  0,  0,  -6, 

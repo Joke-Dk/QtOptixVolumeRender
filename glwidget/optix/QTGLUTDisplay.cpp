@@ -211,9 +211,10 @@ void QTGLUTDisplay::initializeGL()
 		buffer_height = static_cast<int>(buffer_height_rts);
 		_mouse = new Mouse( _camera, buffer_width, buffer_height );
 	} catch( optix::Exception& e ){
-		sutilReportError( e.getErrorString().c_str() );
+		std::cout<<e.getErrorString()<<std::endl;
+		//sutilReportError( e.getErrorString().c_str() );
 		std::cout<<"Init GL error! "<<std::endl;
-		exit(2);
+		system("pause");//exit(2);
 	}
 
 	// reshape window to the correct window resize

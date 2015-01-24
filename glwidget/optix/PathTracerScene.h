@@ -80,18 +80,6 @@ private:
 	virtual bool keyPressed(unsigned char key, int x, int y);
 	void createEnvironmentScene( );
 
-	optix::GeometryInstance createParallelogram( const float3& anchor,
-		const float3& offset1,
-		const float3& offset2);
-
-	optix::GeometryInstance PathTracerScene::createSphere( const float3& p, float r);
-
-	//GeometryInstance createLightParallelogram( const float3& anchor,
-	//	const float3& offset1,
-	//	const float3& offset2,
-	//	int lgt_instance = -1);
-	optix::GeometryGroup PathTracerScene::createObjloader( const std::string& path, const optix::Matrix4x4 m0,
-		const optix::Material &material0);
 	void setMaterial( optix::GeometryInstance& gi,
 		optix::Material material,
 		const std::string& color_name="",
