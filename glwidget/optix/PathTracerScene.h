@@ -1,7 +1,5 @@
 #pragma once
-
-
-#include "Sampler.h"
+#include "helpers.h"
 //#include <optixu/optixu_math_stream_namespace.h>
 #include <GLUTDisplay.h>
 #include <ObjLoader.h>

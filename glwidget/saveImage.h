@@ -1,5 +1,5 @@
 #pragma once
-#include "optix/Sampler.h"
+#include "optix/helpers.h"
 #include <ObjLoader.h>
 #include <iostream>
 #include <cassert>

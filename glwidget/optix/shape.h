@@ -1,5 +1,5 @@
 #pragma once
-#include "Sampler.h"
+#include "helpers.h"
 #include <ObjLoader.h>
 class Shape
 {

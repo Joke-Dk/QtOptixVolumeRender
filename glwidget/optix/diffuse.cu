@@ -1,4 +1,3 @@
-//#include "volume.cuh"
 #include "ray.cuh"
 
 rtDeclareVariable(float3,        diffuse_color, , );

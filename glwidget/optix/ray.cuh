@@ -1,11 +1,9 @@
 #ifndef _RAY_CUH_
 #define _RAY_CUH_
 
-#include <optix.h>
-#include <optixu/optixu_math_namespace.h>
-//#include "helpers.h"
-#include "Sampler.h"
-#include "random.h"
+#include "helpers.h"
+//#include <optix.h>
+//#include <optixu/optixu_math_namespace.h>
 
 using namespace optix;
 

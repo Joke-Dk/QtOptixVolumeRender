@@ -201,18 +201,6 @@
 						RelativePath=".\optix\helpers.h"
 						>
 					</File>
-					<File
-						RelativePath=".\optix\math.cuh"
-						>
-					</File>
-					<File
-						RelativePath=".\optix\random.h"
-						>
-					</File>
-					<File
-						RelativePath=".\optix\Sampler.h"
-						>
-					</File>
 				</Filter>
 				<Filter
 					Name="envmap"
