@@ -13,7 +13,7 @@ Material DefineGlassMaterial( Context& m_context)
 	Material& glassMaterial = makeMaterialPrograms( m_context, "glass.cu", "glass_fresnel", "glass_any_hit_shadow");
 
 	bool m_green_glass = 0;
-	glassMaterial["index_of_refraction"  ]->setFloat( 1.41f );
+	glassMaterial["index_of_refraction"  ]->setFloat( 1.4f );
 	glassMaterial["glass_color"  ]->setFloat( 1.f,1.f,1.f );
 	glassMaterial["importance_cutoff"  ]->setFloat( 0.01f );
 	glassMaterial["cutoff_color"       ]->setFloat( 0.2f, 0.2f, 0.2f );

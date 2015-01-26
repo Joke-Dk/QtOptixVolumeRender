@@ -27,8 +27,8 @@ RT_PROGRAM void diffuse()
 	//////////////////////////////////////////////////////////////////////////
 	// Fast preview moduel
 	//current_prd.attenuation *= dot(current_prd.direction, ffnormal);
-	if (current_prd.depth >5)
-		current_prd.done = 1;
+	//if (current_prd.depth >5)
+	//	current_prd.done = 1;
 	
 	current_prd.countEmitted = false;
 

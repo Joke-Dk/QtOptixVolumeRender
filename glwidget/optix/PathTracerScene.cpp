@@ -361,7 +361,7 @@ void PathTracerScene::createEnvironmentScene()
 	//updateParameter("isRayMarching", 0.f);
 	glassMaterial = DefineGlassMaterial( m_context);
 	mirrorMaterial = DefineMirrorMaterial( m_context);
-	fogGlassMaterial = DefineFogMaterial( m_context, 2, 1.3f);
+	fogGlassMaterial = DefineFogMaterial( m_context, 2, 1.4f);
 	//m_pgram_bounding_box = m_context->createProgramFromPTXFile( my_ptxpath( "parallelogram.cu" ), "bounds" );
 	//m_pgram_intersection = m_context->createProgramFromPTXFile( my_ptxpath( "parallelogram.cu" ), "intersect" );
 
@@ -485,25 +485,9 @@ void PathTracerScene::createEnvironmentScene()
 	{
 		//////////////////////////////////////////////////////////////////////////
 		// GeometryInstance 0 - Sphere and Cup.obj
-		gis2cornell.push_back( createSphere( m_context, optix::make_float3(5.f,0.f,6.f), 1.f));
+		gis2cornell.push_back( createSphere( m_context, optix::make_float3(5.f,-7.f,0.f), 3.f));
 		setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
-		//setMaterial(gis1reference.back(), mirrorMaterial, "glass_color", make_float3(1.f));
 	}
-
-	//////////////////////////////////////////////////////////////////////////
-	// mirror cylinder 0
-	//if(0)
-	//{
-	//	optix::Material fogMirrorMaterial = DefineFogMaterial( m_context, 1);
-	//	const float matrix_1[4*4] = { 0.4,  0,  0,  0, 
-	//		0,  0.6,  0,  -10.5, 
-	//		0,  0,  0.4, 0, 
-	//		0,  0,  0,  1 };
-	//	const optix::Matrix4x4 m1( matrix_1 );
-	//	std::string obj_path1 = ("optix/mesh/cylinder.obj");
-	//	optix::GeometryGroup& objgroup1 = createObjloader( obj_path1, m1, fogMirrorMaterial);
-	//	gis1reference.push_back(objgroup1->getChild(0));
-	//}
 
 	//////////////////////////////////////////////////////////////////////////
 	// diffuse cylinder 0
@@ -517,6 +501,15 @@ void PathTracerScene::createEnvironmentScene()
 		const optix::Matrix4x4 m1( matrix_1 );
 		std::string obj_path1 = ("optix/mesh/cylinder2.obj");
 		gis1reference.push_back(createObjloader( m_context, obj_path1, m1, fogDiffuseMaterial));
+
+		const float matrix_2[4*4] = { 0.5,  0,  0,  -5, 
+			0,  0.5,  0,  -10, 
+			0,  0,  0.5, 0, 
+			0,  0,  0,  1 };
+		const optix::Matrix4x4 m2( matrix_2 );
+		obj_path1 = ("optix/mesh/cognacglass.obj");
+		gis1reference.push_back(createObjloader( m_context, obj_path1, m2, fogGlassMaterial));
+
 	}
 
 
