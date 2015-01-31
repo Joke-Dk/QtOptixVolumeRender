@@ -370,6 +370,26 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="xmlParse"
+					>
+					<File
+						RelativePath=".\thirdParty\tinyxml2.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\thirdParty\tinyxml2.h"
+						>
+					</File>
+					<File
+						RelativePath=".\xmlparse.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\xmlparse.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="UI"

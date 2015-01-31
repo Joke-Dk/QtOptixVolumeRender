@@ -18,6 +18,7 @@
 #include "parallelogram.h"
 #include "sphere.h"
 #include "trianglemesh.h"
+#include "../xmlparse.h"
 using namespace std;
 
 
@@ -50,6 +51,8 @@ void PathTracerScene::SaveImageButton( int id)
 
 void PathTracerScene::initScene( InitialCameraData& camera_data )
 {
+	XmlParse xmlparse("Resources/scene.xml");
+	xmlparse.setup( m_context);
 	//m_context->setPrintEnabled(true);
 	//m_context->setPrintBufferSize(4096);
 	//m_context["MCWoodcock"]->setInt(0);
