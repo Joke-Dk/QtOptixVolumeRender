@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<scene version="0.4.0">
+	<integrator type="path"/>
+
+	<sensor type="perspective">
+		<float name="sceneEpsilon" value="0.001"/>
+		<float name="timeOut" value="1000000.0"/>
+		<int name="maxDepth" value="20"/>
+		<int name="beginDepth" value="2"/>
+		<int name="sampleCount" value="1"/>
+		<float name="fov" value="45.0"/>
+		<float3 name="origin" value="0.0, 0.0, 30.0" />
+		<float3 name="target" value="0.0, 0.0, 0.0" />
+		<float3 name="up" value="0.0, 1.0, 0.0"/>
+		<int name="width" value="512"/>
+		<int name="height" value="512"/>
+	</sensor>
+
+	<shape type="cube">
+		<int name="id" value="0"/>
+		<int name="proxy" value="0"/>
+		<float3 name="p0" value="-13.49, -9, -9"/>
+		<float3 name="p1" value=" 13.49,  9,  9"/>
+		<string name="material" value="volumeBox"/>
+		<string name="filename" value="../../VolumeData/Output_170.dat"/>
+	</shape>
+	
+	<shape type="cube">
+		<string name="id" value="1"/>
+		<string name="proxy" value="0"/>
+		<string name="p0" value="-13.5, -10.5, -10.5"/>
+		<string name="p1" value=" 13.5,  10.5,  10.5"/>
+		<string name="material" value="diffuse"/>
+	</shape>
+	
+	<shape type="obj">
+		<string name="id" value="2"/>
+		<string name="proxy" value="0"/>
+		<string name="matrix" 
+		value="0.0,	16.654,	0.0,	-13.49,
+			14.754,	0.0,	0.0,	-9.0,
+			0.0,	0.0,	14.754,	-9.0,
+			0.0,	0.0,	0.0,	1.0"/>
+		<string name="material" value="glass"/>
+		<string name="filename" value="../../VolumeData/Output_170.obj"/>
+	</shape>
+</scene>
