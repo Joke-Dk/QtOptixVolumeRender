@@ -80,6 +80,7 @@ void PathTracerScene::initScene( InitialCameraData& camera_data )
 		optix::make_float3( 0.f, 0.0f, 0.0f ),    // lookat
 		optix::make_float3( 0.0f, 1.0f,  0.0f ),       // up
 		45.0f );                                // vfov
+	//camera_data = InitialCameraData( m_context["origin"]->getFloat
 
 	// Declare these so validation will pass
 	m_context["eye"]->setFloat( optix::make_float3( 0.0f, 0.0f, 0.0f ) );
