@@ -10,7 +10,7 @@ rtDeclareVariable(int,        index_x, , );
 rtDeclareVariable(int,        index_y, , );
 rtDeclareVariable(int,        index_z, , );
 rtDeclareVariable(float,        sigma_t, , );
-rtDeclareVariable(float,        alpha_value, , );
+rtDeclareVariable(float,        alpha, , );
 rtDeclareVariable(float,        g, , );
 rtDeclareVariable(int,        isCurve, , );
 

@@ -352,7 +352,7 @@ RT_PROGRAM void fog__closest_hit_radiance()
 			//current_prd.direction = v1 * p.x + v2 * p.y + ray.direction * p.z;
 
 			current_prd.direction = SampleHG( z1, z2, ray.direction);
-			current_prd.attenuation*=alpha_value;
+			current_prd.attenuation*=alpha;
 
 			// Compute direct light...
 			// Or shoot one...
