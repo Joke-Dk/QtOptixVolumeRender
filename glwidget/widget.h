@@ -15,6 +15,7 @@ public:
 	void addProgressBar( int value);
 	//////////////////////////////////////////////////////////////////////////
 	// Tab: Parameter
+	optix::Context& getContext();
 	void UpdataParameterAndRefresh(std::string str, float value, bool refresh=true);
 	void UpdataParameterAndRefreshInt(std::string str, int value, bool refresh=true);
 	void UpdataParameterAndRefreshUInt(std::string str, unsigned int value, bool refresh=true);

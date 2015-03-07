@@ -49,10 +49,17 @@ void PathTracerScene::SaveImageButton( int id)
 	saveImage.Save( m_context, id);
 }
 
-void PathTracerScene::initScene( InitialCameraData& camera_data )
+void PathTracerScene::initScensor()
 {
+	XmlParse xmlUiDefault("Resources/DefaultUI.xml");
+	xmlUiDefault.setup( m_context);
+
 	XmlParse xmlparse("Resources/scene.xml");
 	xmlparse.setup( m_context);
+}
+
+void PathTracerScene::initScene( InitialCameraData& camera_data )
+{
 	//m_context->setPrintEnabled(true);
 	//m_context->setPrintBufferSize(4096);
 	//m_context["MCWoodcock"]->setInt(0);
@@ -74,13 +81,18 @@ void PathTracerScene::initScene( InitialCameraData& camera_data )
 	optix::Buffer buffer = createOutputBuffer( RT_FORMAT_FLOAT4, m_width, m_height );
 	output_buffer->set(buffer);
 
-
+	//////////////////////////////////////////////////////////////////////////
 	// Set up camera
-	camera_data = InitialCameraData( optix::make_float3( 0.0f, 0.0f, 30.0f ), // eye
-		optix::make_float3( 0.f, 0.0f, 0.0f ),    // lookat
-		optix::make_float3( 0.0f, 1.0f,  0.0f ),       // up
-		45.0f );                                // vfov
-	//camera_data = InitialCameraData( m_context["origin"]->getFloat
+	//camera_data = InitialCameraData( optix::make_float3( 0.0f, 0.0f, 30.0f ), // eye
+	//	optix::make_float3( 0.f, 0.0f, 0.0f ),    // lookat
+	//	optix::make_float3( 0.0f, 1.0f,  0.0f ),       // up
+	//	45.0f );                                // vfov
+	camera_data = InitialCameraData( 
+		m_context["origin"]->getFloat3(), 
+		m_context["target"]->getFloat3(), 
+		m_context["up"]->getFloat3(),
+		m_context["fov"]->getFloat()
+		);
 
 	// Declare these so validation will pass
 	m_context["eye"]->setFloat( optix::make_float3( 0.0f, 0.0f, 0.0f ) );
@@ -101,7 +113,7 @@ void PathTracerScene::initScene( InitialCameraData& camera_data )
 
 	miss_program_noHDR = m_context->createProgramFromPTXFile( ptx_path, "miss" );
 	miss_program_hasHDR = m_context->createProgramFromPTXFile( ptx_path, "envmap_miss" );
-	switchHasHDR(m_context["hasHDR"]->getFloat()<0.5f? false:true);
+	switchHasHDR(m_context["hasHDR"]->getInt());
 	m_context["frame_number"]->setUint(1);
 
 	// Index of sampling_stategy (BSDF, light, MIS)
@@ -155,10 +167,11 @@ void PathTracerScene::trace( const RayGenCameraData& camera_data )
 
 	if( m_camera_changed ) {
 		m_camera_changed = false;
-		m_frame = 1;
+		m_context["frame_number"]->setUint(0);
 	}
+	m_frame = m_context["frame_number"]->getUint()+1;
+	m_context["frame_number"]->setUint( m_frame);
 	printf ("%d\r", m_frame);
-	m_context["frame_number"]->setUint( m_frame++ );
 
 	m_context->launch( 0,static_cast<unsigned int>(buffer_width),static_cast<unsigned int>(buffer_height));
 
@@ -236,8 +249,8 @@ void PathTracerScene::updateHasAreaBox( )
 {
 	// Light buffer
 	float light_em = m_context["light_em"]->getFloat();
-	float hasArea = m_context["hasArea"]->getFloat();
-	light.emission = hasArea>0.5f?optix::make_float3(light_em):optix::make_float3(0.f);
+	int hasArea = m_context["hasArea"]->getInt();
+	light.emission = hasArea?optix::make_float3(light_em):optix::make_float3(0.f);
 	memcpy( light_buffer->map(), &light, sizeof( light ) );
 	light_buffer->unmap();
 	m_context["lights"]->setBuffer( light_buffer );
@@ -286,20 +299,20 @@ void PathTracerScene::updateGeometryInstance()
 	gis.insert(gis.end(), gis0volume.begin(), gis0volume.end());
 
 	// 1 add reference
-	if (getParameter("hasBackground")>0.5f)
+	if ( m_context["hasBackground"]->getInt())
 	{
 		gis.insert(gis.end(), gis1reference.begin(), gis1reference.end());
 	}	
 
 	// 2 add cornell box
-	if( getParameter("hasCornell")>0.5f)
+	if( m_context["hasCornell"]->getInt())
 	{
 		gis.insert(gis.end(), gis1reference0.begin(), gis1reference0.end());
 		gis.insert(gis.end(), gis2cornell.begin(), gis2cornell.end());
 	}
 
 	// 3 add area box
-	if( getParameter("hasArea")>0.5f)
+	if( m_context["hasArea"]->getInt())
 		gis.insert(gis.end(), gis3arealight.begin(), gis3arealight.end());
 
 	optix::GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());

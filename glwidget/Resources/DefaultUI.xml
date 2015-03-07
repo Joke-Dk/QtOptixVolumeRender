@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<scene version="0.4.0">
+	<integrator type="path"/>
+
+	<sensor type="perspective">
+		<float name="sceneEpsilon" value="0.001"/>
+		<float name="timeOut" value="1000000.0"/>
+		<float name="sigmaT" value="15"/>
+		<float name="alpha" value="0.65"/>
+		<float name="g" value="0"/>
+		<int name="isCurve" value="1"/>
+		<float name="CloudCover" value="0.02"/>
+		<float name="CloudSharpness" value="0.001"/>
+		<int name="hasBackground" value="1"/>
+		<float name="radianceMultipler" value="1"/>
+		<int name="hasHDR" value="1"/>
+		<int name="indexHDR" value="0"/>
+		<int name="hasCornell" value="1"/>
+		<int name="hasArea" value="1"/>
+	</sensor>
+</scene>

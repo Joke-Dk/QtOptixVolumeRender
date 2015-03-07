@@ -12,7 +12,7 @@ rtDeclareVariable(int,        index_z, , );
 rtDeclareVariable(float,        sigma_t, , );
 rtDeclareVariable(float,        alpha_value, , );
 rtDeclareVariable(float,        g, , );
-rtDeclareVariable(float,        isCurve, , );
+rtDeclareVariable(int,        isCurve, , );
 
 rtDeclareVariable(float,        CloudCover, , );
 rtDeclareVariable(float,        CloudSharpness, , );
@@ -64,7 +64,7 @@ static __device__  __inline__ float CloudExpCurve(float v)
 
 static __device__ __inline__ float GetDensity(int index)
 {
-	if(isCurve>0.5f)
+	if(isCurve)
 		return  CloudExpCurve(volume_density[index]);//*.densityMultiplier//*CloudExpCurve(res)
 	return volume_density[index];
 }
@@ -109,7 +109,7 @@ static __device__ __inline__ float get_density(float3 p)
 		//debug.watch(p,x0,y0,z0, w1, w0)
 		//return 1.f
 		float res = (((d000 * w0.x + d001 * w1.x) * w0.y +  (d010 * w0.x + d011 * w1.x) * w1.y) * w0.z +  ((d100 * w0.x + d101 * w1.x) * w0.y + (d110 * w0.x + d111 * w1.x) * w1.y) * w1.z); 
-		if(isCurve>0.5f)
+		if(isCurve)
 			return  CloudExpCurve(res);
 		return res;
 	}

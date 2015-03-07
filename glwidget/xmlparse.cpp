@@ -74,4 +74,8 @@ void XmlParse::ParseSensor( optix::Context& optixCtx, tinyxml2::XMLElement *elem
 	{
 		optixCtx[element->Attribute( "name")] ->setFloat( Chars2Float3(element->Attribute( "value")));
 	}
+	else if( elementName == std::string("bool"))
+	{
+		optixCtx[element->Attribute( "name")] ->setInt( element->BoolAttribute( "value")? 1:0);
+	}
 }

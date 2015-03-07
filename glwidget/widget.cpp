@@ -55,7 +55,7 @@ Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
 	connect(ui.radioButton_3, SIGNAL(toggled(bool)), this, SLOT(slotRadioButton3()));	
 	connect(ui.radioButton_4, SIGNAL(toggled(bool)), this, SLOT(slotRadioButton4()));	
 	connect(ui.radioButton_5, SIGNAL(toggled(bool)), this, SLOT(slotRadioButton5()));	
-	SetDeafaultParamater();
+	//SetDeafaultParamater();
 
 	// UI: FLD Precompution button
 	connect(ui.pushButton, SIGNAL(clicked(bool)), this, SLOT(slotPushButton()));
@@ -81,26 +81,36 @@ Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
 	connect(ui.spinBox_MaxDepth, SIGNAL(valueChanged( int)), this, SLOT(slotSpinboxMaxDepth()));
 	connect(ui.spinBox_SampleLaunchId, SIGNAL(valueChanged( int)), this, SLOT(slotSpinboxSampleLaunchId()));
 
+	SetDeafaultParamater();
 	dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene)->_widget = this;
+}
+
+optix::Context& Widget::getContext()
+{
+	return QTGLUTDisplay::_scene->getContext();
 }
 
 void Widget::SetDeafaultParamater()
 {
-	UpdataParameterAndRefresh("sigma_t", ui.doubleSpinBox->value(), false);
-	UpdataParameterAndRefresh("alpha_value", ui.doubleSpinBox_2->value() , false);
-	UpdataParameterAndRefresh("g", ui.doubleSpinBox_3->value() , false);
-	UpdataParameterAndRefresh("CloudCover", ui.doubleSpinBox_4->value(), false);
-	UpdataParameterAndRefresh("CloudSharpness", ui.doubleSpinBox_5->value(), false);
-	UpdataParameterAndRefresh("isCurve", ui.checkBox_3->isChecked()?1.f:0.f, false);
-	UpdataParameterAndRefresh("hasBackground", ui.checkBox_4->isChecked()?1.f:0.f, false);
-	UpdataParameterAndRefresh("radianceMultipler", ui.doubleSpinBox_6->value(), false);
+	dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene)->initScensor();
+	//m_context = QTGLUTDisplay::_scene->getContext();
+
+	ui.doubleSpinBox->setValue( getContext()["sigmaT"]->getFloat());
+	ui.doubleSpinBox_2->setValue( getContext()["alpha"]->getFloat());
+	ui.doubleSpinBox_3->setValue( getContext()["g"]->getFloat());
+	ui.doubleSpinBox_4->setValue( getContext()["CloudCover"]->getFloat());
+	ui.doubleSpinBox_5->setValue( getContext()["CloudSharpness"]->getFloat());
+	ui.doubleSpinBox_6->setValue( getContext()["radianceMultipler"]->getFloat());
+	ui.checkBox->setChecked( getContext()["hasArea"]->getInt());
+	ui.checkBox_2->setChecked( getContext()["hasHDR"]->getInt());
+	ui.checkBox_3->setChecked( getContext()["isCurve"]->getInt());
+	ui.checkBox_4->setChecked( getContext()["hasBackground"]->getInt());
+	ui.checkBox_5->setChecked( getContext()["hasCornell"]->getInt());
 	UpdataEnvironmentLight( ui.comboBox->currentIndex() , false);
 	//UpdataEnvironmentLight( 1, false);
 	
-	UpdataParameterAndRefresh("hasCornell", ui.checkBox_5->isChecked()?1.f:0.f, false);
+	//UpdataParameterAndRefresh("hasCornell", ui.checkBox_5->isChecked()?1.f:0.f, false);
 	//UpdataHasHDR( ui.checkBox_2->isChecked(), false);
-	UpdataParameterAndRefresh("hasArea", ui.checkBox->isChecked()?1.f:0.f, false);
-	UpdataParameterAndRefresh("hasHDR", ui.checkBox_2->isChecked()?1.f:0.f, false);
 
 
 	UpdataParameterAndRefresh("isFLDMethod", ui.radioButton->isChecked()||ui.radioButton_4->isChecked()?0.f:1.f , false);
@@ -240,12 +250,12 @@ void Widget::slotClicked3()
 	ui.doubleSpinBox_5->setEnabled(isEnabled);
 	ui.horizontalSlider_4->setEnabled(isEnabled);
 	ui.horizontalSlider_5->setEnabled(isEnabled);
-	UpdataParameterAndRefresh("isCurve", ui.checkBox_3->isChecked()?1.f:0.f);
+	UpdataParameterAndRefreshInt("isCurve", ui.checkBox_3->isChecked()?1:0);
 }
 
 void Widget::slotClicked4()
 {
-	UpdataParameterAndRefresh("hasBackground", ui.checkBox_4->isChecked()?1.f:0.f);
+	UpdataParameterAndRefreshInt("hasBackground", ui.checkBox_4->isChecked()?1:0);
 	PathTracerScene* scene= dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene);
 	scene->updateGeometryInstance();
 }
@@ -260,54 +270,48 @@ Widget::~Widget()
 {
 }
 
+
+
+void Widget::UpdataParameterAndRefresh(std::string str, float value, bool refresh)
+{
+	getContext()[str.c_str()]->setFloat( value);
+	if(refresh)
+	{
+		getContext()["frame_number"]->setUint( 1);
+	}
+}
+
 float Widget::GetParameterValue(std::string str)
 {
-	PathTracerScene* scene= dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene);
-	return scene->m_context[str.c_str()]->getFloat();
+	return getContext()[str.c_str()]->getFloat();
 }
 
 int Widget::GetParameterValueInt(std::string str)
 {
-	PathTracerScene* scene= dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene);
-	return scene->m_context[str.c_str()]->getInt();
+	return getContext()[str.c_str()]->getInt();
 }
-
 
 void Widget::UpdataParameterAndRefreshInt(std::string str, int value, bool refresh)
 {
-	PathTracerScene* scene= dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene);
-	scene->updateParameter(str , value);
+	getContext()[str.c_str()]->setInt( value);
 	if(refresh)
 	{
-		_glWidget->resizeGL(scene->m_width, scene->m_height);
+		getContext()["frame_number"]->setUint( 1);
 	}
 }
 
 void Widget::UpdataParameterAndRefreshUInt(std::string str, unsigned int value, bool refresh)
 {
-	PathTracerScene* scene= dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene);
-	scene->updateParameter(str , value);
+	getContext()[str.c_str()]->setUint( value);
 	if(refresh)
 	{
-		_glWidget->resizeGL(scene->m_width, scene->m_height);
-	}
-}
-
-void Widget::UpdataParameterAndRefresh(std::string str, float value, bool refresh)
-{
-	PathTracerScene* scene= dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene);
-	scene->updateParameter(str , value);
-	if(refresh)
-	{
-		_glWidget->resizeGL(scene->m_width, scene->m_height);
+		getContext()["frame_number"]->setUint( 1);
 	}
 }
 
 void Widget::Refresh()
 {
-	PathTracerScene* scene= dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene);
-	_glWidget->resizeGL(scene->m_width, scene->m_height);
-
+	getContext()["frame_number"]->setUint( 1);
 }
 
 void Widget::UpdataEnvironmentLight(int idEnv, bool refresh)

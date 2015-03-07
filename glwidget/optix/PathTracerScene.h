@@ -26,6 +26,7 @@ public:
 		, m_height(512u)
 	{}
 
+	void initScensor();
 	virtual void   initScene( InitialCameraData& camera_data );
 	virtual void   trace( const RayGenCameraData& camera_data );
 	void PreCompution();
