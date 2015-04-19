@@ -332,7 +332,7 @@ void PathTracerScene::UpdateID( int id)
 {
 	optix::int3 indexXYZ;
 	volumeData.UpdateID( id);
-	volumeData.setup(m_context, 2);
+	volumeData.setup(m_context);
 	UpdateObjID(id);
 }
 
@@ -439,7 +439,7 @@ void PathTracerScene::createEnvironmentScene()
 	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", red);
 	//right
 	gis2cornell.push_back( createParallelogram( m_context, p1, -optix::make_float3( 0.0f, 0.0f, dp.z),-optix::make_float3( 0.f , dp.y, 0.0f) ) );
-	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", blue);
+	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", green);
 	//behind
 	gis2cornell.push_back( createParallelogram( m_context, p0, optix::make_float3( dp.x, 0.0f, 0.f),optix::make_float3( 0.f , dp.y, 0.0f) ) );
 	setMaterial(gis2cornell.back(), diffuseMaterial, "diffuse_color", white);
@@ -450,7 +450,7 @@ void PathTracerScene::createEnvironmentScene()
 
 	//load volume data
 	//optix::int3 indexXYZ;
-	int volumeSelect = 2;
+	volumeSelect = 0;
 	switch( volumeSelect)
 	{
 	case 0:
@@ -458,7 +458,7 @@ void PathTracerScene::createEnvironmentScene()
 		// GeometryInstance 0 - Volume Box
 		p0 = optix::make_float3(-10.49f, -10.49f, -4.f);
 		p1 = optix::make_float3(10.49f, 10.49f, 4.f);
-		updateVolumeFilename( std::string("optix/volume/density_render.70.pbrt"));
+		updateVolumeFilename( std::string("optix/volume/density_render_70.pbrt"));
 		break;
 	case 1:
 		p0 = optix::make_float3(-6.f, -10.49f, -6.f);
@@ -508,7 +508,7 @@ void PathTracerScene::createEnvironmentScene()
 
 	//////////////////////////////////////////////////////////////////////////
 	// diffuse cylinder 0
-	if(1)
+	if(0)
 	{
 		optix::Material fogDiffuseMaterial = DefineFogMaterial( m_context, 3);
 		const float matrix_1[4*4] = { 0.0,  0.5,  0,  -13.5f,//-14.25, 

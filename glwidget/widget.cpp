@@ -138,7 +138,7 @@ void Widget::slotDoubleSpinbox_Slider()
 	if(int(ui.doubleSpinBox->value()*scale) == ui.horizontalSlider->value())
 		return;
 	ui.horizontalSlider->setValue((int)(ui.doubleSpinBox->value()*scale));
-	UpdataParameterAndRefresh("sigma_t", ui.doubleSpinBox->value());
+	UpdataParameterAndRefresh("sigmaT", ui.doubleSpinBox->value());
 }
 
 void Widget::slotSlider_DoubleSpinbox()
@@ -147,7 +147,7 @@ void Widget::slotSlider_DoubleSpinbox()
 	if(int(ui.doubleSpinBox->value()*scale) == ui.horizontalSlider->value())
 		return;
 	ui.doubleSpinBox->setValue((double)(ui.horizontalSlider->value())/scale);
-	UpdataParameterAndRefresh("sigma_t", ui.doubleSpinBox->value());
+	UpdataParameterAndRefresh("sigmaT", ui.doubleSpinBox->value());
 
 }
 

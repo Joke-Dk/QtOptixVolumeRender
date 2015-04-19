@@ -9,7 +9,7 @@ rtDeclareVariable(float3,        P1, , );
 rtDeclareVariable(int,        index_x, , );
 rtDeclareVariable(int,        index_y, , );
 rtDeclareVariable(int,        index_z, , );
-rtDeclareVariable(float,        sigma_t, , );
+rtDeclareVariable(float,        sigmaT, , );
 rtDeclareVariable(float,        alpha, , );
 rtDeclareVariable(float,        g, , );
 rtDeclareVariable(int,        isCurve, , );
@@ -44,7 +44,7 @@ static __device__ __inline__ int xyz2i(int3 xyz)
 	return xyz.z*index_x*index_y+ xyz.y*index_x+xyz.x;
 }
 
-static __device__  __inline__ float CloudExpCurve0(float v)
+static __device__  __inline__ float CloudExpCurve(float v)
 {
 	float c=v-CloudCover;
 	if (c<0.f){c=0.f;}
@@ -52,7 +52,7 @@ static __device__  __inline__ float CloudExpCurve0(float v)
 	return cloudDensity;
 }
 
-static __device__  __inline__ float CloudExpCurve(float v)
+static __device__  __inline__ float CloudExpCurve0(float v)
 {
 	if (v>=0.1f&&SequenceCurID>140)
 		return 0.f;

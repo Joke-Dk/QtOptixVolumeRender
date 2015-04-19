@@ -115,7 +115,7 @@
              <item row="0" column="1">
               <widget class="QLabel" name="label">
                <property name="text">
-                <string>sigma_t</string>
+                <string>sigmaT</string>
                </property>
               </widget>
              </item>

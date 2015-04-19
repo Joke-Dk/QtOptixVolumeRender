@@ -178,7 +178,7 @@ RT_PROGRAM void fog_shadow()
 		float maxLength = ray.tmax;
 		if(MCWoodcock)//woodcock-tracking shadow
 		{
-			float d = woodcockTracking_shadow( ray, maxLength, sigma_t);
+			float d = woodcockTracking_shadow( ray, maxLength, sigmaT);
 			if(d< maxLength-scene_epsilon)
 			{
 				current_prd_shadow.attenuation *= 0.f;rtTerminateRay();
@@ -190,7 +190,7 @@ RT_PROGRAM void fog_shadow()
 		}
 		else//ray-marching shadow
 		{
-			current_prd_shadow.attenuation *= exp(-sigma_t*getOpticDepth( ray, maxLength, sigma_t));
+			current_prd_shadow.attenuation *= exp(-sigmaT*getOpticDepth(ray, maxLength, sigmaT));
 		}
 		break;
 	}
@@ -227,9 +227,9 @@ RT_PROGRAM void fog__closest_hit_radiance()
 		if(current_prd.insertedDiffuse)
 			d = RT_DEFAULT_MAX;
 		else if(MCWoodcock)
-			d = woodcockTracking( ray, t_hit, sigma_t);//1000.f;//woodcockTracking(0.1f, r1);
+			d = woodcockTracking(ray, t_hit, sigmaT);//1000.f;//woodcockTracking(0.1f, r1);
 		else
-			d = rayMarching( ray, t_hit, sigma_t);
+			d = rayMarching(ray, t_hit, sigmaT);
 		if (d>=t_hit)
 		{
 			current_prd.origin = hitpoint;

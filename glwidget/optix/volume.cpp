@@ -14,6 +14,20 @@ std::string VolumeData::UpdateFilename( std::string & filename)
 	return _filenamePath;
 }
 
+int VolumeData::getVolumeKindID()
+{
+	volumeKindID = 2;
+	if (_filenameTail==std::string(".pbrt"))
+	{
+		volumeKindID = 0;
+	}
+	else if (_filenameTail == std::string(".dat"))
+	{
+		volumeKindID = 2;
+	}
+	return volumeKindID;
+}
+
 void VolumeData::UpdateID( int id)
 {
 	_id = id;
@@ -22,16 +36,17 @@ void VolumeData::UpdateID( int id)
 	_filename = _filenameHead+ std::string(tmpID)+_filenameTail;
 }
 
-void VolumeData::setup(optix::Context& optixCtx, int kindVolume)
+void VolumeData::setup(optix::Context& optixCtx)
 {
-	switch(kindVolume)
+	getVolumeKindID();
+	switch (volumeKindID)
 	{
 	case 0:
 		ReadKind0Pbrt( optixCtx);break;
 	default:
 	case 1:
 	case 2:
-		ReadKind1Dat(optixCtx, kindVolume);break;
+		ReadKind1Dat( optixCtx);break;
 	}
 	optixCtx["index_x" ]->setInt(_indexXYZ.x );
 	optixCtx["index_y" ]->setInt(_indexXYZ.y );

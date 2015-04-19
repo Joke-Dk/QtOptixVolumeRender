@@ -53,6 +53,7 @@ public:
 	unsigned int   m_height;
 	EnvironmentMap envMap;
 private:
+	int volumeSelect;
 	clock_t timeStart;
 	SaveImage saveImage;
 	VolumeData volumeData;
