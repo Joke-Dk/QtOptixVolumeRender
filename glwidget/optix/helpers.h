@@ -219,10 +219,14 @@ struct ParallelogramLight
 	bool textured;
 };
 
-static __inline__ std::string my_ptxpath( const std::string& base )
+static __inline__ std::string my_ptxpath(const std::string& base)
 {
 	//cout<<std::string("load  ./Debug/ptx/ray_tracer_optix_" + base + ".ptx")<<endl;
-	return std::string("Debug/ptx/glwidget_" + base + ".ptx");
+#ifdef DEBUG
+	return std::string("./x64/Debug/ptx/tracy_" + base + ".ptx");
+#else
+	return std::string("./x64/Release/ptx/tracy_" + base + ".ptx");
+#endif	
 }
 
 static __device__ __inline__ void mapToDisk( optix::float2& sample )

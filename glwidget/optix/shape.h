@@ -1,6 +1,6 @@
 #pragma once
 #include "helpers.h"
-#include <ObjLoader.h>
+#include <OptixMesh.h>
 class Shape
 {
 public:

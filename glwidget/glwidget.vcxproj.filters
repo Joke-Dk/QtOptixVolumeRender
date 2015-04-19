@@ -1,0 +1,391 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;cxx;c;def</Extensions>
+    </Filter>
+    <Filter Include="Source Files\optix">
+      <UniqueIdentifier>{8465097b-0ae6-4cdf-a688-2bc02b848985}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\optix\cuda">
+      <UniqueIdentifier>{1dd9551f-42da-47ea-87a8-d3d7e10dbb04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\optix\math">
+      <UniqueIdentifier>{b6f19f9b-76bf-458e-bb7c-c5c05cc346d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\optix\envmap">
+      <UniqueIdentifier>{b6493ffc-6fcc-4026-8a50-302c56442160}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\optix\volume">
+      <UniqueIdentifier>{2d6ce840-5618-451d-8ac6-a08f6aeb198f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\optix\image">
+      <UniqueIdentifier>{0bed061b-6cb0-4801-9cee-c81c7ccdcf4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\optix\shape">
+      <UniqueIdentifier>{fcd5cda7-4ad0-47c7-aebe-ae3a627eb8fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\optix\scene">
+      <UniqueIdentifier>{e060675e-f09c-48e9-a8b9-c576b622022c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\optix\material">
+      <UniqueIdentifier>{0968f9e6-41d7-4619-a991-430cf8eab849}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\optix\xmlParse">
+      <UniqueIdentifier>{04e29e99-fc3c-4d8e-8677-146146c20ac4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{1d0e6825-aa89-4247-9cfb-5acd4cb1d322}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h</Extensions>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{2e9b49c0-7f58-4ec0-a4e8-e3fd80359c99}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{99e42fb6-c326-4f85-ba4d-7fe2f81cb34a}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="optix\envmapSampler.cpp">
+      <Filter>Source Files\optix\envmap</Filter>
+    </ClCompile>
+    <ClCompile Include="optix\volume.cpp">
+      <Filter>Source Files\optix\volume</Filter>
+    </ClCompile>
+    <ClCompile Include="saveImage.cpp">
+      <Filter>Source Files\optix\image</Filter>
+    </ClCompile>
+    <ClCompile Include="optix\parallelogram.cpp">
+      <Filter>Source Files\optix\shape</Filter>
+    </ClCompile>
+    <ClCompile Include="optix\shape.cpp">
+      <Filter>Source Files\optix\shape</Filter>
+    </ClCompile>
+    <ClCompile Include="optix\sphere.cpp">
+      <Filter>Source Files\optix\shape</Filter>
+    </ClCompile>
+    <ClCompile Include="optix\trianglemesh.cpp">
+      <Filter>Source Files\optix\shape</Filter>
+    </ClCompile>
+    <ClCompile Include="optix\PathTracerScene.cpp">
+      <Filter>Source Files\optix\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="optix\light.cpp">
+      <Filter>Source Files\optix\material</Filter>
+    </ClCompile>
+    <ClCompile Include="optix\material.cpp">
+      <Filter>Source Files\optix\material</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdParty\tinyxml2.cpp">
+      <Filter>Source Files\optix\xmlParse</Filter>
+    </ClCompile>
+    <ClCompile Include="xmlparse.cpp">
+      <Filter>Source Files\optix\xmlParse</Filter>
+    </ClCompile>
+    <ClCompile Include="optix\QTGLUTDisplay.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="widget.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="window.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_glwidget.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_QTGLUTDisplay.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_widget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_window.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_QTGLUTDisplay.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_widget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_window.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="optix\QTGLUTDisplay.h">
+      <Filter>Source Files\UI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="widget.h">
+      <Filter>Source Files\UI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="window.h">
+      <Filter>Source Files\UI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="widget.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\areaLight.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\branch-closed.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\branch-end.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\branch-more.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\branch-open.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\checkbox_checked.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\checkbox_checked_disabled.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\checkbox_checked_disabled_locked.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\checkbox_checked_hover.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\checkbox_unchecked.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\checkbox_unchecked_hover.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\checkbox_unchecked_locked.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\chunk.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\close.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\combobox.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\common.qss">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\DirectionLight.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\DirectionLight_Shadow.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\down_arrow.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\down_arrow_disabled.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\float.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="glwidget.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\left_arrow.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\menu_arrow.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\PointLight.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\PointLight_Shadow.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\radiobutton_checked.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\radiobutton_checked_hover.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\radiobutton_disabled.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\radiobutton_disabled_locked.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\radiobutton_unchecked.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\radiobutton_unchecked_hover.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\radiobutton_unchecked_locked.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\right_arrow.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\slider_handle.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\slider_handle_disabled.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\SpotLight.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\SpotLight_Shadow.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\up_arrow.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\vline.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\x.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\x_sel.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\y.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\y_sel.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\z.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\images\z_sel.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\MultiCompution.cuh">
+      <Filter>Source Files\optix\cuda</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\helpers.h">
+      <Filter>Source Files\optix\math</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\discrete.h">
+      <Filter>Source Files\optix\envmap</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\envmapSampler.h">
+      <Filter>Source Files\optix\envmap</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\discrete.cuh">
+      <Filter>Source Files\optix\envmap</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\envmap.cuh">
+      <Filter>Source Files\optix\envmap</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\envmap_distr.cuh">
+      <Filter>Source Files\optix\envmap</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\volume.h">
+      <Filter>Source Files\optix\volume</Filter>
+    </CustomBuild>
+    <CustomBuild Include="saveImage.h">
+      <Filter>Source Files\optix\image</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\intersection_refinement.h">
+      <Filter>Source Files\optix\shape</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\parallelogram.h">
+      <Filter>Source Files\optix\shape</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\shape.h">
+      <Filter>Source Files\optix\shape</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\sphere.h">
+      <Filter>Source Files\optix\shape</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\trianglemesh.h">
+      <Filter>Source Files\optix\shape</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\PathTracerScene.h">
+      <Filter>Source Files\optix\scene</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\ray.cuh">
+      <Filter>Source Files\optix\scene</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\light.h">
+      <Filter>Source Files\optix\material</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\material.h">
+      <Filter>Source Files\optix\material</Filter>
+    </CustomBuild>
+    <CustomBuild Include="optix\volume.cuh">
+      <Filter>Source Files\optix\material</Filter>
+    </CustomBuild>
+    <CustomBuild Include="thirdParty\tinyxml2.h">
+      <Filter>Source Files\optix\xmlParse</Filter>
+    </CustomBuild>
+    <CustomBuild Include="xmlparse.h">
+      <Filter>Source Files\optix\xmlParse</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GeneratedFiles\ui_widget.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="optix\diffuse.cu">
+      <Filter>Source Files\optix\material</Filter>
+    </CudaCompile>
+    <CudaCompile Include="optix\fog.cu">
+      <Filter>Source Files\optix\material</Filter>
+    </CudaCompile>
+    <CudaCompile Include="optix\glass.cu">
+      <Filter>Source Files\optix\material</Filter>
+    </CudaCompile>
+    <CudaCompile Include="optix\light.cu">
+      <Filter>Source Files\optix\material</Filter>
+    </CudaCompile>
+    <CudaCompile Include="optix\mirror.cu">
+      <Filter>Source Files\optix\material</Filter>
+    </CudaCompile>
+    <CudaCompile Include="optix\PathCamera.cu">
+      <Filter>Source Files\optix\scene</Filter>
+    </CudaCompile>
+    <CudaCompile Include="optix\parallelogram.cu">
+      <Filter>Source Files\optix\shape</Filter>
+    </CudaCompile>
+    <CudaCompile Include="optix\sphere.cu">
+      <Filter>Source Files\optix\shape</Filter>
+    </CudaCompile>
+    <CudaCompile Include="optix\trianglemesh.cu">
+      <Filter>Source Files\optix\shape</Filter>
+    </CudaCompile>
+    <CudaCompile Include="optix\PreCompution.cu">
+      <Filter>Source Files\optix\cuda</Filter>
+    </CudaCompile>
+  </ItemGroup>
+</Project>

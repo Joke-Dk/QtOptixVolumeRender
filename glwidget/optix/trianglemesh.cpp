@@ -17,14 +17,16 @@ void TriangleMesh::setup( optix::Context& optixCtx)
 TriangleMesh::TriangleMesh(optix::Context& optixCtx, const std::string& path, const optix::Matrix4x4 m0, const optix::Material& material0)
 {
 	init( optixCtx);
-	ObjLoader objloader0( (path).c_str(), optixCtx, _gg, material0);
-	objloader0.setIntersectProgram( _ProgramIntersection );
-	objloader0.setBboxProgram( _ProgramBoundingBox );
-	objloader0.load( m0 );
+	OptixMesh OptixMesh0(  optixCtx, _gg, material0);
+	OptixMesh0.setDefaultIntersectionProgram(_ProgramIntersection);
+	//OptixMesh0.setBboxProgram( _ProgramBoundingBox );
+	OptixMesh0.setLoadingTransform(m0);
+	OptixMesh0.loadBegin_Geometry(path);
+	OptixMesh0.loadFinish_Materials();
 	_gi = _gg->getChild(0);
 }
 
-optix::GeometryInstance createObjloader( optix::Context& optixCtx, const std::string& path, const optix::Matrix4x4 m0, const optix::Material& material0)
+optix::GeometryInstance createOptixMesh( optix::Context& optixCtx, const std::string& path, const optix::Matrix4x4 m0, const optix::Material& material0)
 {
 	return TriangleMesh( optixCtx, path, m0, material0).getGeometryInstance();
 }

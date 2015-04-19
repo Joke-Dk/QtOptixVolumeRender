@@ -1,8 +1,8 @@
 #include "optix/PathTracerScene.h"
 #include "widget.h"
+#include <QFileDialog>
 
-
-Widget::Widget( QTGLUTDisplay* glWidget,  QWidget *parent, Qt::WFlags flags)
+Widget::Widget(QTGLUTDisplay* glWidget, QWidget *parent, Qt::WindowFlags flags)
 : QWidget(parent, flags)
 {
 	//////////////////////////////////////////////////////////////////////////

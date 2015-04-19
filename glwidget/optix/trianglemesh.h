@@ -14,4 +14,4 @@ protected:
 };
 
 
-optix::GeometryInstance createObjloader( optix::Context& optixCtx, const std::string& path, const optix::Matrix4x4 m0, const optix::Material& material0);
+optix::GeometryInstance createOptixMesh( optix::Context& optixCtx, const std::string& path, const optix::Matrix4x4 m0, const optix::Material& material0);

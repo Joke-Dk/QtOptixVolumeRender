@@ -1,3 +1,8 @@
+Backup
+UpgradeLog.htm
+*.sdf
+*.opensdf
+
 #*.xml
 *.user
 *.dat

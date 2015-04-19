@@ -2,7 +2,7 @@
 #include "helpers.h"
 //#include <optixu/optixu_math_stream_namespace.h>
 #include <GLUTDisplay.h>
-#include <ObjLoader.h>
+#include <OptixMesh.h>
 #include "envmapSampler.h"
 #include "volume.h"
 #include "saveImage.h"

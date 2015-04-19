@@ -38,8 +38,8 @@
 **
 ****************************************************************************/
 #include "optix/PathTracerScene.h"
-#include <QApplication>
-#include <QDesktopWidget>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QDesktopWidget>
 
 #include "window.h"
 

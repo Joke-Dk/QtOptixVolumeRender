@@ -1,7 +1,7 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 #include "ui_widget.h"
 #include "optix/QTGLUTDisplay.h"
 class Widget : public QWidget
@@ -10,7 +10,7 @@ class Widget : public QWidget
 
 	friend class QTGLUTDisplay;
 public:
-	Widget( QTGLUTDisplay* glWidget, QWidget *parent = 0, Qt::WFlags flags = 0);
+	Widget(QTGLUTDisplay* glWidget, QWidget *parent = 0, Qt::WindowFlags flags = 0);
 	~Widget();
 	void addProgressBar( int value);
 	//////////////////////////////////////////////////////////////////////////

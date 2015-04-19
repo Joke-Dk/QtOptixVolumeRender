@@ -812,7 +812,8 @@ void QTGLUTDisplay::displayFrame()
     glBindTexture( GL_TEXTURE_2D, _texId );
 
     // send pbo to texture
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, vboId);
+    //glBindBuffer(GL_PIXEL_UNPACK_BUFFER, vboId);
+	GLEW_GET_FUN(__glewBindBuffer)(GL_PIXEL_UNPACK_BUFFER, vboId);
 
     RTsize elementSize = buffer->getElementSize();
     if      ((elementSize % 8) == 0) glPixelStorei(GL_UNPACK_ALIGNMENT, 8);
@@ -832,7 +833,8 @@ void QTGLUTDisplay::displayFrame()
       assert(0 && "Unknown buffer format");
     }
 
-    glBindBuffer( GL_PIXEL_UNPACK_BUFFER, 0 );
+	//glBindBuffer( GL_PIXEL_UNPACK_BUFFER, 0 );
+	GLEW_GET_FUN(__glewBindBuffer)(GL_PIXEL_UNPACK_BUFFER, 0);
 
     glEnable(GL_TEXTURE_2D);
 

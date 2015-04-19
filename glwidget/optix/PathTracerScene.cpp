@@ -218,14 +218,14 @@ optix::Buffer PathTracerScene::getOutputBuffer()
 	return m_context["output_buffer"]->getBuffer();
 }
 
-//optix::GeometryGroup PathTracerScene::createObjloader( const std::string& path, const optix::Matrix4x4 m0, const optix::Material& material0)
+//optix::GeometryGroup PathTracerScene::createOptixMesh( const std::string& path, const optix::Matrix4x4 m0, const optix::Material& material0)
 //{
 //	optix::GeometryGroup geomgroup = m_context->createGeometryGroup();
 //	//std::string prog_path = std::string(sutilSamplesPtxDir()) + "/glass_generated_triangle_mesh_iterative.cu.ptx";
 //	optix::Program mesh_intersect = m_context->createProgramFromPTXFile( my_ptxpath( "TriangleMesh.cu" ), "mesh_intersect"  );
-//	ObjLoader objloader0( (path).c_str(), m_context, geomgroup, material0 );
-//	objloader0.setIntersectProgram( mesh_intersect );
-//	objloader0.load( m0 );
+//	OptixMesh OptixMesh0( (path).c_str(), m_context, geomgroup, material0 );
+//	OptixMesh0.setIntersectProgram( mesh_intersect );
+//	OptixMesh0.load( m0 );
 //	return geomgroup;
 //}
 
@@ -355,7 +355,7 @@ void PathTracerScene::UpdateObjID( int id)
 	sprintf( objName, "output_%d.obj", id);
  	std::string obj_path1 = saveImage.pathHead+string(objName);
 	gis1reference.clear();
-	gis1reference.push_back(createObjloader( m_context, obj_path1, m1, fogGlassMaterial));
+	gis1reference.push_back(createOptixMesh( m_context, obj_path1, m1, fogGlassMaterial));
 	updateGeometryInstance();
 }
 
@@ -517,7 +517,7 @@ void PathTracerScene::createEnvironmentScene()
 			0,  0,  0,  1 };
 		const optix::Matrix4x4 m1( matrix_1 );
 		std::string obj_path1 = ("optix/mesh/cylinder2.obj");
-		gis1reference.push_back(createObjloader( m_context, obj_path1, m1, fogDiffuseMaterial));
+		gis1reference.push_back(createOptixMesh( m_context, obj_path1, m1, fogDiffuseMaterial));
 
 		const float matrix_2[4*4] = { 0.5,  0,  0,  -5, 
 			0,  0.5,  0,  -10, 
@@ -525,7 +525,7 @@ void PathTracerScene::createEnvironmentScene()
 			0,  0,  0,  1 };
 		const optix::Matrix4x4 m2( matrix_2 );
 		obj_path1 = ("optix/mesh/cognacglass.obj");
-		gis1reference.push_back(createObjloader( m_context, obj_path1, m2, fogGlassMaterial));
+		gis1reference.push_back(createOptixMesh( m_context, obj_path1, m2, fogGlassMaterial));
 
 	}
 
@@ -537,7 +537,7 @@ void PathTracerScene::createEnvironmentScene()
 	//	0,  0,  0,  1 };
 	//const optix::Matrix4x4 m2( matrix_2 );
 	//std::string obj_path2 = ("optix/mesh/cup.obj");
-	//GeometryGroup& objgroup2 = createObjloader( obj_path2, m2, glassMaterial);
+	//GeometryGroup& objgroup2 = createOptixMesh( obj_path2, m2, glassMaterial);
 	//gis1reference.push_back(objgroup2->getChild(0));
 	//////////////////////////////////////////////////////////////////////////
 	// END

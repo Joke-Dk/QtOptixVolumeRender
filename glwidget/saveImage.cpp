@@ -9,9 +9,10 @@ SaveImage::SaveImage()
 void SaveImage::Save( optix::Context& optixCtx, int id)
 {
 	optix::Buffer buffer = optixCtx["output_buffer"]->getBuffer();
-	optix::uint buffer_width, buffer_height;
+	RTsize buffer_width, buffer_height;
 	buffer->getSize( buffer_width, buffer_height );
-	optix::float4* cpuBuffer=(optix::float4*)buffer->map();
+
+	optix::float4* cpuBuffer = (optix::float4*)buffer->map();
 
 	//////////////////////////////////////////////////////////////////////////
 	// FreeImage lib operation

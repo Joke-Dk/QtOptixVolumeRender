@@ -1,7 +1,7 @@
 #pragma once
 #include "thirdParty/tinyxml2.h"
 #include "optix/helpers.h"
-#include <ObjLoader.h>
+#include <OptixMesh.h>
 #include <string>
 #include <map>
 
