@@ -12,11 +12,13 @@
 		<int name="isCurve" value="1"/>
 		<float name="CloudCover" value="0.02"/>
 		<float name="CloudSharpness" value="0.001"/>
-		<int name="hasBackground" value="1"/>
+		<int name="hasBackground" value="0"/>
 		<float name="radianceMultipler" value="1"/>
 		<int name="hasHDR" value="1"/>
-		<int name="indexHDR" value="0"/>
+		<int name="indexHDR" value="1"/>
 		<int name="hasCornell" value="0"/>
 		<int name="hasArea" value="0"/>
+		
+		<int name="MCWoodcock" value="1"/>
 	</sensor>
 </scene>

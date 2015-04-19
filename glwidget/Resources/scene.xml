@@ -6,7 +6,9 @@
 	<sensor type="perspective">
 		<float name="sceneEpsilon" value="0.001"/>
 		<float name="timeOut" value="1000000.0"/>
-		<int name="maxDepth" value="20"/>
+		<uint name="maxDepth" value="10"/>
+		<uint name="antiAliasing" value="1"/>
+		<int name="sampleLaunchId" value="0"/>
 		<int name="beginDepth" value="2"/>
 		<int name="sampleCount" value="1"/>
 		<float name="fov" value="45.0"/>

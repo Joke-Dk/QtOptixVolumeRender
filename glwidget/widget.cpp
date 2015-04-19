@@ -106,18 +106,22 @@ void Widget::SetDeafaultParamater()
 	ui.checkBox_3->setChecked( getContext()["isCurve"]->getInt());
 	ui.checkBox_4->setChecked( getContext()["hasBackground"]->getInt());
 	ui.checkBox_5->setChecked( getContext()["hasCornell"]->getInt());
-	UpdataEnvironmentLight( ui.comboBox->currentIndex() , false);
+
+
+	ui.comboBox->setCurrentIndex(getContext()["indexHDR"]->getInt());
+	UpdataEnvironmentLight();
 	//UpdataEnvironmentLight( 1, false);
 	
 	//UpdataParameterAndRefresh("hasCornell", ui.checkBox_5->isChecked()?1.f:0.f, false);
 	//UpdataHasHDR( ui.checkBox_2->isChecked(), false);
 
+	ui.radioButton_woodcock->setChecked(getContext()["MCWoodcock"]->getInt());
 
 	UpdataParameterAndRefresh("isFLDMethod", ui.radioButton->isChecked()||ui.radioButton_4->isChecked()?0.f:1.f , false);
 	UpdataParameterAndRefresh("isFLDSingle", ui.radioButton_3->isChecked()?1.f:ui.radioButton_5->isChecked()?-1.f:0.f, false);
-	UpdataParameterAndRefreshUInt("max_depth", ui.radioButton_4->isChecked()?unsigned int(3):unsigned int(100), false);
+	UpdataParameterAndRefreshUInt("maxDepth", ui.radioButton_4->isChecked()?unsigned int(3):unsigned int(100), false);
 	UpdataParameterAndRefresh("isSingle", 0.f, false);
-	UpdataParameterAndRefreshInt("MCWoodcock", ui.radioButton_woodcock->isChecked()?1:0, false);
+
 	ui.comboBox->setEnabled(ui.checkBox_2->isChecked());
 
 	//////////////////////////////////////////////////////////////////////////
@@ -127,9 +131,12 @@ void Widget::SetDeafaultParamater()
 	slotSpinbox3MaxID();
 	UpdataParameterAndRefreshInt("doRendering", 1, false);
 
-	UpdataParameterAndRefreshUInt( "sqrt_num_samples", ui.spinBox_AntiAlias->value(), false);
-	UpdataParameterAndRefreshUInt( "max_depth", ui.spinBox_MaxDepth->value(), false);
-	UpdataParameterAndRefreshInt("sampleLaunchId", ui.spinBox_SampleLaunchId->value(), false);
+	//UpdataParameterAndRefreshUInt( "antiAliasing", ui.spinBox_AntiAlias->value(), false);
+	ui.spinBox_AntiAlias->setValue(getContext()["antiAliasing"]->getUint());
+	//UpdataParameterAndRefreshUInt( "maxDepth", ui.spinBox_MaxDepth->value(), false);
+	ui.spinBox_MaxDepth->setValue(getContext()["maxDepth"]->getUint());
+	//UpdataParameterAndRefreshInt("sampleLaunchId", ui.spinBox_SampleLaunchId->value(), false);
+	ui.spinBox_SampleLaunchId->setValue(getContext()["sampleLaunchId"]->getInt());
 }
 
 void Widget::slotDoubleSpinbox_Slider()
@@ -263,7 +270,8 @@ void Widget::slotClicked4()
 
 void Widget::slotComboBox()
 {
-	UpdataEnvironmentLight( ui.comboBox->currentIndex() );
+	getContext()["indexHDR"]->setInt(ui.comboBox->currentIndex());
+	UpdataEnvironmentLight();
 }
 
 Widget::~Widget()
@@ -314,14 +322,13 @@ void Widget::Refresh()
 	getContext()["frame_number"]->setUint( 1);
 }
 
-void Widget::UpdataEnvironmentLight(int idEnv, bool refresh)
+void Widget::UpdataEnvironmentLight( bool refresh)
 {
 	PathTracerScene* scene= dynamic_cast<PathTracerScene*>(QTGLUTDisplay::_scene);
-	scene->switchEnvironmentLight( idEnv);
+	scene->switchEnvironmentLight();
 	if(refresh)
 	{
-		_glWidget->resizeGL(scene->m_width, scene->m_height);
-		//scene->PreCompution( );
+		Refresh();
 	}
 }
 
@@ -378,7 +385,7 @@ void Widget::slotRadioButton3()
 void Widget::slotRadioButton4()
 {
 	UpdataParameterAndRefresh("isFLDMethod", ui.radioButton_4->isChecked()?0.f:1.f, false);
-	UpdataParameterAndRefreshUInt("max_depth", ui.radioButton_4->isChecked()?unsigned int(3):unsigned int(100), false);
+	UpdataParameterAndRefreshUInt("maxDepth", ui.radioButton_4->isChecked()?unsigned int(3):unsigned int(100), false);
 	UpdataParameterAndRefresh("isSingle", ui.radioButton_4->isChecked()?1.f:0.f);
 }
 
@@ -475,12 +482,12 @@ void Widget::slotPushButtonPause()
 
 void Widget::slotSpinboxAntiAlias()
 {
-	UpdataParameterAndRefreshUInt( "sqrt_num_samples", ui.spinBox_AntiAlias->value());
+	UpdataParameterAndRefreshUInt( "antiAliasing", ui.spinBox_AntiAlias->value());
 }
 
 void Widget::slotSpinboxMaxDepth()
 {
-	UpdataParameterAndRefreshUInt( "max_depth", ui.spinBox_MaxDepth->value());
+	UpdataParameterAndRefreshUInt( "maxDepth", ui.spinBox_MaxDepth->value());
 }
 
 void Widget::slotSpinboxSampleLaunchId()

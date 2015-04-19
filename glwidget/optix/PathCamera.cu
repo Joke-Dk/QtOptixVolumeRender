@@ -7,7 +7,7 @@ rtDeclareVariable(float3,        U, , );
 rtDeclareVariable(float3,        V, , );
 rtDeclareVariable(float3,        W, , );
 rtDeclareVariable(unsigned int,  frame_number, , );
-rtDeclareVariable(unsigned int,  sqrt_num_samples, , );
+rtDeclareVariable(unsigned int,  antiAliasing, , );
 rtBuffer<float4, 2>              output_buffer;
 rtDeclareVariable(int,  hasBackground, , );
 rtDeclareVariable(float,  radianceMultipler, , );
@@ -29,14 +29,14 @@ RT_PROGRAM void pathtrace_camera()
 	float2 inv_screen = 1.0f/make_float2(screen) * 2.f;
 	float2 pixel = (make_float2(launch_index)) * inv_screen - 1.f;
 
-	float2 jitter_scale = inv_screen / sqrt_num_samples;
-	unsigned int samples_per_pixel = sqrt_num_samples*sqrt_num_samples;
+	float2 jitter_scale = inv_screen / antiAliasing;
+	unsigned int samples_per_pixel = antiAliasing*antiAliasing;
 	float3 result = make_float3(0.0f);
 
 	unsigned int seed = tea<16>(screen.x*launch_index.y+launch_index.x, frame_number+sampleLaunchId*SequenceMaxSample*2);
 	do {
-		unsigned int x = samples_per_pixel%sqrt_num_samples;
-		unsigned int y = samples_per_pixel/sqrt_num_samples;
+		unsigned int x = samples_per_pixel%antiAliasing;
+		unsigned int y = samples_per_pixel/antiAliasing;
 		float2 jitter = make_float2(x-rnd(seed), y-rnd(seed));
 		float2 d = pixel + jitter*jitter_scale;
 		float3 ray_origin = eye;
@@ -56,7 +56,7 @@ RT_PROGRAM void pathtrace_camera()
 		for(;;) {
 			Ray ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
 			rtTrace(top_object, ray, prd);
-			if(prd.done ||(prd.depth >= max_depth)) {
+			if(prd.done ||(prd.depth >= maxDepth)) {
 				prd.result += prd.radiance * prd.attenuation;
 				break;
 			}
@@ -78,7 +78,7 @@ RT_PROGRAM void pathtrace_camera()
 		seed = prd.seed;
 	} while (--samples_per_pixel);
 
-	float3 pixel_color = result/(sqrt_num_samples*sqrt_num_samples);
+	float3 pixel_color = result/(antiAliasing*antiAliasing);
 	/*
 	if(launch_index.x==0&&launch_index.y==0)
 	{

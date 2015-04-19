@@ -70,6 +70,10 @@ void XmlParse::ParseSensor( optix::Context& optixCtx, tinyxml2::XMLElement *elem
 	{
 		optixCtx[element->Attribute( "name")] ->setInt( element->IntAttribute( "value"));
 	}
+	else if (elementName == std::string("uint"))
+	{
+		optixCtx[element->Attribute("name")]->setUint(element->UnsignedAttribute("value"));
+	}
 	else if( elementName == std::string("float3"))
 	{
 		optixCtx[element->Attribute( "name")] ->setFloat( Chars2Float3(element->Attribute( "value")));

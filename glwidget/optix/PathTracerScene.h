@@ -40,7 +40,7 @@ public:
 	void updateParameter( std::string str, int value);
 	void updateParameter( std::string str, unsigned int value);
 	float getParameter( std::string str);
-	void switchEnvironmentLight( int envId);
+	void switchEnvironmentLight();
 	void switchHasHDR( bool hasHDR);
 	void updateHasAreaBox( );
 	void updateGeometryInstance( );

@@ -22,7 +22,7 @@ public:
 	float GetParameterValue(std::string str);
 	int GetParameterValueInt(std::string str);
 	void SetDeafaultParamater();
-	void UpdataEnvironmentLight(int idEnv, bool refresh=true);
+	void UpdataEnvironmentLight(bool refresh=true);
 	void UpdataHasHDR(bool hasHDR, bool refresh=true);
 	void Refresh();
 	QTGLUTDisplay* _glWidget;
